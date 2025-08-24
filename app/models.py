@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field, EmailStr
-from typing import Optional
+from typing import Optional, List
 from datetime import datetime
 
 class User(BaseModel):
@@ -28,14 +28,28 @@ class UserResponse(BaseModel):
     created_at: datetime
 
 class TweetEngagement(BaseModel):
+    id: Optional[str] = None  # UUID for database record
     tweet_id: str
     user_id: str
-    like_count: int
-    retweet_count: int
-    reply_count: int
-    mention_count: int
-    engagement_score: int
-    fetched_at: datetime
+    tweet_text: Optional[str] = None
+    like_count: int = 0
+    retweet_count: int = 0
+    reply_count: int = 0
+    mention_count: int = 0
+    engagement_score: int = 0
+    posted_date: Optional[datetime] = None
+    fetched_at: datetime = Field(default_factory=datetime.utcnow)
+
+class CSVUploadResponse(BaseModel):
+    message: str
+    records_processed: int
+    records_stored: int
+    errors: List[str] = []
+
+class CSVParseError(BaseModel):
+    row: int
+    error: str
+    data: dict
 
 class SessionData(BaseModel):
     user_id: str

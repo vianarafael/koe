@@ -2,6 +2,7 @@ from fastapi import APIRouter, Request, Depends
 from fastapi.responses import HTMLResponse
 from app.templates import get_templates
 from app.auth import get_current_user
+from app.db import get_db, get_user_engagements, get_user_total_score
 from app.models import User
 
 router = APIRouter()
@@ -9,20 +10,38 @@ router = APIRouter()
 templates = get_templates()
 
 @router.get("/", response_class=HTMLResponse)
-async def index(request: Request, current_user: User = Depends(get_current_user)):
+async def index(request: Request, current_user: User = Depends(get_current_user), db=Depends(get_db)):
     """Display dashboard with authentication-aware content"""
-    # Example HTMX usage: simple dashboard placeholder
     template = templates.get_template("index.html")
     
-    # For now, we'll show empty data - this will be populated in T02/T03
+    # Get user engagement data if authenticated
     tweets = []
     total_score = 0
+    
+    if current_user:
+        try:
+            tweets = await get_user_engagements(db, current_user.id, limit=50)
+            total_score = await get_user_total_score(db, current_user.id)
+        except Exception as e:
+            print(f"Error fetching user data: {e}")
+            tweets = []
+            total_score = 0
+    
+    # Get upload success message from query params
+    upload_success = request.query_params.get("upload_success") == "true"
+    processed_count = request.query_params.get("processed", "0")
+    stored_count = request.query_params.get("stored", "0")
+    error_count = request.query_params.get("errors", "0")
     
     return HTMLResponse(template.render(
         request=request, 
         tweets=tweets, 
         total_score=total_score,
-        current_user=current_user
+        current_user=current_user,
+        upload_success=upload_success,
+        processed_count=processed_count,
+        stored_count=stored_count,
+        error_count=error_count
     ))
 
 @router.get("/login", response_class=HTMLResponse)

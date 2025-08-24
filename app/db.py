@@ -1,8 +1,9 @@
 import aiosqlite
 import uuid
 from datetime import datetime, timedelta
+from typing import List, Optional
 from app.settings import settings
-from app.models import User, UserCreate, UserResponse
+from app.models import User, UserCreate, UserResponse, TweetEngagement
 
 async def get_db():
     db = await aiosqlite.connect(settings.DATABASE_URL.replace('sqlite:///', ''))
@@ -29,15 +30,18 @@ async def init_db():
         
         await db.execute('''
             CREATE TABLE IF NOT EXISTS tweet_engagements (
+                id TEXT PRIMARY KEY,
                 tweet_id TEXT NOT NULL,
                 user_id TEXT NOT NULL,
-                like_count INTEGER NOT NULL,
-                retweet_count INTEGER NOT NULL,
-                reply_count INTEGER NOT NULL,
-                mention_count INTEGER NOT NULL,
-                engagement_score INTEGER NOT NULL,
+                tweet_text TEXT,
+                like_count INTEGER NOT NULL DEFAULT 0,
+                retweet_count INTEGER NOT NULL DEFAULT 0,
+                reply_count INTEGER NOT NULL DEFAULT 0,
+                mention_count INTEGER NOT NULL DEFAULT 0,
+                engagement_score INTEGER NOT NULL DEFAULT 0,
+                posted_date TEXT,
                 fetched_at TEXT NOT NULL,
-                PRIMARY KEY (tweet_id, user_id)
+                UNIQUE(tweet_id, user_id)
             )
         ''')
         
@@ -123,3 +127,86 @@ async def check_username_exists(db: aiosqlite.Connection, username: str) -> bool
     ''', (username,)) as cursor:
         row = await cursor.fetchone()
         return row['count'] > 0
+
+async def store_tweet_engagement(db: aiosqlite.Connection, engagement: TweetEngagement) -> bool:
+    """Store a single tweet engagement record"""
+    try:
+        await db.execute('''
+            INSERT OR REPLACE INTO tweet_engagements 
+            (id, tweet_id, user_id, tweet_text, like_count, retweet_count, reply_count, mention_count, 
+             engagement_score, posted_date, fetched_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (
+            engagement.id or str(uuid.uuid4()),
+            engagement.tweet_id,
+            engagement.user_id,
+            engagement.tweet_text,
+            engagement.like_count,
+            engagement.retweet_count,
+            engagement.reply_count,
+            engagement.mention_count,
+            engagement.engagement_score,
+            engagement.posted_date.isoformat() if engagement.posted_date else None,
+            engagement.fetched_at.isoformat()
+        ))
+        await db.commit()
+        return True
+    except Exception as e:
+        print(f"Error storing engagement: {e}")
+        return False
+
+async def store_multiple_engagements(db: aiosqlite.Connection, engagements: List[TweetEngagement]) -> int:
+    """Store multiple tweet engagement records"""
+    stored_count = 0
+    for engagement in engagements:
+        if await store_tweet_engagement(db, engagement):
+            stored_count += 1
+    return stored_count
+
+async def get_user_engagements(db: aiosqlite.Connection, user_id: str, limit: int = 100) -> List[TweetEngagement]:
+    """Get engagement records for a specific user"""
+    engagements = []
+    async with db.execute('''
+        SELECT * FROM tweet_engagements 
+        WHERE user_id = ? 
+        ORDER BY fetched_at DESC 
+        LIMIT ?
+    ''', (user_id, limit)) as cursor:
+        async for row in cursor:
+            engagement = TweetEngagement(
+                id=row['id'],
+                tweet_id=row['tweet_id'],
+                user_id=row['user_id'],
+                tweet_text=row['tweet_text'],
+                like_count=row['like_count'],
+                retweet_count=row['retweet_count'],
+                reply_count=row['reply_count'],
+                mention_count=row['mention_count'],
+                engagement_score=row['engagement_score'],
+                posted_date=datetime.fromisoformat(row['posted_date']) if row['posted_date'] else None,
+                fetched_at=datetime.fromisoformat(row['fetched_at'])
+            )
+            engagements.append(engagement)
+    return engagements
+
+async def get_user_total_score(db: aiosqlite.Connection, user_id: str) -> int:
+    """Get total engagement score for a user"""
+    async with db.execute('''
+        SELECT COALESCE(SUM(engagement_score), 0) as total_score 
+        FROM tweet_engagements 
+        WHERE user_id = ?
+    ''', (user_id,)) as cursor:
+        row = await cursor.fetchone()
+        return row['total_score']
+
+async def delete_user_engagements(db: aiosqlite.Connection, user_id: str) -> bool:
+    """Delete all engagement records for a user (for cleanup)"""
+    try:
+        await db.execute('''
+            DELETE FROM tweet_engagements WHERE user_id = ?
+        ''', (user_id,))
+        await db.commit()
+        return True
+    except Exception as e:
+        print(f"Error deleting engagements: {e}")
+        return False
