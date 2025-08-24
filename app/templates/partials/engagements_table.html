@@ -1,0 +1,202 @@
+{% if tweets %}
+<div class="overflow-x-auto">
+  <table class="min-w-full divide-y divide-gray-200">
+    <thead class="bg-gray-50">
+      <tr>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          <button 
+            class="flex items-center space-x-1 hover:text-gray-700"
+            hx-get="/dashboard/api/engagements?sort_by=score&order={% if sort_by == 'score' and order == 'desc' %}asc{% else %}desc{% endif %}"
+            hx-target="#engagements-table"
+            hx-include="[name='min_score'],[name='max_score'],[name='limit']"
+          >
+            <span>Score</span>
+            {% if sort_by == 'score' %}
+              {% if order == 'desc' %}
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                </svg>
+              {% else %}
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              {% endif %}
+            {% endif %}
+          </button>
+        </th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          <button 
+            class="flex items-center space-x-1 hover:text-gray-700"
+            hx-get="/dashboard/api/engagements?sort_by=date&order={% if sort_by == 'date' and order == 'desc' %}asc{% else %}desc{% endif %}"
+            hx-target="#engagements-table"
+            hx-include="[name='min_score'],[name='max_score'],[name='limit']"
+          >
+            <span>Date</span>
+            {% if sort_by == 'date' %}
+              {% if order == 'desc' %}
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                </svg>
+              {% else %}
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              {% endif %}
+            {% endif %}
+          </button>
+        </th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tweet ID</th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Text</th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          <button 
+            class="flex items-center space-x-1 hover:text-gray-700"
+            hx-get="/dashboard/api/engagements?sort_by=likes&order={% if sort_by == 'likes' and order == 'desc' %}asc{% else %}desc{% endif %}"
+            hx-target="#engagements-table"
+            hx-include="[name='min_score'],[name='max_score'],[name='limit']"
+          >
+            <span>Likes</span>
+            {% if sort_by == 'likes' %}
+              {% if order == 'desc' %}
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                </svg>
+              {% else %}
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              {% endif %}
+            {% endif %}
+          </button>
+        </th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          <button 
+            class="flex items-center space-x-1 hover:text-gray-700"
+            hx-get="/dashboard/api/engagements?sort_by=retweets&order={% if sort_by == 'retweets' and order == 'desc' %}asc{% else %}desc{% endif %}"
+            hx-target="#engagements-table"
+            hx-include="[name='min_score'],[name='max_score'],[name='limit']"
+          >
+            <span>Retweets</span>
+            {% if sort_by == 'retweets' %}
+              {% if order == 'desc' %}
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                </svg>
+              {% else %}
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              {% endif %}
+            {% endif %}
+          </button>
+        </th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          <button 
+            class="flex items-center space-x-1 hover:text-gray-700"
+            hx-get="/dashboard/api/engagements?sort_by=replies&order={% if sort_by == 'replies' and order == 'desc' %}asc{% else %}desc{% endif %}"
+            hx-target="#engagements-table"
+            hx-include="[name='min_score'],[name='max_score'],[name='limit']"
+          >
+            <span>Replies</span>
+            {% if sort_by == 'replies' %}
+              {% if order == 'desc' %}
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                </svg>
+              {% else %}
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              {% endif %}
+            {% endif %}
+          </button>
+        </th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mentions</th>
+      </tr>
+    </thead>
+    <tbody class="bg-white divide-y divide-gray-200">
+      {% for tweet in tweets %}
+      <tr class="hover:bg-gray-50">
+        <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+            {% if tweet.engagement_score >= 100 %}bg-green-100 text-green-800
+            {% elif tweet.engagement_score >= 50 %}bg-yellow-100 text-yellow-800
+            {% elif tweet.engagement_score >= 20 %}bg-blue-100 text-blue-800
+            {% else %}bg-gray-100 text-gray-800{% endif %}">
+            {{ tweet.engagement_score }}
+          </span>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+          {% if tweet.posted_date %}
+            {{ tweet.posted_date.strftime('%Y-%m-%d') }}
+          {% else %}
+            {{ tweet.fetched_at.strftime('%Y-%m-%d') }}
+          {% endif %}
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+          {{ tweet.tweet_id[:20] }}...
+        </td>
+        <td class="px-6 py-4 text-sm text-gray-900 max-w-xs truncate">
+          {{ tweet.tweet_text or "No text available" }}
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+          <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-800">
+            {{ tweet.like_count }}
+          </span>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+          <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
+            {{ tweet.retweet_count }}
+          </span>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+          <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+            {{ tweet.reply_count }}
+          </span>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+          <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
+            {{ tweet.mention_count }}
+          </span>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  
+  <!-- Results Summary -->
+  <div class="mt-4 text-sm text-gray-500 text-center">
+    Showing {{ tweets|length }} of {{ tweets|length }} results
+    {% if min_score or max_score %}
+      {% if min_score and max_score %}
+        (Score range: {{ min_score }} - {{ max_score }})
+      {% elif min_score %}
+        (Min score: {{ min_score }})
+      {% elif max_score %}
+        (Max score: {{ max_score }})
+      {% endif %}
+    {% endif %}
+  </div>
+</div>
+{% else %}
+<div class="text-center py-12">
+  <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2m0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+  </svg>
+  <h3 class="mt-2 text-sm font-medium text-gray-900">No tweets found</h3>
+  <p class="mt-1 text-sm text-gray-500">
+    {% if min_score or max_score %}
+      No tweets match your current filters. Try adjusting the score range.
+    {% else %}
+      Upload your CSV files to start tracking engagement metrics.
+    {% endif %}
+  </p>
+  <div class="mt-6">
+    <a
+      href="/upload"
+      class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+    >
+      Upload CSV
+    </a>
+  </div>
+</div>
+{% endif %}

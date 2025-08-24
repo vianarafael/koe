@@ -129,20 +129,40 @@ block content %}
     </div>
     {% endif %}
 
-    <!-- Upload Section -->
-    <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-md">
-      <h3 class="text-lg font-medium text-blue-900 mb-2">Upload Your Data</h3>
-      <p class="text-sm text-blue-700 mb-4">
-        Upload CSV files from X Analytics to start tracking your engagement
-        metrics. Scores will be automatically calculated using your point
-        values.
-      </p>
-      <a
-        href="/upload"
-        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-      >
-        Upload CSV
-      </a>
+    <!-- Action Buttons -->
+    <div class="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Upload Section -->
+      <div class="p-4 bg-blue-50 border border-blue-200 rounded-md">
+        <h3 class="text-lg font-medium text-blue-900 mb-2">Upload Your Data</h3>
+        <p class="text-sm text-blue-700 mb-4">
+          Upload CSV files from X Analytics to start tracking your engagement
+          metrics. Scores will be automatically calculated using your point
+          values.
+        </p>
+        <a
+          href="/upload"
+          class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        >
+          Upload CSV
+        </a>
+      </div>
+
+      <!-- Dashboard Section -->
+      <div class="p-4 bg-purple-50 border border-purple-200 rounded-md">
+        <h3 class="text-lg font-medium text-purple-900 mb-2">
+          Advanced Dashboard
+        </h3>
+        <p class="text-sm text-purple-700 mb-4">
+          Access the full dashboard with advanced sorting, filtering, and
+          analytics for your engagement data.
+        </p>
+        <a
+          href="/dashboard"
+          class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+        >
+          View Dashboard
+        </a>
+      </div>
     </div>
 
     {% else %}
