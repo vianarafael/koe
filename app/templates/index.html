@@ -1,0 +1,240 @@
+{% extends "base.html" %} {% block title %}Dashboard - Koe{% endblock %} {%
+block content %}
+<div class="bg-white shadow rounded-lg">
+  <div class="px-4 py-5 sm:p-6">
+    <h2 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+      Engagement Dashboard
+    </h2>
+
+    {% if request.cookies.get('koe_session') %}
+    <!-- Authenticated User Content -->
+    <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-md">
+      <div class="flex">
+        <div class="flex-shrink-0">
+          <svg
+            class="h-5 w-5 text-green-400"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </div>
+        <div class="ml-3">
+          <h3 class="text-sm font-medium text-green-800">Welcome!</h3>
+          <div class="mt-2 text-sm text-green-700">
+            <p>You're signed in and ready to track your engagement metrics.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Total Score Display -->
+    <div class="mb-6">
+      <div class="bg-gray-50 rounded-lg p-4">
+        <div class="text-center">
+          <p class="text-sm font-medium text-gray-500">
+            Total Engagement Score
+          </p>
+          <p class="text-3xl font-bold text-gray-900">{{ total_score or 0 }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Upload Section -->
+    <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-md">
+      <h3 class="text-lg font-medium text-blue-900 mb-2">Upload Your Data</h3>
+      <p class="text-sm text-blue-700 mb-4">
+        Upload CSV files from X Analytics to start tracking your engagement
+        metrics.
+      </p>
+      <a
+        href="/upload"
+        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+      >
+        Upload CSV
+      </a>
+    </div>
+
+    {% else %}
+    <!-- Authentication Required -->
+    <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-md">
+      <div class="flex">
+        <div class="flex-shrink-0">
+          <svg
+            class="h-5 w-5 text-blue-400"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </div>
+        <div class="ml-3">
+          <h3 class="text-sm font-medium text-blue-800">
+            Authentication Required
+          </h3>
+          <div class="mt-2 text-sm text-blue-700">
+            <p>
+              To view your engagement metrics, please
+              <a
+                href="/auth/login"
+                class="font-medium underline hover:text-blue-600"
+                >sign in</a
+              >
+              or
+              <a
+                href="/auth/register"
+                class="font-medium underline hover:text-blue-600"
+                >create an account</a
+              >.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Total Score Display -->
+    <div class="mb-6">
+      <div class="bg-gray-50 rounded-lg p-4">
+        <div class="text-center">
+          <p class="text-sm font-medium text-gray-500">
+            Total Engagement Score
+          </p>
+          <p class="text-3xl font-bold text-gray-900">{{ total_score or 0 }}</p>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Tweets Table -->
+    {% if tweets %}
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Tweet ID
+            </th>
+            <th
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Text
+            </th>
+            <th
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Score
+            </th>
+            <th
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Likes
+            </th>
+            <th
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Retweets
+            </th>
+            <th
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Replies
+            </th>
+            <th
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Mentions
+            </th>
+            <th
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Created At
+            </th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          {% for tweet in tweets %}
+          <tr class="hover:bg-gray-50">
+            <td
+              class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+            >
+              {{ tweet.tweet_id }}
+            </td>
+            <td class="px-6 py-4 text-sm text-gray-900">{{ tweet.text }}</td>
+            <td
+              class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold"
+            >
+              {{ tweet.engagement_score }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              {{ tweet.like_count }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              {{ tweet.retweet_count }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              {{ tweet.reply_count }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              {{ tweet.mention_count }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              {{ tweet.created_at }}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="text-center py-12">
+      <svg
+        class="mx-auto h-12 w-12 text-gray-400"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2m0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+        />
+      </svg>
+      <h3 class="mt-2 text-sm font-medium text-gray-900">No tweets found</h3>
+      <p class="mt-1 text-sm text-gray-500">
+        {% if request.cookies.get('koe_session') %} Upload your CSV files to
+        start tracking engagement metrics. {% else %} Sign in to start tracking
+        your engagement metrics. {% endif %}
+      </p>
+      <div class="mt-6">
+        {% if request.cookies.get('koe_session') %}
+        <a
+          href="/upload"
+          class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        >
+          Upload CSV
+        </a>
+        {% else %}
+        <a
+          href="/auth/login"
+          class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        >
+          Sign In
+        </a>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

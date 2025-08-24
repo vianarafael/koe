@@ -1,0 +1,12 @@
+fastapi
+uvicorn[standard]
+jinja2
+httpx
+python-dotenv
+aiosqlite
+pydantic
+pydantic-settings
+stripe
+passlib[bcrypt]
+python-multipart
+itsdangerous
