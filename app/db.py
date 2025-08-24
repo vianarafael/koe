@@ -210,3 +210,67 @@ async def delete_user_engagements(db: aiosqlite.Connection, user_id: str) -> boo
     except Exception as e:
         print(f"Error deleting engagements: {e}")
         return False
+
+async def update_engagement_score(db: aiosqlite.Connection, engagement_id: str, new_score: int) -> bool:
+    """Update the engagement score for a specific engagement"""
+    try:
+        await db.execute('''
+            UPDATE tweet_engagements 
+            SET engagement_score = ?
+            WHERE id = ?
+        ''', (new_score, engagement_id))
+        await db.commit()
+        return True
+    except Exception as e:
+        print(f"Error updating engagement score: {e}")
+        return False
+
+async def get_engagements_by_score_range(
+    db: aiosqlite.Connection, 
+    user_id: str, 
+    min_score: int = 0, 
+    max_score: int = None,
+    limit: int = 100
+) -> List[TweetEngagement]:
+    """Get engagements within a specific score range"""
+    engagements = []
+    
+    if max_score is None:
+        query = '''
+            SELECT * FROM tweet_engagements 
+            WHERE user_id = ? AND engagement_score >= ?
+            ORDER BY engagement_score DESC 
+            LIMIT ?
+        '''
+        params = (user_id, min_score, limit)
+    else:
+        query = '''
+            SELECT * FROM tweet_engagements 
+            WHERE user_id = ? AND engagement_score BETWEEN ? AND ?
+            ORDER BY engagement_score DESC 
+            LIMIT ?
+        '''
+        params = (user_id, min_score, max_score, limit)
+    
+    async with db.execute(query, params) as cursor:
+        async for row in cursor:
+            engagement = TweetEngagement(
+                id=row['id'],
+                tweet_id=row['tweet_id'],
+                user_id=row['user_id'],
+                tweet_text=row['tweet_text'],
+                like_count=row['like_count'],
+                retweet_count=row['retweet_count'],
+                reply_count=row['reply_count'],
+                mention_count=row['mention_count'],
+                engagement_score=row['engagement_score'],
+                posted_date=datetime.fromisoformat(row['posted_date']) if row['posted_date'] else None,
+                fetched_at=datetime.fromisoformat(row['fetched_at'])
+            )
+            engagements.append(engagement)
+    
+    return engagements
+
+async def get_top_engagements(db: aiosqlite.Connection, user_id: str, limit: int = 10) -> List[TweetEngagement]:
+    """Get top performing engagements by score"""
+    return await get_engagements_by_score_range(db, user_id, min_score=0, limit=limit)

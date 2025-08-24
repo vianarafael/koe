@@ -55,3 +55,23 @@ class SessionData(BaseModel):
     user_id: str
     email: str
     username: str
+
+class SetPointValuesRequest(BaseModel):
+    like: int = Field(ge=0, description="Points for each like")
+    retweet: int = Field(ge=0, description="Points for each retweet")
+    reply: int = Field(ge=0, description="Points for each reply")
+    mention: int = Field(ge=0, description="Points for each mention")
+
+class PointValuesResponse(BaseModel):
+    message: str
+    updated_point_values: dict
+    recalculated_count: int
+
+class EngagementScoreCalculation(BaseModel):
+    tweet_id: str
+    like_score: int
+    retweet_score: int
+    reply_score: int
+    mention_score: int
+    total_score: int
+    calculation_details: dict

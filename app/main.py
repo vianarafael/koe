@@ -4,6 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from app.routes import home
 from app.auth import router as auth_router
 from app.routes.upload import router as upload_router
+from app.scoring import scoring_engine
 from app.settings import settings
 
 app = FastAPI(title="Koe - Engagement Tracker")
@@ -19,3 +20,9 @@ app.include_router(upload_router)
 @app.get("/health")
 async def health():
     return {"status": "ok"}
+
+@app.on_event("startup")
+async def startup_event():
+    """Initialize scoring engine on startup"""
+    # Ensure scoring engine is ready
+    assert scoring_engine is not None

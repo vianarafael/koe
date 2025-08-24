@@ -3,8 +3,9 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from typing import Optional
 from app.auth import get_current_user
 from app.models import User, CSVUploadResponse
-from app.db import get_db, store_multiple_engagements
+from app.db import get_db, store_multiple_engagements, get_user_by_id
 from app.csv_parser import csv_parser
+from app.scoring import process_csv_engagements_with_scoring
 from app.templates import get_templates
 
 router = APIRouter(prefix="/upload", tags=["file upload"])
@@ -28,7 +29,7 @@ async def upload_csv(
     current_user: User = Depends(get_current_user),
     db=Depends(get_db)
 ):
-    """Handle CSV file upload and parsing"""
+    """Handle CSV file upload and parsing with scoring"""
     if not current_user:
         raise HTTPException(status_code=401, detail="Authentication required")
     
@@ -46,12 +47,22 @@ async def upload_csv(
         if not engagements:
             raise HTTPException(status_code=400, detail="No valid engagement data found in CSV")
         
-        # Store engagements in database
-        stored_count = await store_multiple_engagements(db, engagements)
+        # Get user's current point values
+        user = await get_user_by_id(db, current_user.id)
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        # Process engagements with scoring and store in database
+        stored_count = await process_csv_engagements_with_scoring(
+            engagements, 
+            current_user.id, 
+            user.point_values, 
+            db
+        )
         
         # Prepare response
         response = CSVUploadResponse(
-            message=f"Successfully processed {len(engagements)} records",
+            message=f"Successfully processed {len(engagements)} records with scoring",
             records_processed=len(engagements),
             records_stored=stored_count,
             errors=[f"Row {error.row}: {error.error}" for error in parse_errors]
@@ -59,7 +70,7 @@ async def upload_csv(
         
         # Redirect to dashboard with success message
         return RedirectResponse(
-            url=f"/?upload_success=true&processed={len(engagements)}&stored={stored_count}&errors={len(parse_errors)}", 
+            url=f"/?upload_success=true&processed={len(engagements)}&stored={stored_count}&errors={len(parse_errors)}&scoring=applied", 
             status_code=302
         )
         

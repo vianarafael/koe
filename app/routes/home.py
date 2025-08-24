@@ -1,8 +1,8 @@
-from fastapi import APIRouter, Request, Depends
+from fastapi import APIRouter, Request, Depends, HTTPException
 from fastapi.responses import HTMLResponse
 from app.templates import get_templates
 from app.auth import get_current_user
-from app.db import get_db, get_user_engagements, get_user_total_score
+from app.db import get_db, get_user_engagements, get_user_total_score, get_top_engagements
 from app.models import User
 
 router = APIRouter()
@@ -17,21 +17,25 @@ async def index(request: Request, current_user: User = Depends(get_current_user)
     # Get user engagement data if authenticated
     tweets = []
     total_score = 0
+    top_engagements = []
     
     if current_user:
         try:
             tweets = await get_user_engagements(db, current_user.id, limit=50)
             total_score = await get_user_total_score(db, current_user.id)
+            top_engagements = await get_top_engagements(db, current_user.id, limit=5)
         except Exception as e:
             print(f"Error fetching user data: {e}")
             tweets = []
             total_score = 0
+            top_engagements = []
     
     # Get upload success message from query params
     upload_success = request.query_params.get("upload_success") == "true"
     processed_count = request.query_params.get("processed", "0")
     stored_count = request.query_params.get("stored", "0")
     error_count = request.query_params.get("errors", "0")
+    scoring_applied = request.query_params.get("scoring", "false") == "true"
     
     return HTMLResponse(template.render(
         request=request, 
@@ -41,7 +45,9 @@ async def index(request: Request, current_user: User = Depends(get_current_user)
         upload_success=upload_success,
         processed_count=processed_count,
         stored_count=stored_count,
-        error_count=error_count
+        error_count=error_count,
+        scoring_applied=scoring_applied,
+        top_engagements=top_engagements
     ))
 
 @router.get("/login", response_class=HTMLResponse)
