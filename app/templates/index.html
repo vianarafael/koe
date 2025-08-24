@@ -6,7 +6,7 @@ block content %}
       Engagement Dashboard
     </h2>
 
-    {% if request.cookies.get('koe_session') %}
+    {% if current_user %}
     <!-- Upload Success Message -->
     {% if upload_success %}
     <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-md">
@@ -77,10 +77,11 @@ block content %}
     <div class="mb-6">
       <div class="bg-gray-50 rounded-lg p-4">
         <div class="text-center">
-          <p class="text-sm font-medium text-gray-500">
+          <p class="text-sm text-medium text-gray-500">
             Total Engagement Score
           </p>
           <p class="text-3xl font-bold text-gray-900">{{ total_score or 0 }}</p>
+          {% if current_user.point_values %}
           <p class="text-xs text-gray-500 mt-1">
             Calculated using your point values: Like({{
             current_user.point_values.like }}), Retweet({{
@@ -88,6 +89,13 @@ block content %}
             current_user.point_values.reply }}), Mention({{
             current_user.point_values.mention }})
           </p>
+          {% else %}
+          <p class="text-xs text-gray-500 mt-1">
+            <a href="/settings" class="text-blue-600 hover:text-blue-800"
+              >Configure your point values</a
+            >
+          </p>
+          {% endif %}
         </div>
       </div>
     </div>
@@ -206,14 +214,17 @@ block content %}
       </div>
     </div>
 
-    <!-- Total Score Display -->
+    <!-- Demo Total Score Display -->
     <div class="mb-6">
       <div class="bg-gray-50 rounded-lg p-4">
         <div class="text-center">
           <p class="text-sm font-medium text-gray-500">
             Total Engagement Score
           </p>
-          <p class="text-3xl font-bold text-gray-900">{{ total_score or 0 }}</p>
+          <p class="text-3xl font-bold text-gray-900">0</p>
+          <p class="text-xs text-gray-500 mt-1">
+            Sign in to start tracking your engagement metrics
+          </p>
         </div>
       </div>
     </div>

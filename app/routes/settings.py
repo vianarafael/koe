@@ -23,24 +23,32 @@ async def settings_page(
     # Get current point values
     current_points = current_user.point_values
     
-    # Get some sample engagement data to show impact
-    try:
-        # This would show how changing points affects scores
-        sample_impact = {
-            "like_impact": f"1 like = {current_points['like']} points",
-            "retweet_impact": f"1 retweet = {current_points['retweet']} points", 
-            "reply_impact": f"1 reply = {current_points['reply']} points",
-            "mention_impact": f"1 mention = {current_points['mention']} points"
+    # Calculate sample impact for current strategy
+    sample_impact = {
+        "high_engagement": {
+            "likes": 100, "retweets": 50, "replies": 25, "mentions": 10,
+            "score": (100 * current_points["like"] + 50 * current_points["retweet"] + 
+                     25 * current_points["reply"] + 10 * current_points["mention"])
+        },
+        "medium_engagement": {
+            "likes": 50, "retweets": 25, "replies": 10, "mentions": 5,
+            "score": (50 * current_points["like"] + 25 * current_points["retweet"] + 
+                     10 * current_points["reply"] + 5 * current_points["mention"])
+        },
+        "low_engagement": {
+            "likes": 10, "retweets": 5, "replies": 2, "mentions": 1,
+            "score": (10 * current_points["like"] + 5 * current_points["retweet"] + 
+                     2 * current_points["reply"] + 1 * current_points["mention"])
         }
-    except Exception as e:
-        sample_impact = {}
+    }
     
-    return templates.TemplateResponse("settings.html", {
-        "request": request,
-        "current_user": current_user,
-        "current_points": current_points,
-        "sample_impact": sample_impact
-    })
+    template = templates.get_template("settings.html")
+    return HTMLResponse(template.render(
+        request=request,
+        current_user=current_user,
+        current_points=current_points,
+        sample_impact=sample_impact
+    ))
 
 @router.post("/update-points", response_class=JSONResponse)
 async def update_point_values(

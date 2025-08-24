@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Request, Depends, HTTPException, Query
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from typing import Optional, List
 from app.auth import get_current_user
 from app.models import User, TweetEngagement
@@ -10,63 +10,24 @@ router = APIRouter(prefix="/dashboard", tags=["dashboard"])
 templates = get_templates()
 
 @router.get("/", response_class=HTMLResponse)
-async def dashboard_page(
-    request: Request, 
-    current_user: User = Depends(get_current_user),
-    db=Depends(get_db)
-):
-    """Display main dashboard with engagement data"""
+async def dashboard_page(request: Request, current_user: User = Depends(get_current_user), db=Depends(get_db)):
+    """Display engagement dashboard"""
     if not current_user:
-        return JSONResponse(
-            status_code=401, 
-            content={"error": "Authentication required"}
-        )
+        return RedirectResponse(url="/auth/login", status_code=302)
     
-    # Get query parameters for sorting and filtering
-    sort_by = request.query_params.get("sort", "score")  # score, date, engagement
-    order = request.query_params.get("order", "desc")    # asc, desc
-    min_score = request.query_params.get("min_score")
-    max_score = request.query_params.get("max_score")
-    limit = int(request.query_params.get("limit", 50))
+    # Get user engagements
+    engagements = await get_user_engagements(db, current_user.id, limit=100)
     
-    try:
-        # Get user engagement data with filtering
-        if min_score or max_score:
-            min_score_int = int(min_score) if min_score else 0
-            max_score_int = int(max_score) if max_score else None
-            tweets = await get_engagements_by_score_range(
-                db, current_user.id, min_score_int, max_score_int, limit
-            )
-        else:
-            tweets = await get_user_engagements(db, current_user.id, limit)
-        
-        # Sort the data based on parameters
-        tweets = sort_engagements(tweets, sort_by, order)
-        
-        # Get total score and top performers
-        total_score = await get_user_total_score(db, current_user.id)
-        top_engagements = await get_top_engagements(db, current_user.id, limit=5)
-        
-        # Calculate summary statistics
-        stats = calculate_engagement_stats(tweets)
-        
-        return templates.TemplateResponse("dashboard.html", {
-            "request": request,
-            "current_user": current_user,
-            "tweets": tweets,
-            "total_score": total_score,
-            "top_engagements": top_engagements,
-            "stats": stats,
-            "sort_by": sort_by,
-            "order": order,
-            "min_score": min_score,
-            "max_score": max_score,
-            "limit": limit
-        })
-        
-    except Exception as e:
-        print(f"Error loading dashboard: {e}")
-        raise HTTPException(status_code=500, detail="Error loading dashboard data")
+    # Calculate statistics
+    stats = calculate_engagement_stats(engagements)
+    
+    template = templates.get_template("dashboard.html")
+    return HTMLResponse(template.render(
+        request=request,
+        current_user=current_user,
+        engagements=engagements,
+        stats=stats
+    ))
 
 @router.get("/api/engagements", response_class=JSONResponse)
 async def get_engagements_api(

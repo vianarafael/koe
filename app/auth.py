@@ -64,12 +64,14 @@ async def get_current_user(request: Request, db=Depends(get_db)) -> Optional[Use
 @router.get("/login", response_class=HTMLResponse)
 async def login_page(request: Request):
     """Display login page"""
-    return templates.TemplateResponse("auth.html", {"request": request, "mode": "login"})
+    template = templates.get_template("auth.html")
+    return HTMLResponse(template.render(request=request, mode="login"))
 
 @router.get("/register", response_class=HTMLResponse)
 async def register_page(request: Request):
     """Display registration page"""
-    return templates.TemplateResponse("auth.html", {"request": request, "mode": "register"})
+    template = templates.get_template("auth.html")
+    return HTMLResponse(template.render(request=request, mode="register"))
 
 @router.post("/register")
 async def register(
@@ -82,17 +84,45 @@ async def register(
     """Handle user registration"""
     # Validate input
     if not email or not username or not password:
-        raise HTTPException(status_code=400, detail="All fields are required")
+        template = templates.get_template("auth.html")
+        return HTMLResponse(template.render(
+            request=request, 
+            mode="register", 
+            error="All fields are required",
+            email=email,
+            username=username
+        ))
     
     if len(password) < 8:
-        raise HTTPException(status_code=400, detail="Password must be at least 8 characters long")
+        template = templates.get_template("auth.html")
+        return HTMLResponse(template.render(
+            request=request, 
+            mode="register", 
+            error="Password must be at least 8 characters long",
+            email=email,
+            username=username
+        ))
     
     # Check if email or username already exists
     if await check_email_exists(db, email):
-        raise HTTPException(status_code=400, detail="Email already registered")
+        template = templates.get_template("auth.html")
+        return HTMLResponse(template.render(
+            request=request, 
+            mode="register", 
+            error="Email already registered",
+            email=email,
+            username=username
+        ))
     
     if await check_username_exists(db, username):
-        raise HTTPException(status_code=400, detail="Username already taken")
+        template = templates.get_template("auth.html")
+        return HTMLResponse(template.render(
+            request=request, 
+            mode="register", 
+            error="Username already taken",
+            email=email,
+            username=username
+        ))
     
     # Create user
     user_data = UserCreate(email=email, username=username, password=password)
@@ -115,7 +145,14 @@ async def register(
         return response
         
     except Exception as e:
-        raise HTTPException(status_code=500, detail="Failed to create user")
+        template = templates.get_template("auth.html")
+        return HTMLResponse(template.render(
+            request=request, 
+            mode="register", 
+            error="Failed to create user. Please try again.",
+            email=email,
+            username=username
+        ))
 
 @router.post("/login")
 async def login(
@@ -127,16 +164,34 @@ async def login(
     """Handle user login"""
     # Validate input
     if not email or not password:
-        raise HTTPException(status_code=400, detail="Email and password are required")
+        template = templates.get_template("auth.html")
+        return HTMLResponse(template.render(
+            request=request, 
+            mode="login", 
+            error="Email and password are required",
+            email=email
+        ))
     
     # Get user by email
     user = await get_user_by_email(db, email)
     if not user:
-        raise HTTPException(status_code=401, detail="Invalid email or password")
+        template = templates.get_template("auth.html")
+        return HTMLResponse(template.render(
+            request=request, 
+            mode="login", 
+            error="Invalid email or password",
+            email=email
+        ))
     
     # Verify password
     if not verify_password(password, user.hashed_password):
-        raise HTTPException(status_code=401, detail="Invalid email or password")
+        template = templates.get_template("auth.html")
+        return HTMLResponse(template.render(
+            request=request, 
+            mode="login", 
+            error="Invalid email or password",
+            email=email
+        ))
     
     # Create session and redirect to dashboard
     session_id = create_session(user)

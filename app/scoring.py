@@ -101,12 +101,13 @@ async def process_csv_engagements_with_scoring(engagements: List[TweetEngagement
             # Update the engagement with the calculated score
             engagement.engagement_score = score
             
-            # Store in database
-            await update_engagement_score(db, engagement.id, score)
-            processed_count += 1
+            # Store the engagement in the database
+            from app.db import store_tweet_engagement
+            if await store_tweet_engagement(db, engagement):
+                processed_count += 1
             
         except Exception as e:
-            print(f"Error processing engagement {engagement.id}: {e}")
+            print(f"Error processing engagement {engagement.tweet_id}: {e}")
             continue
     
     return processed_count

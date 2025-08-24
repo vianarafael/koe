@@ -13,6 +13,8 @@
 - Automatic engagement score calculation using user-defined point values
 - Advanced dashboard UI with real-time sorting, filtering, and analytics
 - **User settings management for optimizing engagement strategy (T05 ✅)**
+- **UI mockups and design system for authentication, dashboard, and settings (T06 ✅)**
+- **Enhanced CSV parsing supporting X Analytics account overview format (Bug Fixes ✅)**
 
 ## ❌ Non-Goals
 
@@ -42,6 +44,8 @@
 - Automatic score calculation that adapts to user preferences
 - **Advanced dashboard with real-time sorting, filtering, and analytics (T04 ✅)**
 - **Professional settings interface for engagement strategy optimization (T05 ✅)**
+- **Comprehensive UI design system and mockups for professional user experience (T06 ✅)**
+- **Enhanced CSV parsing supporting X Analytics account overview and daily summary data (Bug Fixes ✅)**
 
 ## 🔄 Key User Flows
 
@@ -56,6 +60,8 @@
 9. **User accesses advanced dashboard with sorting, filtering, and analytics (T04 ✅)**
 10. **User updates point values and sees updated scores immediately (T05 ✅)**
 11. **User optimizes engagement strategy based on real-time score impact (T05 ✅)**
+12. **User benefits from professional UI design system and comprehensive mockups (T06 ✅)**
+13. **System intelligently handles both tweet-level and account overview CSV formats (Bug Fixes ✅)**
 
 ## 🏗️ Architecture
 
@@ -67,10 +73,12 @@
 - Scoring Engine: Automatic engagement score calculation (T03 ✅)
 - **Dashboard System: Advanced UI with sorting, filtering, and real-time updates (T04 ✅)**
 - **Settings Management: Point value configuration and strategy optimization (T05 ✅)**
+- **UI Design System: Comprehensive mockups and design specifications (T06 ✅)**
+- **Enhanced CSV Parser: Intelligent format detection and dual-mode parsing (Bug Fixes ✅)**
 - Deployment: Linode server with direct deployment
 - Session Management: In-memory session storage with secure cookies
 - Development: Git push and manual server restart workflow
-- CSV Processing: Intelligent column detection and data validation (T02 ✅)
+- CSV Processing: Intelligent column detection and data validation with X Analytics support (T02 ✅ + Bug Fixes ✅)
 
 ## 📊 Data Contracts
 
@@ -162,6 +170,9 @@
 - **Optional columns**: Tweet text, Posted date, Mentions
 - **Date formats**: YYYY-MM-DD, MM/DD/YYYY, DD/MM/YYYY, ISO timestamps
 - **Number formats**: Plain integers, comma-separated, K/M suffixes
+- **X Analytics Account Overview**: Automatic detection and parsing of daily summary data
+- **Dual Format Support**: Handles both individual tweet data and account-level daily summaries
+- **Column Mapping**: Intelligent detection of "Reposts" (X's term for retweets) and other variations
 
 ## 🎯 Scoring System (T03 ✅)
 
@@ -245,6 +256,33 @@
 - **Strategy Recommendations**: AI-powered tips for optimizing engagement strategy
 - **Performance Scenarios**: Example calculations for different engagement levels
 
+## 🎨 UI Design System (T06 ✅)
+
+### Comprehensive Design Specifications
+
+- **Design System Foundation**: Color palette, typography, spacing, and component library
+- **Authentication Flow Mockups**: Detailed wireframes for login, registration, and user profile
+- **Dashboard Design**: Interactive mockups with sorting, filtering, and analytics visualization
+- **Settings Interface**: Professional settings page with strategy optimization interface
+- **Responsive Design**: Mobile-first approach with touch-friendly interactions
+- **Accessibility**: WCAG compliance considerations and keyboard navigation
+
+### Design System Features
+
+- **Component Library**: Reusable UI components with consistent styling
+- **Design Principles**: Simplicity, progressive disclosure, consistency, and performance
+- **Implementation Guidelines**: HTMX, Tailwind CSS, and vanilla JavaScript specifications
+- **Responsive Breakpoints**: Mobile, tablet, and desktop design adaptations
+- **Visual Hierarchy**: Clear information architecture and user flow optimization
+
+### Mockup Specifications
+
+- **Authentication Pages**: Landing, registration, login, and profile wireframes
+- **Dashboard Layout**: Key metrics, engagement breakdown, and interactive table design
+- **Settings Interface**: Point value configuration, strategy analysis, and optimization tips
+- **Form States**: Default, focused, valid, error, and loading state specifications
+- **Interactive Elements**: Button states, navigation patterns, and user feedback
+
 ## ✅ Definition of Done
 
 - [x] User can create account and authenticate with email/password
@@ -263,14 +301,19 @@
 - [x] **Advanced dashboard with sorting, filtering, and real-time updates (T04 ✅)**
 - [x] **User can update point values and see updated scores immediately (T05 ✅)**
 - [x] **Settings interface for engagement strategy optimization (T05 ✅)**
+- [x] **Comprehensive UI mockups and design system (T06 ✅)**
+- [x] **Enhanced CSV parsing with X Analytics account overview support (Bug Fixes ✅)**
+- [x] **Dual-format CSV parsing (tweet-level and daily summaries) (Bug Fixes ✅)**
+- [x] **Improved error handling and debug logging (Bug Fixes ✅)**
 - [ ] Deployed and accessible via public URL
 - [x] Automated tests cover key API endpoints and scoring logic (T03 ✅)
 - [x] **Dashboard functionality testing and validation (T04 ✅)**
 - [x] **Settings management testing and validation (T05 ✅)**
+- [x] **UI design system and mockup specifications (T06 ✅)**
 
 ## 🚧 Current Status
 
-### Completed (T01-T05)
+### Completed (T01-T06)
 
 - ✅ User authentication system (email/password)
 - ✅ User registration and login
@@ -295,10 +338,10 @@
 - ✅ **Settings management system for point value optimization (T05 ✅)**
 - ✅ **Real-time score recalculation and strategy optimization (T05 ✅)**
 - ✅ **Professional settings interface with engagement insights (T05 ✅)**
-
-### In Progress (T06)
-
-- 🔄 Design simple UI mockups for authentication, dashboard, and settings
+- ✅ **Comprehensive UI mockups and design system (T06 ✅)**
+- ✅ **Enhanced CSV parsing with X Analytics account overview support (Bug Fixes ✅)**
+- ✅ **Dual-format CSV parsing (tweet-level and daily summaries) (Bug Fixes ✅)**
+- ✅ **Improved error handling and debug logging (Bug Fixes ✅)**
 
 ### Planned (T07)
 
@@ -313,6 +356,20 @@
 - **Error Handling**: Tracks parsing errors with row numbers and context
 - **Format Flexibility**: Supports multiple CSV export formats from different platforms
 - **Performance**: Efficient parsing with minimal memory usage
+- **X Analytics Support**: Automatic detection of account overview vs. tweet-level data
+- **Dual Format Parsing**: Handles both individual tweets and daily summaries
+- **Synthetic Tweet Creation**: Generates meaningful records for account overview data
+- **Enhanced Error Handling**: Improved debug logging and error reporting
+
+### Enhanced CSV Parser Capabilities (Bug Fixes ✅)
+
+- **Format Detection**: Automatically identifies CSV type (tweet-level vs. account overview)
+- **Account Overview Parsing**: Handles X Analytics daily summary data with synthetic tweet creation
+- **Reposts Support**: Recognizes "Reposts" column (X's term for retweets) automatically
+- **Dual-Mode Operation**: Seamlessly switches between parsing modes based on CSV content
+- **Synthetic Data Generation**: Creates meaningful tweet records for daily performance summaries
+- **Enhanced Error Reporting**: Comprehensive error handling with debug logging capabilities
+- **Column Mapping Intelligence**: Advanced detection of various column naming conventions
 
 ### Scoring Engine Features
 
@@ -341,6 +398,17 @@
 - **Professional UI**: Advanced interface with engagement strategy insights
 - **HTMX Integration**: Dynamic updates without page refresh
 - **Validation Engine**: Comprehensive point value validation
+
+### UI Design System Features
+
+- **Design System Foundation**: Comprehensive color palette, typography, and spacing system
+- **Component Library**: Reusable UI components with consistent styling and behavior
+- **Responsive Design**: Mobile-first approach with touch-friendly interactions
+- **Accessibility**: WCAG compliance considerations and keyboard navigation support
+- **Design Principles**: Simplicity, progressive disclosure, consistency, and performance
+- **Implementation Guidelines**: HTMX, Tailwind CSS, and vanilla JavaScript specifications
+- **Mockup Specifications**: Detailed wireframes for all major user flows
+- **Visual Hierarchy**: Clear information architecture and user flow optimization
 
 ### Database Schema Updates
 

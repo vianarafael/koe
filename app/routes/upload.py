@@ -17,10 +17,8 @@ async def upload_page(request: Request, current_user: User = Depends(get_current
     if not current_user:
         return RedirectResponse(url="/auth/login", status_code=302)
     
-    return templates.TemplateResponse("upload.html", {
-        "request": request, 
-        "current_user": current_user
-    })
+    template = templates.get_template("upload.html")
+    return HTMLResponse(template.render(request=request, current_user=current_user))
 
 @router.post("/csv")
 async def upload_csv(
@@ -55,7 +53,6 @@ async def upload_csv(
         # Process engagements with scoring and store in database
         stored_count = await process_csv_engagements_with_scoring(
             engagements, 
-            current_user.id, 
             user.point_values, 
             db
         )
@@ -78,7 +75,10 @@ async def upload_csv(
         # Re-raise HTTP exceptions
         raise
     except Exception as e:
-        # Handle other errors
+        # Handle other errors with more detail
+        import traceback
+        error_details = f"Error processing file: {str(e)}\nTraceback: {traceback.format_exc()}"
+        print(f"Upload error: {error_details}")  # Debug logging
         raise HTTPException(status_code=500, detail=f"Error processing file: {str(e)}")
 
 @router.get("/sample")
