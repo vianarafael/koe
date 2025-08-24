@@ -11,6 +11,8 @@
 - CSV file upload and parsing for engagement data ingestion
 - Intelligent CSV parsing with automatic column detection
 - Automatic engagement score calculation using user-defined point values
+- Advanced dashboard UI with real-time sorting, filtering, and analytics
+- **User settings management for optimizing engagement strategy (T05 ✅)**
 
 ## ❌ Non-Goals
 
@@ -27,6 +29,7 @@
 - Social media managers for small brands or personal brands
 - Content creators wanting quick feedback on post performance
 - Users who export engagement data from various platforms
+- **Users wanting to optimize their engagement strategy through point value configuration**
 
 ## 💎 Value Propositions
 
@@ -37,6 +40,8 @@
 - No API dependencies or rate limits
 - Intelligent CSV parsing that adapts to various export formats
 - Automatic score calculation that adapts to user preferences
+- **Advanced dashboard with real-time sorting, filtering, and analytics (T04 ✅)**
+- **Professional settings interface for engagement strategy optimization (T05 ✅)**
 
 ## 🔄 Key User Flows
 
@@ -48,7 +53,9 @@
 6. System parses CSV data and stores engagement metrics (T02 ✅)
 7. System automatically calculates engagement scores per post using point values (T03 ✅)
 8. User views dashboard with engagement scores and top posts (T03 ✅)
-9. User updates point values and sees updated scores immediately
+9. **User accesses advanced dashboard with sorting, filtering, and analytics (T04 ✅)**
+10. **User updates point values and sees updated scores immediately (T05 ✅)**
+11. **User optimizes engagement strategy based on real-time score impact (T05 ✅)**
 
 ## 🏗️ Architecture
 
@@ -58,6 +65,8 @@
 - Authentication: Local email/password with session management
 - File Processing: CSV parsing for engagement data ingestion (T02 ✅)
 - Scoring Engine: Automatic engagement score calculation (T03 ✅)
+- **Dashboard System: Advanced UI with sorting, filtering, and real-time updates (T04 ✅)**
+- **Settings Management: Point value configuration and strategy optimization (T05 ✅)**
 - Deployment: Linode server with direct deployment
 - Session Management: In-memory session storage with secure cookies
 - Development: Git push and manual server restart workflow
@@ -99,6 +108,16 @@
 - `SetPointValuesRequest`: {'like': 'integer', 'retweet': 'integer', 'reply': 'integer', 'mention': 'integer'}
 - `PointValuesResponse`: {'message': 'string', 'updated_point_values': 'dict', 'recalculated_count': 'integer'}
 - `EngagementScoreCalculation`: {'tweet_id': 'string', 'like_score': 'integer', 'retweet_score': 'integer', 'reply_score': 'integer', 'mention_score': 'integer', 'total_score': 'integer', 'calculation_details': 'dict'}
+
+### Dashboard Models
+
+- `EngagementDashboardResponse`: {'tweets': [{'tweet_id': 'string', 'text': 'string', 'engagement_score': 'integer', 'like_count': 'integer', 'retweet_count': 'integer', 'reply_count': 'integer', 'mention_count': 'integer', 'created_at': 'datetime'}], 'total_score': 'integer'}
+- `DashboardStats`: {'total_tweets': 'integer', 'total_score': 'integer', 'average_score': 'float', 'top_score': 'integer', 'engagement_breakdown': 'dict'}
+
+### Settings Models
+
+- `PointValueUpdate`: {'like': 'integer', 'retweet': 'integer', 'reply': 'integer', 'mention': 'integer'}
+- `StrategyImpactAnalysis`: {'current_values': 'dict', 'scoring_formula': 'string', 'example_scenarios': 'dict', 'recommendations': 'dict'}
 
 ### API Input/Output
 
@@ -168,6 +187,64 @@
 - **Database Storage**: Engagement scores stored with engagement data
 - **Performance Metrics**: Top engagements displayed by score ranking
 
+## 🎛️ Dashboard System (T04 ✅)
+
+### Advanced Dashboard Features
+
+- **Interactive Table**: Sortable headers with real-time sorting and filtering
+- **Score Range Filtering**: Min/max score controls with instant results
+- **Statistics Overview**: Comprehensive engagement metrics and breakdown
+- **HTMX Integration**: Dynamic interactions without page refresh
+- **Responsive Design**: Mobile-friendly layout with touch interactions
+- **Top Performers**: Highlights best tweets by engagement score
+- **Partial Templates**: Modular UI components for reusability
+
+### Dashboard API Endpoints
+
+- **`GET /dashboard/`**: Main dashboard page with statistics and data
+- **`GET /dashboard/api/engagements`**: JSON API for engagement data with sorting/filtering
+- **`GET /dashboard/api/stats`**: Statistics and analytics data
+- **Real-time Updates**: HTMX-powered dynamic content updates
+
+### Dashboard Capabilities
+
+- **Multi-criteria Sorting**: Score, date, engagement, likes, retweets, replies
+- **Advanced Filtering**: Score ranges, result limiting, instant feedback
+- **Performance Analytics**: Total scores, averages, top performers
+- **Engagement Breakdown**: Visual representation of engagement types
+
+## ⚙️ Settings Management System (T05 ✅)
+
+### Point Value Configuration
+
+- **Real-time Updates**: Immediate point value changes with instant feedback
+- **Validation Engine**: Comprehensive validation of point values (non-negative integers)
+- **Score Recalculation**: Automatic recalculation of all engagement scores
+- **Strategy Optimization**: AI-powered recommendations for engagement strategy
+
+### Settings Features
+
+- **Professional UI**: Advanced settings interface with engagement strategy insights
+- **HTMX Integration**: Dynamic updates without page refresh
+- **Strategy Analysis**: Real-time impact analysis of point value changes
+- **Example Scenarios**: High/medium/low engagement examples with calculated scores
+- **Optimization Tips**: Automatic recommendations based on current configuration
+
+### Settings API Endpoints
+
+- **`GET /settings/`**: Main settings page with current configuration
+- **`POST /settings/update-points`**: JSON API for updating point values
+- **`POST /settings/update-points-htmx`**: HTMX endpoint with immediate UI feedback
+- **`GET /settings/api/current-points`**: Get current user point values
+- **`GET /settings/api/point-impact`**: Analyze impact of current point values
+
+### Strategy Optimization
+
+- **Impact Analysis**: Real-time calculation of how point changes affect scores
+- **Scoring Formula Display**: Shows current formula with actual values
+- **Strategy Recommendations**: AI-powered tips for optimizing engagement strategy
+- **Performance Scenarios**: Example calculations for different engagement levels
+
 ## ✅ Definition of Done
 
 - [x] User can create account and authenticate with email/password
@@ -182,13 +259,18 @@
 - [x] Automatic score calculation during CSV upload (T03 ✅)
 - [x] Score calculation using configurable point values (T03 ✅)
 - [x] Dashboard displays engagement scores and top performers (T03 ✅)
-- [ ] User can update point values and see updated scores immediately
+- [x] **Dashboard renders tweets with correct scores and updates on data change (T04 ✅)**
+- [x] **Advanced dashboard with sorting, filtering, and real-time updates (T04 ✅)**
+- [x] **User can update point values and see updated scores immediately (T05 ✅)**
+- [x] **Settings interface for engagement strategy optimization (T05 ✅)**
 - [ ] Deployed and accessible via public URL
 - [x] Automated tests cover key API endpoints and scoring logic (T03 ✅)
+- [x] **Dashboard functionality testing and validation (T04 ✅)**
+- [x] **Settings management testing and validation (T05 ✅)**
 
 ## 🚧 Current Status
 
-### Completed (T01-T03)
+### Completed (T01-T05)
 
 - ✅ User authentication system (email/password)
 - ✅ User registration and login
@@ -207,17 +289,20 @@
 - ✅ Configurable point values with validation (T03 ✅)
 - ✅ Dashboard score display and top performers (T03 ✅)
 - ✅ Score-based database queries and sorting (T03 ✅)
+- ✅ **Advanced dashboard UI with sorting, filtering, and analytics (T04 ✅)**
+- ✅ **Interactive table with real-time updates and HTMX integration (T04 ✅)**
+- ✅ **Comprehensive statistics and engagement breakdown (T04 ✅)**
+- ✅ **Settings management system for point value optimization (T05 ✅)**
+- ✅ **Real-time score recalculation and strategy optimization (T05 ✅)**
+- ✅ **Professional settings interface with engagement insights (T05 ✅)**
 
-### In Progress (T04)
+### In Progress (T06)
 
-- 🔄 Dashboard UI with advanced sorting/filtering by engagement score
-- 🔄 Enhanced score visualization and analytics
+- 🔄 Design simple UI mockups for authentication, dashboard, and settings
 
-### Planned (T05)
+### Planned (T07)
 
-- 📋 User settings page for updating point values
-- 📋 Real-time score updates and dashboard refresh
-- 📋 Score recalculation triggers and notifications
+- 📋 Write documentation for setup, usage, and API endpoints
 
 ## 🔧 Technical Implementation Details
 
@@ -236,6 +321,26 @@
 - **Performance**: Efficient scoring for large datasets
 - **Integration**: Seamless integration with CSV upload and database operations
 - **Extensibility**: Easy to modify scoring algorithms and add new metrics
+- **Score Recalculation**: Async functions for updating all user engagement scores
+- **Strategy Optimization**: Real-time impact analysis and recommendations
+
+### Dashboard Engine Features
+
+- **Interactive Sorting**: Multi-criteria sorting with visual indicators
+- **Advanced Filtering**: Score range filtering with instant results
+- **Real-time Updates**: HTMX integration for dynamic content updates
+- **Statistics Calculation**: Comprehensive engagement metrics and breakdown
+- **Responsive Design**: Mobile-friendly layout with touch interactions
+- **Partial Templates**: Modular UI components for reusability
+
+### Settings Management Features
+
+- **Point Value Configuration**: Real-time updates with immediate feedback
+- **Strategy Optimization**: AI-powered recommendations and impact analysis
+- **Score Recalculation**: Automatic updates of all engagement scores
+- **Professional UI**: Advanced interface with engagement strategy insights
+- **HTMX Integration**: Dynamic updates without page refresh
+- **Validation Engine**: Comprehensive point value validation
 
 ### Database Schema Updates
 
@@ -244,6 +349,7 @@
 - **Data integrity**: Unique constraints prevent duplicate entries
 - **Performance**: Optimized queries for dashboard display and score-based sorting
 - **Score indexing**: Efficient queries for top performers and score ranges
+- **Settings integration**: Point values stored per user with validation
 
 ### File Upload Security
 
@@ -259,3 +365,14 @@
 - **Top Performers**: Highlights best-performing tweets by score
 - **Upload Feedback**: Indicates when scoring has been applied
 - **Real-time Updates**: Scores calculated and displayed immediately
+- **Advanced Analytics**: Comprehensive statistics and engagement breakdown
+- **Interactive Controls**: Sorting, filtering, and result limiting
+- **Mobile Optimization**: Responsive design with touch interactions
+
+### Settings System Integration
+
+- **Navigation Integration**: Settings link in main navigation menu
+- **Real-time Updates**: Immediate feedback on point value changes
+- **Strategy Insights**: Automatic recommendations and optimization tips
+- **Impact Analysis**: Real-time calculation of strategy changes
+- **Professional Interface**: Advanced UI with engagement strategy optimization

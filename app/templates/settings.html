@@ -1,0 +1,510 @@
+{% extends "base.html" %} {% block title %}Settings - Koe{% endblock %} {% block
+content %}
+<div class="bg-white shadow rounded-lg">
+  <div class="px-4 py-5 sm:p-6">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-lg leading-6 font-medium text-gray-900">
+        Engagement Strategy Settings
+      </h2>
+      <div class="flex space-x-2">
+        <a
+          href="/"
+          class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        >
+          <svg
+            class="w-4 h-4 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+            />
+          </svg>
+          Dashboard
+        </a>
+        <a
+          href="/upload"
+          class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        >
+          <svg
+            class="w-4 h-4 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+            />
+          </svg>
+          Upload CSV
+        </a>
+      </div>
+    </div>
+
+    <!-- Current Point Values Display -->
+    <div class="mb-8">
+      <h3 class="text-lg font-medium text-gray-900 mb-4">
+        Current Engagement Strategy
+      </h3>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div class="text-center">
+            <p class="text-sm font-medium text-blue-600">Likes</p>
+            <p class="text-2xl font-bold text-blue-900">
+              {{ current_points.like }}
+            </p>
+            <p class="text-xs text-blue-500">points per like</p>
+          </div>
+        </div>
+        <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+          <div class="text-center">
+            <p class="text-sm font-medium text-green-600">Retweets</p>
+            <p class="text-2xl font-bold text-green-900">
+              {{ current_points.retweet }}
+            </p>
+            <p class="text-xs text-green-500">points per retweet</p>
+          </div>
+        </div>
+        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+          <div class="text-center">
+            <p class="text-sm font-medium text-yellow-600">Replies</p>
+            <p class="text-2xl font-bold text-yellow-900">
+              {{ current_points.reply }}
+            </p>
+            <p class="text-xs text-yellow-500">points per reply</p>
+          </div>
+        </div>
+        <div class="bg-purple-50 border border-purple-200 rounded-lg p-4">
+          <div class="text-center">
+            <p class="text-sm font-medium text-purple-600">Mentions</p>
+            <p class="text-2xl font-bold text-purple-900">
+              {{ current_points.mention }}
+            </p>
+            <p class="text-xs text-purple-500">points per mention</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Point Value Update Form -->
+    <div class="mb-8">
+      <h3 class="text-lg font-medium text-gray-900 mb-4">
+        Optimize Your Engagement Strategy
+      </h3>
+      <div class="bg-gray-50 border border-gray-200 rounded-lg p-6">
+        <form
+          hx-post="/settings/update-points-htmx"
+          hx-target="#update-result"
+          hx-swap="innerHTML"
+          class="space-y-6"
+        >
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Likes -->
+            <div>
+              <label
+                for="like"
+                class="block text-sm font-medium text-gray-700 mb-2"
+              >
+                <span class="inline-flex items-center">
+                  <svg
+                    class="w-4 h-4 mr-2 text-red-500"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                    />
+                  </svg>
+                  Likes Value
+                </span>
+              </label>
+              <input
+                type="number"
+                id="like"
+                name="like"
+                value="{{ current_points.like }}"
+                min="0"
+                max="100"
+                class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                placeholder="Enter points for likes"
+                required
+              />
+              <p class="mt-1 text-xs text-gray-500">
+                How valuable are likes to your strategy?
+              </p>
+            </div>
+
+            <!-- Retweets -->
+            <div>
+              <label
+                for="retweet"
+                class="block text-sm font-medium text-gray-700 mb-2"
+              >
+                <span class="inline-flex items-center">
+                  <svg
+                    class="w-4 h-4 mr-2 text-blue-500"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M23.77 15.67c-.292-.293-.767-.293-1.06 0l-2.54 2.54V9.5c0-1.1-.9-2-2-2h-1.5c-.28 0-.5-.22-.5-.5s.22-.5.5-.5H20c1.1 0 2 .9 2 2v8.71l-2.54-2.54c-.292-.293-.767-.293-1.06 0s-.292.767 0 1.06l4.29 4.29c.292.292.767.292 1.06 0l4.29-4.29c.292-.293.292-.767 0-1.06z"
+                    />
+                  </svg>
+                  Retweets Value
+                </span>
+              </label>
+              <input
+                type="number"
+                id="retweet"
+                name="retweet"
+                value="{{ current_points.retweet }}"
+                min="0"
+                max="100"
+                class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                placeholder="Enter points for retweets"
+                required
+              />
+              <p class="mt-1 text-xs text-gray-500">
+                Retweets amplify your reach - how important are they?
+              </p>
+            </div>
+
+            <!-- Replies -->
+            <div>
+              <label
+                for="reply"
+                class="block text-sm font-medium text-gray-700 mb-2"
+              >
+                <span class="inline-flex items-center">
+                  <svg
+                    class="w-4 h-4 mr-2 text-green-500"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"
+                    />
+                  </svg>
+                  Replies Value
+                </span>
+              </label>
+              <input
+                type="number"
+                id="reply"
+                name="reply"
+                value="{{ current_points.reply }}"
+                min="0"
+                max="100"
+                class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                placeholder="Enter points for replies"
+                required
+              />
+              <p class="mt-1 text-xs text-gray-500">
+                Replies create conversations - what's their worth?
+              </p>
+            </div>
+
+            <!-- Mentions -->
+            <div>
+              <label
+                for="mention"
+                class="block text-sm font-medium text-gray-700 mb-2"
+              >
+                <span class="inline-flex items-center">
+                  <svg
+                    class="w-4 h-4 mr-2 text-purple-500"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+                    />
+                  </svg>
+                  Mentions Value
+                </span>
+              </label>
+              <input
+                type="number"
+                id="mention"
+                name="mention"
+                value="{{ current_points.mention }}"
+                min="0"
+                max="100"
+                class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                placeholder="Enter points for mentions"
+                required
+              />
+              <p class="mt-1 text-xs text-gray-500">
+                Mentions expand your network - how valuable are they?
+              </p>
+            </div>
+          </div>
+
+          <!-- Strategy Tips -->
+          <div class="bg-blue-50 border border-blue-200 rounded-md p-4">
+            <h4 class="text-sm font-medium text-blue-800 mb-2">
+              💡 Engagement Strategy Tips
+            </h4>
+            <div class="text-sm text-blue-700 space-y-1">
+              <p>
+                • <strong>Higher values</strong> for actions you want to
+                encourage
+              </p>
+              <p>
+                • <strong>Lower values</strong> for actions that are less
+                important to your goals
+              </p>
+              <p>
+                • <strong>Balanced approach</strong> considers all engagement
+                types valuable
+              </p>
+              <p>
+                • <strong>Focus on quality</strong> over quantity for meaningful
+                engagement
+              </p>
+            </div>
+          </div>
+
+          <div class="flex justify-end space-x-3">
+            <button
+              type="button"
+              onclick="resetToDefaults()"
+              class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+            >
+              Reset to Defaults
+            </button>
+            <button
+              type="submit"
+              class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              <svg
+                class="w-4 h-4 mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+              Update Strategy & Recalculate Scores
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Update Result Display -->
+    <div id="update-result"></div>
+
+    <!-- Current Strategy Analysis -->
+    <div class="mb-8">
+      <h3 class="text-lg font-medium text-gray-900 mb-4">
+        Strategy Impact Analysis
+      </h3>
+      <div class="bg-white border border-gray-200 rounded-lg p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Scoring Formula -->
+          <div>
+            <h4 class="text-sm font-medium text-gray-700 mb-2">
+              Current Scoring Formula
+            </h4>
+            <div class="bg-gray-50 border border-gray-200 rounded-md p-3">
+              <code class="text-sm text-gray-800">
+                Score = (likes × {{ current_points.like }}) + (retweets × {{
+                current_points.retweet }}) + (replies × {{ current_points.reply
+                }}) + (mentions × {{ current_points.mention }})
+              </code>
+            </div>
+          </div>
+
+          <!-- Strategy Insights -->
+          <div>
+            <h4 class="text-sm font-medium text-gray-700 mb-2">
+              Strategy Insights
+            </h4>
+            <div class="space-y-2">
+              {% if current_points.reply > current_points.like %}
+              <div class="flex items-center text-sm text-green-600">
+                <svg
+                  class="w-4 h-4 mr-2"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                </svg>
+                Replies are your highest-value engagement
+              </div>
+              {% endif %} {% if current_points.retweet > current_points.like %}
+              <div class="flex items-center text-sm text-blue-600">
+                <svg
+                  class="w-4 h-4 mr-2"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                </svg>
+                Retweets are highly valued
+              </div>
+              {% endif %} {% if current_points.mention == current_points.like %}
+              <div class="flex items-center text-sm text-purple-600">
+                <svg
+                  class="w-4 h-4 mr-2"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                </svg>
+                Mentions and likes have equal value
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Example Scenarios -->
+    <div class="mb-8">
+      <h3 class="text-lg font-medium text-gray-900 mb-4">
+        Example Engagement Scenarios
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- High Engagement -->
+        <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+          <h4 class="text-sm font-medium text-green-800 mb-2">
+            High Engagement Post
+          </h4>
+          <div class="text-sm text-green-700 space-y-1">
+            <p>• 100 likes = {{ 100 * current_points.like }} points</p>
+            <p>• 50 retweets = {{ 50 * current_points.retweet }} points</p>
+            <p>• 25 replies = {{ 25 * current_points.reply }} points</p>
+            <p>• 10 mentions = {{ 10 * current_points.mention }} points</p>
+            <div class="mt-2 pt-2 border-t border-green-200">
+              <p class="font-semibold">
+                Total Score: {{ 100 * current_points.like + 50 *
+                current_points.retweet + 25 * current_points.reply + 10 *
+                current_points.mention }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Medium Engagement -->
+        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+          <h4 class="text-sm font-medium text-yellow-800 mb-2">
+            Medium Engagement Post
+          </h4>
+          <div class="text-sm text-yellow-700 space-y-1">
+            <p>• 50 likes = {{ 50 * current_points.like }} points</p>
+            <p>• 25 retweets = {{ 25 * current_points.retweet }} points</p>
+            <p>• 10 replies = {{ 10 * current_points.reply }} points</p>
+            <p>• 5 mentions = {{ 5 * current_points.mention }} points</p>
+            <div class="mt-2 pt-2 border-t border-yellow-200">
+              <p class="font-semibold">
+                Total Score: {{ 50 * current_points.like + 25 *
+                current_points.retweet + 10 * current_points.reply + 5 *
+                current_points.mention }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Low Engagement -->
+        <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+          <h4 class="text-sm font-medium text-gray-800 mb-2">
+            Low Engagement Post
+          </h4>
+          <div class="text-sm text-gray-700 space-y-1">
+            <p>• 10 likes = {{ 10 * current_points.like }} points</p>
+            <p>• 5 retweets = {{ 5 * current_points.retweet }} points</p>
+            <p>• 2 replies = {{ 2 * current_points.reply }} points</p>
+            <p>• 1 mention = {{ 1 * current_points.mention }} points</p>
+            <div class="mt-2 pt-2 border-t border-gray-200">
+              <p class="font-semibold">
+                Total Score: {{ 10 * current_points.like + 5 *
+                current_points.retweet + 2 * current_points.reply + 1 *
+                current_points.mention }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex justify-center space-x-4">
+      <a
+        href="/dashboard"
+        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+      >
+        <svg
+          class="w-4 h-4 mr-2"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2m0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+          />
+        </svg>
+        View Dashboard with New Scores
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  function resetToDefaults() {
+    document.getElementById("like").value = 1;
+    document.getElementById("retweet").value = 2;
+    document.getElementById("reply").value = 3;
+    document.getElementById("mention").value = 1;
+  }
+
+  // HTMX event handlers for better UX
+  document.addEventListener("htmx:beforeRequest", function (evt) {
+    if (evt.target.closest("form")) {
+      const submitBtn = evt.target.querySelector('button[type="submit"]');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `
+        <svg class="w-4 h-4 mr-2 animate-spin" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        Updating...
+      `;
+      }
+    }
+  });
+
+  document.addEventListener("htmx:afterRequest", function (evt) {
+    if (evt.target.closest("form")) {
+      const submitBtn = evt.target.querySelector('button[type="submit"]');
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `
+        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+        Update Strategy & Recalculate Scores
+      `;
+      }
+    }
+  });
+</script>
+{% endblock %}

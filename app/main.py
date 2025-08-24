@@ -5,6 +5,7 @@ from app.routes import home
 from app.auth import router as auth_router
 from app.routes.upload import router as upload_router
 from app.routes.dashboard import router as dashboard_router
+from app.routes.settings import router as settings_router
 from app.scoring import scoring_engine
 from app.settings import settings
 
@@ -18,6 +19,7 @@ app.include_router(home.router)
 app.include_router(auth_router)
 app.include_router(upload_router)
 app.include_router(dashboard_router)
+app.include_router(settings_router)
 
 @app.get("/health")
 async def health():
