@@ -37,50 +37,107 @@
         <div class="text-center">
           <p class="text-sm font-medium text-blue-600">Total Score</p>
           <p class="text-2xl font-bold text-blue-900">{{ total_score or 0 }}</p>
+          <p class="text-xs text-blue-600 mt-1">Sum of all engagement scores</p>
         </div>
       </div>
       <div class="bg-green-50 border border-green-200 rounded-lg p-4">
         <div class="text-center">
           <p class="text-sm font-medium text-green-600">Total Tweets</p>
           <p class="text-2xl font-bold text-green-900">{{ stats.total_tweets or 0 }}</p>
+          <p class="text-xs text-green-600 mt-1">Number of tweets analyzed</p>
         </div>
       </div>
       <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
         <div class="text-center">
           <p class="text-sm font-medium text-yellow-600">Average Score</p>
           <p class="text-2xl font-bold text-yellow-900">{{ stats.average_score or 0 }}</p>
+          <p class="text-xs text-yellow-600 mt-1">Total Score ÷ Total Tweets</p>
         </div>
       </div>
       <div class="bg-purple-50 border border-purple-200 rounded-lg p-4">
         <div class="text-center">
           <p class="text-sm font-medium text-purple-600">Top Score</p>
           <p class="text-2xl font-bold text-purple-900">{{ stats.top_score or 0 }}</p>
+          <p class="text-xs text-purple-600 mt-1">Highest single tweet score</p>
         </div>
       </div>
     </div>
 
+    <!-- Mathematical Consistency Check -->
+    {% if stats.total_tweets > 0 %}
+    <div class="mb-6 p-4 bg-gray-50 border border-gray-200 rounded-lg">
+      <h4 class="text-sm font-medium text-gray-700 mb-2">🔍 Data Consistency Check</h4>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-gray-600">
+        <div>
+          <p><strong>Total Score:</strong> {{ total_score or 0 }}</p>
+          <p><strong>Total Tweets:</strong> {{ stats.total_tweets or 0 }}</p>
+        </div>
+        <div>
+          <p><strong>Calculated Average:</strong> {{ total_score / stats.total_tweets if stats.total_tweets > 0 else 0 | round(2) }}</p>
+          <p><strong>Displayed Average:</strong> {{ stats.average_score or 0 }}</p>
+        </div>
+        <div>
+          <p><strong>Consistency:</strong> 
+            {% if (total_score / stats.total_tweets if stats.total_tweets > 0 else 0) | round(2) == stats.average_score %}
+              ✅ Match
+            {% else %}
+              ⚠️ Mismatch
+            {% endif %}
+          </p>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
     <!-- Engagement Breakdown -->
     <div class="mb-6">
       <h3 class="text-lg font-medium text-gray-900 mb-3">Engagement Breakdown</h3>
+      <p class="text-sm text-gray-600 mb-3">Raw engagement counts from all your uploaded tweets (not weighted by point values)</p>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div class="bg-red-50 border border-red-200 rounded-lg p-3 text-center">
           <p class="text-sm font-medium text-red-600">Likes</p>
           <p class="text-xl font-bold text-red-900">{{ stats.engagement_breakdown.likes or 0 }}</p>
+          <p class="text-xs text-red-600">Total likes received</p>
         </div>
         <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 text-center">
           <p class="text-sm font-medium text-blue-600">Retweets</p>
           <p class="text-xl font-bold text-blue-900">{{ stats.engagement_breakdown.retweets or 0 }}</p>
+          <p class="text-xs text-blue-600">Total retweets received</p>
         </div>
         <div class="bg-green-50 border border-green-200 rounded-lg p-3 text-center">
           <p class="text-sm font-medium text-green-600">Replies</p>
           <p class="text-xl font-bold text-green-900">{{ stats.engagement_breakdown.replies or 0 }}</p>
+          <p class="text-xs text-green-600">Total replies received</p>
         </div>
         <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3 text-center">
           <p class="text-sm font-medium text-yellow-600">Mentions</p>
           <p class="text-xl font-bold text-yellow-900">{{ stats.engagement_breakdown.mentions or 0 }}</p>
+          <p class="text-xs text-yellow-600">Total mentions received</p>
         </div>
       </div>
     </div>
+
+    <!-- Scoring Explanation -->
+    {% if current_user.point_values %}
+    <div class="mb-6 p-4 bg-indigo-50 border border-indigo-200 rounded-lg">
+      <h4 class="text-sm font-medium text-indigo-700 mb-3">📊 How Your Scoring Works</h4>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-indigo-700">
+        <div>
+          <p class="font-medium mb-2">Your Point Values:</p>
+          <ul class="space-y-1 text-xs">
+            <li>❤️ Like: {{ current_user.point_values.like }} point{{ 's' if current_user.point_values.like != 1 else '' }}</li>
+            <li>🔄 Retweet: {{ current_user.point_values.retweet }} point{{ 's' if current_user.point_values.retweet != 1 else '' }}</li>
+            <li>💬 Reply: {{ current_user.point_values.reply }} point{{ 's' if current_user.point_values.reply != 1 else '' }}</li>
+            <li>📢 Mention: {{ current_user.point_values.mention }} point{{ 's' if current_user.point_values.mention != 1 else '' }}</li>
+          </ul>
+        </div>
+        <div>
+          <p class="font-medium mb-2">Score Calculation:</p>
+          <p class="text-xs">Each tweet's score = (Likes × {{ current_user.point_values.like }}) + (Retweets × {{ current_user.point_values.retweet }}) + (Replies × {{ current_user.point_values.reply }}) + (Mentions × {{ current_user.point_values.mention }})</p>
+        </div>
+      </div>
+    </div>
+    {% endif %}
 
     <!-- Top Performers -->
     {% if top_engagements %}

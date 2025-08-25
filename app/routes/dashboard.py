@@ -21,12 +21,16 @@ async def dashboard_page(request: Request, current_user: User = Depends(get_curr
     # Calculate statistics
     stats = calculate_engagement_stats(engagements)
     
+    # Get total score for consistency
+    total_score = await get_user_total_score(db, current_user.id)
+    
     template = templates.get_template("dashboard.html")
     return HTMLResponse(template.render(
         request=request,
         current_user=current_user,
         engagements=engagements,
-        stats=stats
+        stats=stats,
+        total_score=total_score
     ))
 
 @router.get("/api/engagements", response_class=JSONResponse)
