@@ -6,7 +6,7 @@ from fastapi.responses import HTMLResponse
 from datetime import datetime
 import uvicorn
 
-from app.routes import home, upload, dashboard, settings
+from app.routes import home, upload, dashboard, settings, goals
 from app import auth
 from app.scoring import scoring_engine
 
@@ -31,6 +31,7 @@ app.include_router(auth.router)
 app.include_router(upload.router)
 app.include_router(dashboard.router)
 app.include_router(settings.router)
+app.include_router(goals.router)
 
 # Health check endpoint for production monitoring
 @app.get("/health")

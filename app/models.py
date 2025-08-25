@@ -75,3 +75,49 @@ class EngagementScoreCalculation(BaseModel):
     mention_score: int
     total_score: int
     calculation_details: dict
+
+# Goal System Models (Sprint 2)
+class GoalTemplate(BaseModel):
+    id: str
+    name: str
+    description: str
+    category: str
+    primary_metric: str
+    secondary_metrics: List[str] = []
+    default_targets: dict
+    coaching_tips: List[str] = []
+
+class UserGoal(BaseModel):
+    id: Optional[str] = None
+    user_id: str
+    goal_type: str
+    target_value: int
+    start_date: datetime
+    end_date: datetime
+    current_value: int = 0
+    unit: str
+    is_primary: bool = True
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+class GoalProgress(BaseModel):
+    current_value: int
+    target_value: int
+    progress_percentage: float
+    current_pace: float
+    needed_pace: float
+    on_track: bool
+    days_remaining: int
+    trend: str
+
+class CreateGoalRequest(BaseModel):
+    goal_type: str
+    target_value: int
+    timeframe_days: int
+    is_custom: bool = False
+    custom_metric: Optional[str] = None
+
+class GoalResponse(BaseModel):
+    message: str
+    goal: UserGoal
+    progress: GoalProgress
+    coaching_feedback: Optional[str] = None

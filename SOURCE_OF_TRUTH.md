@@ -50,6 +50,7 @@
 - **Comprehensive documentation covering development, user, and production needs (T07 ✅)**
 
 ### 🚀 **Killer Differentiator: Active Strategy Assistant**
+
 - **Most Tools = Passive Reporting**: Just show numbers, leave users to figure out what to do
 - **Koe = Active Strategy Assistant**: Analyze data, identify patterns, recommend actions, track progress toward goals
 - **Growth Coach**: Not just "here's your data" but "here's how to grow your engagement"
@@ -76,6 +77,7 @@
 16. **User sees score growth over time**: Visual indicators that score increases with new data (UI Enhancement ✅)
 
 ### 🎯 **Strategy Assistant User Flows (Sprint 2)**
+
 17. **User sets engagement goals**: Define targets like "100 replies this month" or "500 followers in 3 months"
 18. **User tracks goal progress**: See burn-down style progress with current pace vs. needed pace
 19. **User receives actionable insights**: Get recommendations based on actual data patterns, not assumptions
@@ -149,8 +151,9 @@
 
 ### Strategy Assistant Models (Sprint 2)
 
-- `UserGoal`: {'id': 'string', 'user_id': 'string', 'goal_type': 'string', 'target_value': 'integer', 'start_date': 'datetime', 'end_date': 'datetime', 'current_value': 'integer', 'unit': 'string'}
+- `UserGoal`: {'id': 'string', 'user_id': 'string', 'goal_type': 'string', 'target_value': 'integer', 'start_date': 'datetime', 'end_date': 'datetime', 'current_value': 'integer', 'unit': 'string', 'is_primary': 'boolean'}
 - `GoalProgress`: {'current_value': 'integer', 'target_value': 'integer', 'progress_percentage': 'float', 'current_pace': 'float', 'needed_pace': 'float', 'on_track': 'boolean', 'days_remaining': 'integer', 'trend': 'string'}
+- `GoalTemplate`: {'id': 'string', 'name': 'string', 'description': 'string', 'category': 'string', 'primary_metric': 'string', 'secondary_metrics': 'list', 'default_targets': 'dict', 'coaching_tips': 'list'}
 - `EngagementInsight`: {'strongest_type': 'string', 'growth_opportunity': 'string', 'performance_trend': 'string', 'strategy_tip': 'string'}
 - `ContentRecommendation`: {'content_type': 'string', 'strategy': 'string', 'expected_impact': 'string', 'testing_suggestion': 'string'}
 - `GrowthAnalytics`: {'trend': 'string', 'growth_rate': 'string', 'best_day': 'date', 'consistent_days': 'integer'}
@@ -530,3 +533,11 @@
 - **Real-time Coaching**: Active guidance on how to achieve engagement goals
 - **Performance Benchmarking**: Compare current performance to historical data and trends
 - **Strategy Validation**: Test different approaches and measure their impact on engagement
+
+### Goal System Architecture
+
+- **Template-Based Goals**: 4 core goal categories with starter/intermediate/advanced options
+- **Monetization Path**: Primary goal (impressions) + secondary goal (followers) with visual hierarchy
+- **Progress Visualization**: Multiple progress bars with primary metric as hero, secondary as supporting
+- **Coaching Validation**: Only intervene if goals are unrealistic, offer multiple adjustment options
+- **Dashboard Integration**: Goals displayed at top, above engagement score, creating clear UX narrative

@@ -73,6 +73,30 @@ block content %}
       </div>
     </div>
 
+    <!-- Goal Setting Section -->
+    {% if current_user %}
+    <div class="mb-6">
+      <div
+        class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-6 border border-purple-200"
+      >
+        <div class="text-center">
+          <h3 class="text-lg font-semibold text-purple-800 mb-3">
+            🎯 Ready to Set Your Goals?
+          </h3>
+          <p class="text-sm text-purple-700 mb-4">
+            Transform your engagement data into actionable growth targets
+          </p>
+          <a
+            href="/goals"
+            class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+          >
+            Set My Goal 🚀
+          </a>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
     <!-- Total Score Display -->
     <div class="mb-6">
       <div

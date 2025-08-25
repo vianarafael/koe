@@ -1,0 +1,390 @@
+{% extends "base.html" %} {% block title %}Set Your Goals - Koe{% endblock %} {%
+block content %}
+<div class="bg-white shadow rounded-lg">
+  <div class="px-4 py-5 sm:p-6">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-lg leading-6 font-medium text-gray-900">
+        🎯 Set Your Goals
+      </h2>
+      <div class="flex space-x-2">
+        <a
+          href="/"
+          class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        >
+          <svg
+            class="w-4 h-4 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+            />
+          </svg>
+          Home
+        </a>
+        <a
+          href="/dashboard"
+          class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        >
+          <svg
+            class="w-4 h-4 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+            />
+          </svg>
+          Dashboard
+        </a>
+      </div>
+    </div>
+
+    <!-- Success Message -->
+    {% if request.query_params.get("success") == "true" %}
+    <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+      <div class="flex">
+        <div class="flex-shrink-0">
+          <svg
+            class="h-5 w-5 text-green-400"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </div>
+        <div class="ml-3">
+          <p class="text-sm font-medium text-green-800">
+            Goal created successfully! 🎉
+          </p>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Current Goals Display -->
+    {% if user_goals %}
+    <div class="mb-8">
+      <h3 class="text-lg font-medium text-gray-900 mb-4">Your Current Goals</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {% for goal in user_goals %}
+        <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+          <div class="flex justify-between items-start">
+            <div class="flex-1">
+              <h4 class="text-sm font-medium text-gray-900">
+                {{ goal.goal_type.replace('_', ' ').title() }}
+              </h4>
+              <p class="text-xs text-gray-600 mt-1">
+                {{ goal.current_value }} / {{ goal.target_value }} {{ goal.unit
+                }}
+              </p>
+              <p class="text-xs text-gray-500 mt-1">
+                Due: {{ goal.end_date.strftime('%B %d, %Y') }}
+              </p>
+            </div>
+            <form
+              hx-post="/goals/delete/{{ goal.id }}"
+              hx-confirm="Delete this goal?"
+              class="ml-2"
+            >
+              <button
+                type="submit"
+                class="text-red-600 hover:text-red-800 text-sm"
+              >
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  />
+                </svg>
+              </button>
+            </form>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Step 1: Choose Goal Type -->
+    <div class="mb-8">
+      <h3 class="text-lg font-medium text-gray-900 mb-4">
+        Step 1: Choose Your Goal Type
+      </h3>
+      <p class="text-sm text-gray-600 mb-6">
+        What's your North Star right now? Choose a template or create a custom
+        goal.
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {% for template_id, template in goal_templates.items() %}
+        <div
+          class="border border-gray-200 rounded-lg p-4 hover:border-blue-300 hover:shadow-md transition-all cursor-pointer"
+          onclick="selectGoalTemplate('{{ template_id }}', {{ template | tojson }})"
+        >
+          <div class="text-center">
+            <div class="text-2xl mb-2">{{ template.name.split(' ')[0] }}</div>
+            <h4 class="text-sm font-medium text-gray-900 mb-2">
+              {{ template.name.split(' ', 1)[1] }}
+            </h4>
+            <p class="text-xs text-gray-600">{{ template.description }}</p>
+          </div>
+        </div>
+        {% endfor %}
+
+        <!-- Custom Goal Option -->
+        <div
+          class="border border-gray-200 rounded-lg p-4 hover:border-green-300 hover:shadow-md transition-all cursor-pointer"
+          onclick="selectCustomGoal()"
+        >
+          <div class="text-center">
+            <div class="text-2xl mb-2">✍️</div>
+            <h4 class="text-sm font-medium text-gray-900 mb-2">Custom Goal</h4>
+            <p class="text-xs text-gray-600">Define your own target.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Goal Customization Form -->
+    <div id="goal-form" class="hidden mb-8">
+      <h3 class="text-lg font-medium text-gray-900 mb-4">
+        Step 2: Customize Your Goal
+      </h3>
+
+      <form hx-post="/goals/create" hx-target="#goal-form" class="space-y-6">
+        <input type="hidden" id="goal-type" name="goal_type" value="" />
+
+        <!-- Template-based goal customization -->
+        <div id="template-options" class="hidden">
+          <label class="block text-sm font-medium text-gray-700 mb-2"
+            >Choose Difficulty Level:</label
+          >
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div
+              class="border border-gray-200 rounded-lg p-3 cursor-pointer hover:border-blue-300"
+              onclick="selectDifficulty('starter')"
+            >
+              <h5 class="text-sm font-medium text-gray-900">🚀 Starter</h5>
+              <p class="text-xs text-gray-600" id="starter-target"></p>
+            </div>
+            <div
+              class="border border-gray-200 rounded-lg p-3 cursor-pointer hover:border-blue-300"
+              onclick="selectDifficulty('intermediate')"
+            >
+              <h5 class="text-sm font-medium text-gray-900">💪 Intermediate</h5>
+              <p class="text-xs text-gray-600" id="intermediate-target"></p>
+            </div>
+            <div
+              class="border border-gray-200 rounded-lg p-3 cursor-pointer hover:border-blue-300"
+              onclick="selectDifficulty('advanced')"
+            >
+              <h5 class="text-sm font-medium text-gray-900">🔥 Advanced</h5>
+              <p class="text-xs text-gray-600" id="advanced-target"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Custom goal inputs -->
+        <div id="custom-inputs" class="hidden space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2"
+              >Metric:</label
+            >
+            <select
+              name="custom_metric"
+              class="block w-full text-sm border-gray-300 rounded-md"
+            >
+              <option value="impressions">Impressions</option>
+              <option value="followers">Followers</option>
+              <option value="replies">Replies</option>
+              <option value="retweets">Retweets</option>
+              <option value="likes">Likes</option>
+              <option value="engagement_rate">Engagement Rate (%)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2"
+              >Target Value:</label
+            >
+            <input
+              type="number"
+              name="target_value"
+              id="custom-target"
+              placeholder="100"
+              required
+              class="block w-full text-sm border-gray-300 rounded-md"
+            />
+          </div>
+        </div>
+
+        <!-- Timeframe selection -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2"
+            >Timeframe:</label
+          >
+          <select
+            name="timeframe_days"
+            id="timeframe"
+            class="block w-full text-sm border-gray-300 rounded-md"
+          >
+            <option value="7">1 Week</option>
+            <option value="30">1 Month</option>
+            <option value="90">3 Months</option>
+            <option value="180">6 Months</option>
+            <option value="365">1 Year</option>
+          </select>
+        </div>
+
+        <!-- Hidden fields for form submission -->
+        <input type="hidden" name="is_custom" id="is-custom" value="false" />
+        <input
+          type="hidden"
+          name="target_value"
+          id="form-target-value"
+          value=""
+        />
+
+        <!-- Submit button -->
+        <div class="flex justify-end">
+          <button
+            type="submit"
+            class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
+            Set Goal 🎯
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  let selectedTemplate = null;
+  let selectedDifficulty = null;
+
+  function selectGoalTemplate(templateId, template) {
+    selectedTemplate = template;
+
+    // Show the form
+    document.getElementById("goal-form").classList.remove("hidden");
+
+    // Set the goal type
+    document.getElementById("goal-type").value = templateId;
+
+    // Show template options if available
+    if (
+      template.default_targets &&
+      Object.keys(template.default_targets).length > 0
+    ) {
+      document.getElementById("template-options").classList.remove("hidden");
+      document.getElementById("custom-inputs").classList.add("hidden");
+      document.getElementById("is-custom").value = "false";
+
+      // Populate difficulty options
+      if (template.default_targets.starter) {
+        document.getElementById(
+          "starter-target"
+        ).textContent = `${template.default_targets.starter.value.toLocaleString()} ${
+          template.default_targets.starter.unit
+        }`;
+      }
+      if (template.default_targets.intermediate) {
+        document.getElementById(
+          "intermediate-target"
+        ).textContent = `${template.default_targets.intermediate.value.toLocaleString()} ${
+          template.default_targets.intermediate.unit
+        }`;
+      }
+      if (template.default_targets.advanced) {
+        document.getElementById(
+          "advanced-target"
+        ).textContent = `${template.default_targets.advanced.value.toLocaleString()} ${
+          template.default_targets.advanced.unit
+        }`;
+      }
+
+      // Set default timeframe
+      if (template.default_targets.primary) {
+        document.getElementById("timeframe").value =
+          template.default_targets.primary.timeframe;
+      } else if (template.default_targets.starter) {
+        document.getElementById("timeframe").value =
+          template.default_targets.starter.timeframe;
+      }
+    } else {
+      // Hide template options for monetization path
+      document.getElementById("template-options").classList.add("hidden");
+      document.getElementById("custom-inputs").classList.remove("hidden");
+      document.getElementById("is-custom").value = "true";
+    }
+
+    // Scroll to form
+    document.getElementById("goal-form").scrollIntoView({ behavior: "smooth" });
+  }
+
+  function selectCustomGoal() {
+    selectedTemplate = null;
+
+    // Show the form
+    document.getElementById("goal-form").classList.remove("hidden");
+
+    // Set the goal type
+    document.getElementById("goal-type").value = "custom";
+
+    // Hide template options, show custom inputs
+    document.getElementById("template-options").classList.add("hidden");
+    document.getElementById("custom-inputs").classList.remove("hidden");
+    document.getElementById("is-custom").value = "true";
+
+    // Scroll to form
+    document.getElementById("goal-form").scrollIntoView({ behavior: "smooth" });
+  }
+
+  function selectDifficulty(difficulty) {
+    selectedDifficulty = difficulty;
+
+    // Update form target value
+    if (selectedTemplate && selectedTemplate.default_targets[difficulty]) {
+      const target = selectedTemplate.default_targets[difficulty];
+      document.getElementById("form-target-value").value = target.value;
+
+      // Update timeframe if available
+      if (target.timeframe) {
+        document.getElementById("timeframe").value = target.timeframe;
+      }
+    }
+
+    // Visual feedback
+    document
+      .querySelectorAll("#template-options > div > div")
+      .forEach((div) => {
+        div.classList.remove("border-blue-500", "bg-blue-50");
+        div.classList.add("border-gray-200");
+      });
+
+    event.currentTarget.classList.remove("border-gray-200");
+    event.currentTarget.classList.add("border-blue-500", "bg-blue-50");
+  }
+</script>
+{% endblock %}
