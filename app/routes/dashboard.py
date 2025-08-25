@@ -24,6 +24,11 @@ async def dashboard_page(request: Request, current_user: User = Depends(get_curr
     # Get total score for consistency
     total_score = await get_user_total_score(db, current_user.id)
     
+    # Debug logging
+    print(f"Dashboard debug - Stats: {stats}")
+    print(f"Dashboard debug - Total score: {total_score}")
+    print(f"Dashboard debug - Engagements count: {len(engagements)}")
+    
     template = templates.get_template("dashboard.html")
     return HTMLResponse(template.render(
         request=request,
@@ -143,14 +148,16 @@ def calculate_engagement_stats(engagements: List[TweetEngagement]) -> dict:
     """Calculate engagement statistics from a list of engagements"""
     if not engagements:
         return {
+            "total_tweets": 0,
             "total_score": 0,
             "average_score": 0,
             "top_score": 0,
             "engagement_breakdown": {"likes": 0, "retweets": 0, "replies": 0, "mentions": 0}
         }
     
+    total_tweets = len(engagements)
     total_score = sum(e.engagement_score for e in engagements)
-    average_score = total_score / len(engagements) if engagements else 0
+    average_score = total_score / total_tweets if total_tweets > 0 else 0
     top_score = max(e.engagement_score for e in engagements) if engagements else 0
     
     # Calculate engagement breakdown
@@ -160,6 +167,7 @@ def calculate_engagement_stats(engagements: List[TweetEngagement]) -> dict:
     total_mentions = sum(e.mention_count for e in engagements)
     
     return {
+        "total_tweets": total_tweets,
         "total_score": total_score,
         "average_score": round(average_score, 2),
         "top_score": top_score,
