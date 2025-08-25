@@ -99,7 +99,8 @@ async def goals_page(request: Request, current_user: User = Depends(get_current_
         request=request,
         current_user=current_user,
         goal_templates=GOAL_TEMPLATES,
-        user_goals=user_goals
+        user_goals=user_goals,
+        now=datetime.now()
     ))
 
 @router.post("/create", response_class=HTMLResponse)
