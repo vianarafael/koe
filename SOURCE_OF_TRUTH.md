@@ -49,6 +49,13 @@
 - **Enhanced CSV parsing supporting X Analytics account overview and daily summary data (Bug Fixes ✅)**
 - **Comprehensive documentation covering development, user, and production needs (T07 ✅)**
 
+### 🚀 **Killer Differentiator: Active Strategy Assistant**
+- **Most Tools = Passive Reporting**: Just show numbers, leave users to figure out what to do
+- **Koe = Active Strategy Assistant**: Analyze data, identify patterns, recommend actions, track progress toward goals
+- **Growth Coach**: Not just "here's your data" but "here's how to grow your engagement"
+- **Actionable Insights**: Every metric comes with "so what?" and "what next?" guidance
+- **Goal-Driven Growth**: Users set targets, Koe tracks progress and recommends actions to hit them
+
 ## 🔄 Key User Flows
 
 1. User creates account with email and password
@@ -67,6 +74,13 @@
 14. **Users access comprehensive documentation for setup, usage, and deployment (T07 ✅)**
 15. **User understands cumulative scoring**: Clear explanation that total score represents ALL engagement (UI Enhancement ✅)
 16. **User sees score growth over time**: Visual indicators that score increases with new data (UI Enhancement ✅)
+
+### 🎯 **Strategy Assistant User Flows (Sprint 2)**
+17. **User sets engagement goals**: Define targets like "100 replies this month" or "500 followers in 3 months"
+18. **User tracks goal progress**: See burn-down style progress with current pace vs. needed pace
+19. **User receives actionable insights**: Get recommendations based on actual data patterns, not assumptions
+20. **User optimizes content strategy**: Use insights to improve posting frequency, content types, and engagement
+21. **User measures growth trends**: Compare current performance to historical data and industry benchmarks
 
 ## 🏗️ Architecture
 
@@ -132,6 +146,15 @@
 
 - `PointValueUpdate`: {'like': 'integer', 'retweet': 'integer', 'reply': 'integer', 'mention': 'integer'}
 - `StrategyImpactAnalysis`: {'current_values': 'dict', 'scoring_formula': 'string', 'example_scenarios': 'dict', 'recommendations': 'dict'}
+
+### Strategy Assistant Models (Sprint 2)
+
+- `UserGoal`: {'id': 'string', 'user_id': 'string', 'goal_type': 'string', 'target_value': 'integer', 'start_date': 'datetime', 'end_date': 'datetime', 'current_value': 'integer', 'unit': 'string'}
+- `GoalProgress`: {'current_value': 'integer', 'target_value': 'integer', 'progress_percentage': 'float', 'current_pace': 'float', 'needed_pace': 'float', 'on_track': 'boolean', 'days_remaining': 'integer', 'trend': 'string'}
+- `EngagementInsight`: {'strongest_type': 'string', 'growth_opportunity': 'string', 'performance_trend': 'string', 'strategy_tip': 'string'}
+- `ContentRecommendation`: {'content_type': 'string', 'strategy': 'string', 'expected_impact': 'string', 'testing_suggestion': 'string'}
+- `GrowthAnalytics`: {'trend': 'string', 'growth_rate': 'string', 'best_day': 'date', 'consistent_days': 'integer'}
+- `ContentProductivity`: {'average_engagement': 'float', 'best_post_score': 'integer', 'best_post_date': 'datetime', 'productivity_tip': 'string', 'total_posts': 'integer'}
 
 ### API Input/Output
 
@@ -357,6 +380,15 @@
 - 🚀 **Ready for Production**: Comprehensive documentation and deployment guides available
 - 📚 **Developer Ready**: Complete setup, API, and deployment documentation
 
+### 🚀 **Strategic Pivot: From Data Dashboard to Growth Coach**
+
+**Previous Vision**: Passive engagement data visualization tool
+**New Vision**: Active strategy assistant that helps users grow their social media engagement
+
+**Key Differentiator**: Most tools show data, Koe shows how to use data to grow
+**Value Proposition**: Transform from "here's your numbers" to "here's how to hit your goals"
+**Next Phase**: Sprint 2 - Strategy Assistant features for goal setting, progress tracking, and actionable insights
+
 ## 🔧 Technical Implementation Details
 
 ### CSV Parser Features
@@ -487,3 +519,14 @@
 - **Timestamp Tracking**: Accurate timing for monitoring and debugging
 - **Production Ready**: Essential endpoint for deployment monitoring
 - **Monitoring Integration**: Compatible with standard monitoring tools
+
+### Strategy Assistant Features (Sprint 2)
+
+- **Goal Setting System**: User-defined engagement targets with customizable timeframes
+- **Progress Tracking**: Burn-down style progress with current pace vs. needed pace analysis
+- **Actionable Insights**: Data-driven recommendations based on actual performance patterns
+- **Growth Analytics**: Historical comparison and trend analysis for performance optimization
+- **Content Optimization**: Pattern recognition and strategy recommendations for engagement growth
+- **Real-time Coaching**: Active guidance on how to achieve engagement goals
+- **Performance Benchmarking**: Compare current performance to historical data and trends
+- **Strategy Validation**: Test different approaches and measure their impact on engagement

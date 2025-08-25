@@ -1,6 +1,6 @@
 # Development Tickets
 
-**Total Points:** 31
+**Total Points:** 57 (MVP: 31 + Sprint 2: 26)
 
 ## 🤖 LLM Tickets
 
@@ -130,3 +130,95 @@ Create wireframes or sketches for authentication flow, dashboard displaying enga
 Prepare README and user guide covering project setup, usage instructions, and API endpoint descriptions for MVP. (acceptance_check: Documentation is complete and reviewed.)
 
 ---
+
+## 🚀 **Sprint 2: Strategy Assistant Features**
+
+*Note: These are not original tickets but represent the strategic pivot from passive data dashboard to active growth coach. This sprint transforms Koe into an actionable strategy assistant.*
+
+### T08: Implement goal setting system for engagement targets
+
+**Points:** 8 | **Owner:** LLM
+
+Create user-defined goal system allowing users to set engagement targets (e.g., "100 replies this month", "500 followers in 3 months") with customizable timeframes and progress tracking. Inputs: goal type, target value, timeframe; Outputs: goal creation, progress calculation, and burn-down style tracking. (acceptance_check: Users can set goals, see progress, and track current pace vs. needed pace.)
+
+**Files to touch:**
+- `app/models.py` (add UserGoal model)
+- `app/db.py` (add goal CRUD operations)
+- `app/routes/goals.py` (new goal management endpoints)
+- `app/templates/goals.html` (goal setting interface)
+- `app/templates/dashboard.html` (add goal progress display)
+
+**Tests to run:**
+- `pytest -k test_goal_system`
+
+**Dependencies:**
+- T01-T07 (MVP complete)
+
+---
+
+### T09: Build actionable insights engine based on real data patterns
+
+**Points:** 6 | **Owner:** LLM
+
+Implement insights engine that analyzes actual engagement data to provide actionable recommendations, not hardcoded advice. Focus on engagement trends, content productivity, and growth patterns. Inputs: user engagement data and historical patterns; Outputs: data-driven insights and strategy recommendations. (acceptance_check: Insights are based on actual data analysis, not assumptions, and provide actionable next steps.)
+
+**Files to touch:**
+- `app/insights.py` (new insights engine)
+- `app/models.py` (add insight models)
+- `app/routes/dashboard.py` (integrate insights)
+- `app/templates/dashboard.html` (display insights)
+
+**Tests to run:**
+- `pytest -k test_insights_engine`
+
+**Dependencies:**
+- T08
+
+---
+
+### T10: Create growth analytics and trend analysis system
+
+**Points:** 7 | **Owner:** LLM
+
+Build analytics system for historical comparison, trend analysis, and performance benchmarking. Include engagement rate trends, content productivity metrics, and growth pattern identification. Inputs: historical engagement data and time-series analysis; Outputs: trend reports, growth metrics, and performance insights. (acceptance_check: Users can see performance trends, compare periods, and identify growth patterns.)
+
+**Files to touch:**
+- `app/analytics.py` (new analytics engine)
+- `app/models.py` (add analytics models)
+- `app/routes/analytics.py` (new analytics endpoints)
+- `app/templates/analytics.html` (analytics dashboard)
+
+**Tests to run:**
+- `pytest -k test_analytics_system`
+
+**Dependencies:**
+- T09
+
+---
+
+### T11: Implement content optimization recommendations
+
+**Points:** 5 | **Owner:** LLM
+
+Create content optimization engine that identifies what drives engagement and recommends specific actions. Focus on content type analysis, posting patterns, and A/B testing suggestions based on actual performance data. Inputs: content performance data and engagement patterns; Outputs: specific recommendations for content improvement and testing strategies. (acceptance_check: Users receive specific, actionable content recommendations based on their data.)
+
+**Files to touch:**
+- `app/optimization.py` (new optimization engine)
+- `app/models.py` (add optimization models)
+- `app/routes/dashboard.py` (integrate recommendations)
+- `app/templates/dashboard.html` (display recommendations)
+
+**Tests to run:**
+- `pytest -k test_optimization_engine`
+
+**Dependencies:**
+- T10
+
+---
+
+## 📊 **Sprint 2 Summary**
+
+**Total Points:** 26
+**Focus:** Transform Koe from passive data viewer to active growth coach
+**Key Outcome:** Users get actionable insights and track progress toward engagement goals
+**Strategic Value:** Differentiate from competitors by providing strategy, not just data
