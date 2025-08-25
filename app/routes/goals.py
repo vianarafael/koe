@@ -86,13 +86,12 @@ GOAL_TEMPLATES = {
 }
 
 @router.get("/", response_class=HTMLResponse)
-async def goals_page(request: Request, current_user: User = Depends(get_current_user)):
+async def goals_page(request: Request, current_user: User = Depends(get_current_user), db=Depends(get_db)):
     """Display goals page with template selection"""
     if not current_user:
         return RedirectResponse(url="/auth/login", status_code=302)
     
     # Get user's existing goals
-    db = await get_db().__anext__()
     user_goals = await get_user_goals(db, current_user.id)
     
     template = templates.get_template("goals.html")
@@ -107,6 +106,7 @@ async def goals_page(request: Request, current_user: User = Depends(get_current_
 async def create_goal(
     request: Request,
     current_user: User = Depends(get_current_user),
+    db=Depends(get_db),
     goal_type: str = Form(...),
     target_value: int = Form(...),
     timeframe_days: int = Form(...),
@@ -116,8 +116,6 @@ async def create_goal(
     """Create a new goal with coaching validation"""
     if not current_user:
         return RedirectResponse(url="/auth/login", status_code=302)
-    
-    db = await get_db().__anext__()
     
     # Calculate dates
     start_date = datetime.now()
