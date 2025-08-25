@@ -65,6 +65,8 @@
 12. **User benefits from professional UI design system and comprehensive mockups (T06 ✅)**
 13. **System intelligently handles both tweet-level and account overview CSV formats (Bug Fixes ✅)**
 14. **Users access comprehensive documentation for setup, usage, and deployment (T07 ✅)**
+15. **User understands cumulative scoring**: Clear explanation that total score represents ALL engagement (UI Enhancement ✅)
+16. **User sees score growth over time**: Visual indicators that score increases with new data (UI Enhancement ✅)
 
 ## 🏗️ Architecture
 
@@ -418,6 +420,16 @@
 - **Mockup Specifications**: Detailed wireframes for all major user flows
 - **Visual Hierarchy**: Clear information architecture and user flow optimization
 
+### Enhanced Score Display Features
+
+- **Cumulative Score Explanation**: Built-in explanation that score represents ALL engagement
+- **Visual Clarity**: Clear indication that score grows over time and is cumulative
+- **Educational Content**: "What This Score Represents" section with user-friendly explanations
+- **Enhanced Visual Design**: Gradient backgrounds, better spacing, and professional appearance
+- **Point Value Visualization**: Emoji-enhanced display of engagement point values
+- **Growth Indicators**: Clear messaging that score increases with new uploads
+- **User Education**: Automatic explanation of cumulative vs. single-post scoring
+
 ### Documentation System Features (T07 ✅)
 
 - **Comprehensive Coverage**: Complete documentation for development, users, and production
@@ -455,6 +467,10 @@
 - **Advanced Analytics**: Comprehensive statistics and engagement breakdown
 - **Interactive Controls**: Sorting, filtering, and result limiting
 - **Mobile Optimization**: Responsive design with touch interactions
+- **Score Clarity**: Clear explanation that total score is cumulative of ALL engagement
+- **User Education**: Built-in explanations of what metrics represent
+- **Visual Hierarchy**: Professional score display with explanation boxes
+- **Growth Messaging**: Clear indication that score grows over time
 
 ### Settings System Integration
 

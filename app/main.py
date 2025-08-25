@@ -6,7 +6,8 @@ from fastapi.responses import HTMLResponse
 from datetime import datetime
 import uvicorn
 
-from app.routes import home, auth, upload, dashboard, settings
+from app.routes import home, upload, dashboard, settings
+from app import auth
 from app.scoring import scoring_engine
 
 app = FastAPI(

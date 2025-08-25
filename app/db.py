@@ -274,3 +274,22 @@ async def get_engagements_by_score_range(
 async def get_top_engagements(db: aiosqlite.Connection, user_id: str, limit: int = 10) -> List[TweetEngagement]:
     """Get top performing engagements by score"""
     return await get_engagements_by_score_range(db, user_id, min_score=0, limit=limit)
+
+async def get_user_engagement_breakdown(db: aiosqlite.Connection, user_id: str) -> dict:
+    """Get breakdown of engagement counts and points by type for a user"""
+    async with db.execute('''
+        SELECT 
+            COALESCE(SUM(like_count), 0) as total_likes,
+            COALESCE(SUM(retweet_count), 0) as total_retweets,
+            COALESCE(SUM(reply_count), 0) as total_replies,
+            COALESCE(SUM(mention_count), 0) as total_mentions
+        FROM tweet_engagements 
+        WHERE user_id = ?
+    ''', (user_id,)) as cursor:
+        row = await cursor.fetchone()
+        return {
+            'likes': row['total_likes'],
+            'retweets': row['total_retweets'],
+            'replies': row['total_replies'],
+            'mentions': row['total_mentions']
+        }
