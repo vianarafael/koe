@@ -24,10 +24,14 @@ async def dashboard_page(request: Request, current_user: User = Depends(get_curr
     # Get total score for consistency
     total_score = await get_user_total_score(db, current_user.id)
     
+    # Get top engagements for display
+    top_engagements = await get_top_engagements(db, current_user.id, limit=5)
+    
     # Debug logging
     print(f"Dashboard debug - Stats: {stats}")
     print(f"Dashboard debug - Total score: {total_score}")
     print(f"Dashboard debug - Engagements count: {len(engagements)}")
+    print(f"Dashboard debug - Top engagements: {len(top_engagements)}")
     
     template = templates.get_template("dashboard.html")
     return HTMLResponse(template.render(
@@ -35,7 +39,8 @@ async def dashboard_page(request: Request, current_user: User = Depends(get_curr
         current_user=current_user,
         engagements=engagements,
         stats=stats,
-        total_score=total_score
+        total_score=total_score,
+        top_engagements=top_engagements
     ))
 
 @router.get("/api/engagements", response_class=JSONResponse)
