@@ -1,9 +1,10 @@
 from fastapi import APIRouter, Request, Depends, HTTPException, Query
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from typing import Optional, List
+from datetime import datetime
 from app.auth import get_current_user
 from app.models import User, TweetEngagement
-from app.db import get_db, get_user_engagements, get_user_total_score, get_top_engagements, get_engagements_by_score_range
+from app.db import get_db, get_user_engagements, get_user_total_score, get_top_engagements, get_engagements_by_score_range, get_user_goals
 from app.templates import get_templates
 
 router = APIRouter(prefix="/dashboard", tags=["dashboard"])
@@ -27,11 +28,15 @@ async def dashboard_page(request: Request, current_user: User = Depends(get_curr
     # Get top engagements for display
     top_engagements = await get_top_engagements(db, current_user.id, limit=5)
     
+    # Get user goals for dashboard display
+    user_goals = await get_user_goals(db, current_user.id)
+    
     # Debug logging
     print(f"Dashboard debug - Stats: {stats}")
     print(f"Dashboard debug - Total score: {total_score}")
     print(f"Dashboard debug - Engagements count: {len(engagements)}")
     print(f"Dashboard debug - Top engagements: {len(top_engagements)}")
+    print(f"Dashboard debug - User goals: {len(user_goals)}")
     
     template = templates.get_template("dashboard.html")
     return HTMLResponse(template.render(
@@ -40,7 +45,9 @@ async def dashboard_page(request: Request, current_user: User = Depends(get_curr
         engagements=engagements,
         stats=stats,
         total_score=total_score,
-        top_engagements=top_engagements
+        top_engagements=top_engagements,
+        user_goals=user_goals,
+        now=datetime.now()
     ))
 
 @router.get("/api/engagements", response_class=JSONResponse)

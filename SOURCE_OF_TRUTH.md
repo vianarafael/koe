@@ -1,4 +1,4 @@
-# Source of Truth - Koe
+# Source of Truth - Koe → EngageMeter
 
 ## 🎯 Project Scope
 
@@ -79,15 +79,16 @@
 ### 🎯 **Strategy Assistant User Flows (Sprint 2)**
 
 17. **User sets engagement goals**: Define targets like "100 replies this month" or "500 followers in 3 months"
-18. **User tracks goal progress**: See burn-down style progress with current pace vs. needed pace
-19. **User receives actionable insights**: Get recommendations based on actual data patterns, not assumptions
-20. **User optimizes content strategy**: Use insights to improve posting frequency, content types, and engagement
-21. **User measures growth trends**: Compare current performance to historical data and industry benchmarks
+18. **User is redirected to dashboard**: After goal creation, user sees immediate progress on dashboard (not confusing page states)
+19. **User tracks goal progress**: See burn-down style progress with current pace vs. needed pace on dashboard
+20. **User receives actionable insights**: Get recommendations based on actual data patterns, not assumptions
+21. **User optimizes content strategy**: Use insights to improve posting frequency, content types, and engagement
+22. **User measures growth trends**: Compare current performance to historical data and industry benchmarks
 
 ## 🏗️ Architecture
 
 - Backend: FastAPI for API endpoints and authentication
-- Frontend: HTMX with Tailwind CSS for dynamic interactions
+- Frontend: HTMX with Tailwind CSS for dynamic interactions (transitioning to DaisyUI)
 - Database: SQLite for user accounts and engagement data
 - Authentication: Local email/password with session management
 - File Processing: CSV parsing for engagement data ingestion (T02 ✅)
@@ -98,6 +99,71 @@
 - **Enhanced CSV Parser: Intelligent format detection and dual-mode parsing (Bug Fixes ✅)**
 - **Documentation System: Complete guides for development, users, and production (T07 ✅)**
 - Deployment: Linode server with direct deployment
+
+## 🚀 **Epic Transformation: Koe → EngageMeter**
+
+### **Strategic Pivot Overview**
+
+- **From**: Passive data dashboard showing engagement numbers
+- **To**: Active strategy assistant focused on monetization and growth
+- **Core Value**: Transform "here's your numbers" into "here's how to hit your goals"
+
+### **Epic A: Global Rename & Branding**
+
+- **A1**: Complete codebase rename from "Koe" to "EngageMeter"
+- **A2**: Update URLs, meta tags, and branding assets
+
+### **Epic B: Data Consistency & Scoring (Immediate Priority)**
+
+- **B1**: X Analytics CSV schema implementation (Date, Impressions, Likes, Engagements, etc.)
+- **B2**: User-defined scoring weights with live preview
+- **B3**: Metric math correctness and consistency
+- **B4**: Engagement rate calculations and funnel analysis
+
+### **Epic C: Goals System Enhancement (Current T08)**
+
+- **C1**: Monetization template with dual progress bars (Impressions + Followers)
+- **C2**: Custom goal templates and free-form goal setting
+- **C3**: Goal validation coach with realistic target suggestions
+
+### **Epic D: Dashboard UX Overhaul (DaisyUI + HTMX)**
+
+- **D1**: Modern layout with Navbar + Sidebar + Content structure
+- **D2**: Empty states and value clarity improvements
+- **D3**: Comprehensive tooltips and help system
+
+### **Epic E: Insights & Recommendations Engine**
+
+- **E1**: Rule-based insights from actual data patterns
+- **E2**: Actionable recommendations tied to specific metrics
+- **E3**: Progress tracking with pace analysis
+
+### **Epic F: Onboarding & Upload Flow**
+
+- **F1**: Free tier with limited insights (paywall for advanced)
+- **F2**: CSV re-upload with merge/replace options
+
+### **Epic G: Monetization & Paywall System**
+
+- **G1**: Free/Pro/Team pricing tiers
+- **G2**: Stripe integration for subscriptions
+- **G3**: One-off report purchases
+
+### **Epic H: Landing Page & Marketing**
+
+- **H1**: Professional landing page with DaisyUI
+
+### **Epic I: Settings & Account Management**
+
+- **I1**: Enhanced scoring rules UI
+- **I2**: Comprehensive goals management
+- **I3**: Data export functionality
+
+### **Epic J: Quality & Reliability**
+
+- **J1**: Input validation and error handling
+- **J2**: Privacy and data protection
+- **J3**: Comprehensive testing suite
 - Session Management: In-memory session storage with secure cookies
 - Development: Git push and manual server restart workflow
 - CSV Processing: Intelligent column detection and data validation with X Analytics support (T02 ✅ + Bug Fixes ✅)
@@ -346,7 +412,7 @@
 
 ## 🚧 Current Status
 
-### Completed (T01-T07)
+### Completed (T01-T08)
 
 - ✅ User authentication system (email/password)
 - ✅ User registration and login
@@ -376,12 +442,22 @@
 - ✅ **Dual-format CSV parsing (tweet-level and daily summaries) (Bug Fixes ✅)**
 - ✅ **Improved error handling and debug logging (Bug Fixes ✅)**
 - ✅ **Complete documentation for setup, usage, and API endpoints (T07 ✅)**
+- ✅ **Goal setting system with template selection and coaching validation (T08 ✅)**
 
 ### MVP Status
 
-- 🎉 **MVP COMPLETE**: All planned features implemented (37/37 points - 100%)
+- 🎉 **MVP COMPLETE**: All planned features implemented (45/45 points - 100%)
 - 🚀 **Ready for Production**: Comprehensive documentation and deployment guides available
 - 📚 **Developer Ready**: Complete setup, API, and deployment documentation
+- 🎯 **Strategy Assistant Ready**: Goal setting system implemented and functional
+
+### Epic Transformation Status
+
+- **Current Epic**: **B** (Data Consistency & Scoring)
+- **Next Priority**: X Analytics CSV schema implementation (T09)
+- **Branding**: Ready for Koe → EngageMeter rename (Epic A)
+- **Architecture**: HTMX + Tailwind → DaisyUI transition planned (Epic D)
+- **Monetization**: Paywall system design complete, implementation pending (Epic G)
 
 ### 🚀 **Strategic Pivot: From Data Dashboard to Growth Coach**
 
@@ -390,7 +466,28 @@
 
 **Key Differentiator**: Most tools show data, Koe shows how to use data to grow
 **Value Proposition**: Transform from "here's your numbers" to "here's how to hit your goals"
-**Next Phase**: Sprint 2 - Strategy Assistant features for goal setting, progress tracking, and actionable insights
+**Next Phase**: Epic Transformation - Complete rebrand to EngageMeter with monetization focus
+
+### 🎯 **Epic Transformation Roadmap**
+
+**Phase 1 (Immediate)**: Epics A-C
+
+- **A**: Koe → EngageMeter rebrand
+- **B**: X Analytics data consistency & scoring
+- **C**: Enhanced goals system
+
+**Phase 2 (Medium-term)**: Epics D-F
+
+- **D**: DaisyUI dashboard overhaul
+- **E**: Insights & recommendations engine
+- **F**: Onboarding & upload flow
+
+**Phase 3 (Long-term)**: Epics G-J
+
+- **G**: Paywall & monetization
+- **H**: Landing page & marketing
+- **I**: Settings & account management
+- **J**: Quality & reliability
 
 ## 🔧 Technical Implementation Details
 
@@ -506,6 +603,10 @@
 - **User Education**: Built-in explanations of what metrics represent
 - **Visual Hierarchy**: Professional score display with explanation boxes
 - **Growth Messaging**: Clear indication that score grows over time
+- **Goals Integration**: Goals displayed at top with progress bars and success messages
+- **Progress Tracking**: Visual progress bars with completion percentage and days remaining
+- **Goal Management**: Quick access to goals page with "Manage Goals" link
+- **Success Feedback**: Immediate confirmation when goals are created successfully
 
 ### Settings System Integration
 
@@ -523,6 +624,15 @@
 - **Production Ready**: Essential endpoint for deployment monitoring
 - **Monitoring Integration**: Compatible with standard monitoring tools
 
+### Technical Improvements & Bug Fixes
+
+- **JavaScript Conflict Resolution**: Eliminated `GOAL_TEMPLATES_DATA` redeclaration errors with HTMX
+- **Form Validation Fixes**: Resolved "invalid form control" errors with proper field naming
+- **HTMX Integration**: Full HTMX implementation eliminates JavaScript state management complexity
+- **User Experience Clarity**: Clear user flow from goal creation to dashboard progress tracking
+- **Template Rendering**: Proper Jinja2 template structure with HTMX targeting
+- **Database Integration**: Goals displayed on dashboard with real-time progress calculation
+
 ### Strategy Assistant Features (Sprint 2)
 
 - **Goal Setting System**: User-defined engagement targets with customizable timeframes
@@ -534,10 +644,17 @@
 - **Performance Benchmarking**: Compare current performance to historical data and trends
 - **Strategy Validation**: Test different approaches and measure their impact on engagement
 
-### Goal System Architecture
+### Goal System Implementation (T08 ✅)
 
-- **Template-Based Goals**: 4 core goal categories with starter/intermediate/advanced options
-- **Monetization Path**: Primary goal (impressions) + secondary goal (followers) with visual hierarchy
-- **Progress Visualization**: Multiple progress bars with primary metric as hero, secondary as supporting
-- **Coaching Validation**: Only intervene if goals are unrealistic, offer multiple adjustment options
-- **Dashboard Integration**: Goals displayed at top, above engagement score, creating clear UX narrative
+- **Database Schema**: `user_goals` table with proper foreign key relationships
+- **Goal Templates**: Pre-configured templates with starter/intermediate/advanced options
+- **Coaching Engine**: Goal validation with supportive feedback and adjustment suggestions
+- **Navigation Integration**: Goals link in main navigation and "Set My Goal" button on dashboard
+- **Professional UI**: Step-by-step goal setting flow with template selection
+- **Progress Tracking**: Real-time progress calculation with pace analysis
+- **Dashboard Integration**: Goals displayed at top, above engagement score for clear UX narrative
+- **Full HTMX Implementation**: No JavaScript conflicts, clean form submission with `hx-target="#goals-content"`
+- **User Flow Optimization**: Goal creation → Dashboard redirect → Progress display (no confusing page states)
+- **Success Message Handling**: Dashboard shows success message and goal progress immediately after creation
+- **Progress Visualization**: Beautiful progress bars with days remaining and completion percentage
+- **Goal Management**: Quick access to goals from dashboard with "Manage Goals" link

@@ -1,10 +1,71 @@
 # Development Tickets
 
-**Total Points:** 57 (MVP: 31 + Sprint 2: 26)
+**Total Points:** 71 (MVP: 31 + Sprint 2: 26 + Epic Transformation: 14)
 
-## 🤖 LLM Tickets
+**Note:** This represents the transformation from Koe (passive dashboard) to EngageMeter (active strategy assistant with monetization focus).
 
-### T01: Implement simple email/password authentication system
+## 🚀 **EPIC ROADMAP: Koe → EngageMeter Transformation**
+
+### **EPIC A: Global Rename & Branding**
+
+- **A1**: Codebase rename & branding (Koe → EngageMeter)
+- **A2**: URL & meta updates
+
+### **EPIC B: Data Consistency & Scoring**
+
+- **B1**: CSV ingestion & schema sanity (X Analytics format)
+- **B2**: Custom scoring rules (user-defined weights)
+- **B3**: Metric math correctness
+- **B4**: Engagement rate & funnels
+
+### **EPIC C: Goals System Enhancement**
+
+- **C1**: Monetization template (multi-goal with progress bars)
+- **C2**: Custom goals & templates
+- **C3**: Goal validation coach
+
+### **EPIC D: Dashboard UX (DaisyUI + HTMX)**
+
+- **D1**: Layout structure (Navbar + Sidebar + Content)
+- **D2**: Empty states & value clarity
+- **D3**: Tooltips & help text
+
+### **EPIC E: Insights & Recommendations**
+
+- **E1**: Insights engine v1 (rule-based)
+- **E2**: Recommendations v1 (actionable)
+- **E3**: Progress tracker
+
+### **EPIC F: Onboarding & Upload Flow**
+
+- **F1**: First-time upload (free tier)
+- **F2**: CSV re-upload & overwrite
+
+### **EPIC G: Paywall & Plans**
+
+- **G1**: Pricing & gating (Free/Pro/Team)
+- **G2**: Checkout integration (Stripe)
+- **G3**: One-off report purchase
+
+### **EPIC H: Landing Page**
+
+- **H1**: One-pager (DaisyUI)
+
+### **EPIC I: Settings & Account**
+
+- **I1**: Scoring rules UI
+- **I2**: Goals management
+- **I3**: Data export
+
+### **EPIC J: Reliability, Privacy, Tests**
+
+- **J1**: Input validation & errors
+- **J2**: Privacy note
+- **J3**: Unit & e2e tests
+
+---
+
+## 🤖 **LLM Tickets (Current Sprint)**
 
 **Points:** 5 | **Owner:** LLM
 
@@ -157,6 +218,52 @@ Create hybrid goal system with template-based defaults and custom goal creation.
 **Dependencies:**
 
 - T01-T07 (MVP complete)
+
+---
+
+### T09: Implement X Analytics CSV Schema & Data Consistency
+
+**Points:** 8 | **Owner:** LLM
+
+Update CSV parser to handle X Analytics format with columns: Date, Impressions, Likes, Engagements, Bookmarks, Shares, New follows, Unfollows, Replies, Reposts, Profile visits, Create Post, Video views, Media views. Implement proper data types, date normalization, and schema validation. Inputs: X Analytics CSV format; Outputs: validated daily aggregates with proper typing. (acceptance_check: CSV uploads work with X Analytics format, data is properly typed, and validation provides helpful errors.)
+
+**Files to touch:**
+
+- `app/csv_parser.py` (update for X Analytics schema)
+- `app/models.py` (add new engagement metrics)
+- `app/db.py` (update database schema)
+- `app/routes/upload.py` (enhance validation)
+
+**Tests to run:**
+
+- `pytest -k test_x_analytics_parsing`
+
+**Dependencies:**
+
+- T08
+
+---
+
+### T10: Implement Custom Scoring Rules & Weight System
+
+**Points:** 6 | **Owner:** LLM
+
+Create user-configurable scoring system where users can set custom weights for different engagement types (e.g., Like=1, Retweet=2, Reply=3, Mention=1). Include live preview of score impact and immediate recalculation. Inputs: user-defined weights; Outputs: updated scoring system with live preview. (acceptance_check: Users can customize scoring weights, see immediate impact on scores, and weights persist per user.)
+
+**Files to touch:**
+
+- `app/scoring.py` (enhance with custom weights)
+- `app/models.py` (add scoring rules models)
+- `app/templates/settings.html` (scoring weight UI)
+- `app/routes/settings.py` (scoring rules endpoints)
+
+**Tests to run:**
+
+- `pytest -k test_custom_scoring`
+
+**Dependencies:**
+
+- T09
 
 **Goal Templates:**
 

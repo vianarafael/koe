@@ -63,6 +63,83 @@
       </div>
     </div>
 
+    <!-- Goal Creation Success Message -->
+    {% if request.query_params.get("goal_created") == "true" %}
+    <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+      <div class="flex">
+        <div class="flex-shrink-0">
+          <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+          </svg>
+        </div>
+        <div class="ml-3">
+          <p class="text-sm font-medium text-green-800">🎉 Goal created successfully!</p>
+          <p class="text-sm text-green-700 mt-1">Your new goal is now being tracked below.</p>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Goals Section -->
+    {% if user_goals %}
+    <div class="mb-6">
+      <div class="flex justify-between items-center mb-3">
+        <h3 class="text-lg font-medium text-gray-900">🎯 Your Goals</h3>
+        <a href="/goals" class="text-sm text-blue-600 hover:text-blue-800">Manage Goals</a>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {% for goal in user_goals %}
+        <div class="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg p-4">
+          <div class="flex justify-between items-start mb-3">
+            <h4 class="text-sm font-medium text-gray-900">
+              {{ goal.goal_type.replace('_', ' ').title() }}
+            </h4>
+            <span class="text-xs text-gray-500">
+              Due: {{ goal.end_date.strftime('%b %d, %Y') }}
+            </span>
+          </div>
+          
+          <!-- Progress Bar -->
+          {% set progress_percentage = (goal.current_value / goal.target_value * 100) | round(1) %}
+          <div class="mb-2">
+            <div class="flex justify-between text-xs text-gray-600 mb-1">
+              <span>{{ goal.current_value | int }} / {{ goal.target_value | int }} {{ goal.unit }}</span>
+              <span>{{ progress_percentage }}%</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2">
+              <div class="bg-gradient-to-r from-blue-500 to-purple-600 h-2 rounded-full transition-all duration-300" 
+                   style="width: {{ progress_percentage }}%"></div>
+            </div>
+          </div>
+          
+          <!-- Days Remaining -->
+          {% set days_remaining = ((goal.end_date - now).days) | int %}
+          <div class="text-xs text-gray-600">
+            {% if days_remaining > 0 %}
+              <span class="text-blue-600">📅 {{ days_remaining }} days remaining</span>
+            {% elif days_remaining == 0 %}
+              <span class="text-orange-600">⚠️ Due today!</span>
+            {% else %}
+              <span class="text-red-600">❌ {{ days_remaining | abs }} days overdue</span>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% else %}
+    <!-- No Goals Yet -->
+    <div class="mb-6 p-4 bg-gray-50 border border-gray-200 rounded-lg">
+      <div class="text-center">
+        <h4 class="text-sm font-medium text-gray-700 mb-2">🎯 No Goals Set Yet</h4>
+        <p class="text-sm text-gray-600 mb-3">Set your first goal to start tracking progress toward your social media objectives.</p>
+        <a href="/goals" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
+          Set Your First Goal 🚀
+        </a>
+      </div>
+    </div>
+    {% endif %}
+
     <!-- Mathematical Consistency Check -->
     {% if stats.total_tweets > 0 %}
     <div class="mb-6 p-4 bg-gray-50 border border-gray-200 rounded-lg">
@@ -77,7 +154,7 @@
           <p><strong>Displayed Average:</strong> {{ stats.average_score or 0 }}</p>
         </div>
         <div>
-          <p><strong>Consistency:</strong> 
+          <strong>Consistency:</strong> 
             {% if (total_score / stats.total_tweets if stats.total_tweets > 0 else 0) | round(2) == stats.average_score %}
               ✅ Match
             {% else %}

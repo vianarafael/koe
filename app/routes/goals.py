@@ -10,8 +10,25 @@ from app.templates import get_templates
 router = APIRouter(prefix="/goals", tags=["goals"])
 templates = get_templates()
 
-# Goal Templates Configuration
+# Goal Templates Configuration - Ordered for display priority
 GOAL_TEMPLATES = {
+    "monetization_path": {
+        "id": "monetization_path",
+        "name": "💵 Monetization Path (recommended)",
+        "description": "X requires 5M impressions in 3 months + 500 verified followers.",
+        "category": "monetization",
+        "primary_metric": "impressions",
+        "secondary_metrics": ["followers"],
+        "default_targets": {
+            "primary": {"value": 5000000, "unit": "impressions", "timeframe": 90},
+            "secondary": {"value": 500, "unit": "followers", "timeframe": 90}
+        },
+        "coaching_tips": [
+            "Focus on high-engagement content to boost impressions",
+            "Build authentic relationships to grow verified followers",
+            "Post consistently - algorithm favors active accounts"
+        ]
+    },
     "grow_impressions": {
         "id": "grow_impressions",
         "name": "📈 Grow Impressions",
@@ -64,23 +81,6 @@ GOAL_TEMPLATES = {
             "Ask questions to encourage responses",
             "Share personal stories that resonate",
             "Create content that sparks discussion"
-        ]
-    },
-    "monetization_path": {
-        "id": "monetization_path",
-        "name": "💵 Monetization Path (recommended)",
-        "description": "X requires 5M impressions in 3 months + 500 verified followers.",
-        "category": "monetization",
-        "primary_metric": "impressions",
-        "secondary_metrics": ["followers"],
-        "default_targets": {
-            "primary": {"value": 5000000, "unit": "impressions", "timeframe": 90},
-            "secondary": {"value": 500, "unit": "followers", "timeframe": 90}
-        },
-        "coaching_tips": [
-            "Focus on high-engagement content to boost impressions",
-            "Build authentic relationships to grow verified followers",
-            "Post consistently - algorithm favors active accounts"
         ]
     }
 }
@@ -138,8 +138,8 @@ async def create_goal(
     # Save goal
     created_goal = await create_user_goal(db, goal)
     
-    # Redirect back to goals page with success message
-    return RedirectResponse(url="/goals?success=true", status_code=302)
+    # Redirect to dashboard to see goal progress
+    return RedirectResponse(url="/dashboard?goal_created=true", status_code=302)
 
 @router.post("/delete/{goal_id}")
 async def delete_goal(
