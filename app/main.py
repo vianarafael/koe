@@ -8,10 +8,12 @@ import uvicorn
 
 from app.routes import home, dashboard
 from app import auth
+from app.db import init_db
+from app.routes import sites, links
 
 app = FastAPI(
-    title="EngageMeter - Social Media Engagement Analytics",
-    description="Track, analyze, and optimize your social media engagement with intelligent scoring and insights",
+    title="EngageMeter.co - Super-Simple Analytics for Indie Hackers",
+    description="Drop 1 snippet. Share our short link. See visits (last 24h).",
     version="1.0.0"
 )
 
@@ -31,6 +33,8 @@ app.mount("/static", StaticFiles(directory="app/static"), name="static")
 app.include_router(home.router)
 app.include_router(auth.router)
 app.include_router(dashboard.router)
+app.include_router(sites.router)
+app.include_router(links.router)
 
 
 # Health check endpoint for production monitoring
@@ -41,7 +45,7 @@ async def health_check():
 @app.on_event("startup")
 async def startup_event():
     # Initialize database and ensure app is ready
-    pass
+    await init_db()
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

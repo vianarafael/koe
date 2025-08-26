@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EngageMeter.co - Link Management</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@4.7.2/dist/full.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg" />
+</head>
+<body class="bg-base-100">
+    <!-- Navigation -->
+    <div class="navbar bg-base-200">
+        <div class="navbar-start">
+            <a href="/" class="btn btn-ghost text-xl">EngageMeter.co</a>
+        </div>
+        <div class="navbar-center">
+            <h1 class="text-xl font-semibold">Link Management</h1>
+        </div>
+        <div class="navbar-end">
+            <div class="dropdown dropdown-end">
+                <div
+                  tabindex="0"
+                  role="button"
+                  class="btn btn-ghost btn-circle avatar"
+                >
+                    <div class="w-10 rounded-full">
+                        <img
+                          alt="User avatar"
+                          src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
+                        />
+                    </div>
+                </div>
+                <ul
+                  tabindex="0"
+                  class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+                >
+                    <li><a href="/dashboard">Dashboard</a></li>
+                    <li><a href="/sites">Sites</a></li>
+                    <li><a href="/links">Links</a></li>
+                    <li><a href="/auth/logout">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h2 class="text-3xl font-bold text-base-content mb-2">
+                    Manage Your Tracked Links
+                </h2>
+                <p class="text-base-content/70">
+                    Create short URLs with UTM parameters to track social media traffic
+                </p>
+            </div>
+            <button
+              class="btn btn-primary"
+              onclick="document.getElementById('add-link-modal').showModal()"
+            >
+                <svg
+                  class="w-5 h-5 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 4v16m8-8H4"
+                    ></path>
+                </svg>
+                Add Link
+            </button>
+        </div>
+
+        <!-- Success Message -->
+        {% if request.query_params.get('success') == 'created' %}
+        <div class="alert alert-success mb-6">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span>Link created successfully! Short code: {{ request.query_params.get('short_code') }}</span>
+        </div>
+        {% endif %}
+
+        <!-- Links List -->
+        {% if links %}
+        <div class="overflow-x-auto">
+            <table class="table table-zebra w-full">
+                <thead>
+                    <tr>
+                        <th>Original URL</th>
+                        <th>Short Code</th>
+                        <th>Source</th>
+                        <th>Campaign</th>
+                        <th>Created</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for link in links %}
+                    <tr>
+                        <td>
+                            <div class="max-w-xs truncate" title="{{ link.original_url }}">
+                                {{ link.original_url }}
+                            </div>
+                        </td>
+                        <td>
+                            <code class="bg-base-300 px-2 py-1 rounded text-sm">
+                                {{ link.short_code }}
+                            </code>
+                        </td>
+                        <td>
+                            <span class="badge badge-{{ 'primary' if link.source == 'x' else 'secondary' if link.source == 'reddit' else 'accent' if link.source == 'linkedin' else 'neutral' }}">
+                                {{ link.source.upper() }}
+                            </span>
+                        </td>
+                        <td>{{ link.utm_campaign }}</td>
+                        <td>{{ link.created_at.strftime('%B %d, %Y') }}</td>
+                        <td>
+                            <div class="flex gap-2">
+                                <button class="btn btn-sm btn-outline" onclick="copyShortUrl('{{ link.short_code }}')">
+                                    Copy
+                                </button>
+                                <button class="btn btn-sm btn-error" onclick="deleteLink('{{ link.id }}', '{{ link.original_url }}')">
+                                    Delete
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <!-- Empty State -->
+        <div class="card bg-base-100 shadow-xl">
+            <div class="card-body text-center py-16">
+                <div class="text-6xl mb-4">🔗</div>
+                <h3 class="card-title text-2xl mb-4">No Tracked Links Yet</h3>
+                <p class="text-base-content/70 mb-6">
+                    Start tracking your social media traffic by creating your first tracked link. 
+                    You'll get a short URL with UTM parameters to share on social platforms.
+                </p>
+                <button class="btn btn-primary" onclick="document.getElementById('add-link-modal').showModal()">
+                    Create Your First Link
+                </button>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Add Link Modal -->
+    <dialog id="add-link-modal" class="modal">
+        <div class="modal-box">
+            <h3 class="font-bold text-lg mb-4">Create Tracked Link</h3>
+            <form method="POST" action="/links">
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text">Site</span>
+                    </label>
+                    <select name="site_id" class="select select-bordered w-full" required>
+                        <option value="">Select a site</option>
+                        {% for site in sites %}
+                        <option value="{{ site.id }}">{{ site.domain }}</option>
+                        {% endfor %}
+                    </select>
+                    <label class="label">
+                        <span class="label-text-alt">Choose which site this link belongs to</span>
+                    </label>
+                </div>
+
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text">Original URL</span>
+                    </label>
+                    <input
+                      type="url"
+                      name="original_url"
+                      placeholder="https://yoursite.com/page"
+                      class="input input-bordered w-full"
+                      required
+                    />
+                    <label class="label">
+                        <span class="label-text-alt">The page you want to track traffic to</span>
+                    </label>
+                </div>
+
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text">Traffic Source</span>
+                    </label>
+                    <select name="source" class="select select-bordered w-full" required>
+                        <option value="">Select source</option>
+                        <option value="x">X (Twitter)</option>
+                        <option value="reddit">Reddit</option>
+                        <option value="linkedin">LinkedIn</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <label class="label">
+                        <span class="label-text-alt">Where will you share this link?</span>
+                    </label>
+                </div>
+
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text">Campaign (Optional)</span>
+                    </label>
+                    <input
+                      type="text"
+                      name="campaign"
+                      placeholder="summer_sale_2024"
+                      class="input input-bordered w-full"
+                    />
+                    <label class="label">
+                        <span class="label-text-alt">Custom campaign name for UTM tracking</span>
+                    </label>
+                </div>
+
+                <div class="modal-action">
+                    <button type="button" class="btn" onclick="document.getElementById('add-link-modal').close()">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">Create Link</button>
+                </div>
+            </form>
+        </div>
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog>
+
+    <script>
+        // Copy short URL functionality
+        function copyShortUrl(shortCode) {
+            const shortUrl = `https://engmtr.co/${shortCode}`;
+            navigator.clipboard.writeText(shortUrl).then(() => {
+                // Show success feedback
+                const button = event.target;
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.classList.add('btn-success');
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('btn-success');
+                }, 2000);
+            });
+        }
+
+        // Delete link functionality
+        function deleteLink(linkId, originalUrl) {
+            if (confirm(`Are you sure you want to delete this tracked link?\n\n${originalUrl}`)) {
+                fetch(`/links/${linkId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        alert('Failed to delete link');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to delete link');
+                });
+            }
+        }
+
+        // Check if user has sites before allowing link creation
+        document.addEventListener('DOMContentLoaded', function() {
+            const sites = {{ sites | length }};
+            if (sites === 0) {
+                const addButton = document.querySelector('button[onclick*="add-link-modal"]');
+                if (addButton) {
+                    addButton.disabled = true;
+                    addButton.title = 'You need to add a site first';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
