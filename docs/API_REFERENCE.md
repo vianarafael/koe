@@ -1,10 +1,10 @@
-# 🔌 API Reference - Koe
+# 🔌 API Reference - EngageMeter
 
-> **Complete API documentation for Koe Social Media Analytics**
+> **Complete API documentation for EngageMeter Social Media Analytics**
 
 ## 🎯 Overview
 
-The Koe API provides programmatic access to social media engagement analytics. All endpoints return JSON responses and support standard HTTP methods.
+The EngageMeter API provides programmatic access to social media engagement analytics. All endpoints return JSON responses and support standard HTTP methods.
 
 ### Base URL
 
@@ -17,7 +17,7 @@ Most endpoints require authentication via session cookies. Include the session c
 
 ```bash
 # After login, include the session cookie
-curl -H "Cookie: koe_session=your-session-token" \
+curl -H "Cookie: engagemeter_session=your-session-token" \
      http://localhost:8000/api/endpoint
 ```
 
@@ -492,7 +492,7 @@ Get the main landing page (HTML).
 import requests
 import json
 
-class KoeClient:
+class EngageMeterClient:
     def __init__(self, base_url="http://localhost:8000"):
         self.base_url = base_url
         self.session = requests.Session()
@@ -524,7 +524,7 @@ class KoeClient:
         return response.json()
 
 # Usage
-client = KoeClient()
+client = EngageMeterClient()
 client.login("user@example.com", "password")
 engagements = client.get_engagements(sort_by="score", limit=10)
 ```
@@ -532,7 +532,7 @@ engagements = client.get_engagements(sort_by="score", limit=10)
 ### JavaScript Client
 
 ```javascript
-class KoeClient {
+class EngageMeterClient {
     constructor(baseUrl = 'http://localhost:8000') {
         this.baseUrl = baseUrl;
     }
@@ -572,7 +572,7 @@ class KoeClient {
 }
 
 // Usage
-const client = new KoeClient();
+const client = new EngageMeterClient();
 client.login('user@example.com', 'password')
     .then(() => client.getEngagements({ sort_by: 'score', limit: 10 }))
     .then(data => console.log(data));
@@ -625,8 +625,8 @@ curl -X POST http://localhost:8000/settings/update-points \
 - **[Setup Guide](SETUP_GUIDE.md)**: Installation and configuration
 - **[User Guide](USER_GUIDE.md)**: End-user documentation
 - **[Deployment Guide](DEPLOYMENT.md)**: Production deployment
-- **[GitHub Repository](https://github.com/yourusername/koe)**: Source code and issues
+- **[GitHub Repository](https://github.com/yourusername/engagemeter)**: Source code and issues
 
 ---
 
-**🔌 Ready to integrate with Koe? Use these endpoints to build powerful social media analytics applications!**
+**🔌 Ready to integrate with EngageMeter? Use these endpoints to build powerful social media analytics applications!**

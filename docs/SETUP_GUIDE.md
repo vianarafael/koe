@@ -1,10 +1,10 @@
-# 📖 Setup Guide - Koe
+# 📖 Setup Guide - EngageMeter
 
-> **Complete installation and configuration guide for Koe Social Media Analytics**
+> **Complete installation and configuration guide for EngageMeter Social Media Analytics**
 
 ## 🎯 Overview
 
-This guide will walk you through setting up Koe on your local machine or server. Koe is designed to be easy to set up and get running quickly.
+This guide will walk you through setting up EngageMeter on your local machine or server. EngageMeter is designed to be easy to set up and get running quickly.
 
 ## 📋 Prerequisites
 
@@ -46,18 +46,19 @@ git --version
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/koe.git
+git clone https://github.com/yourusername/engagemeter.git
 
 # Navigate to project directory
-cd koe
+cd engagemeter
 
 # Verify the structure
 ls -la
 ```
 
 You should see:
+
 ```
-koe/
+engagemeter/
 ├── app/
 ├── docs/
 ├── tests/
@@ -97,6 +98,7 @@ pip list
 ```
 
 You should see packages like:
+
 - fastapi
 - uvicorn
 - sqlalchemy
@@ -118,20 +120,20 @@ nano .env  # or use your preferred editor
 
 ```bash
 # Database Configuration
-DATABASE_URL=sqlite:///./koe.db
+DATABASE_URL=sqlite:///./engagemeter.db
 
 # Security
 SECRET_KEY=your-super-secret-key-here
 SESSION_SECRET_KEY=your-session-secret-key-here
 
 # Application Settings
-APP_NAME=Koe Analytics
+APP_NAME=EngageMeter Analytics
 DEBUG=True
 HOST=0.0.0.0
 PORT=8000
 
 # Session Configuration
-SESSION_COOKIE_NAME=koe_session
+SESSION_COOKIE_NAME=engagemeter_session
 SESSION_COOKIE_SECURE=False  # Set to True in production
 SESSION_COOKIE_HTTPONLY=True
 SESSION_COOKIE_SAMESITE=lax
@@ -169,7 +171,7 @@ bash scripts/dev.sh
 ### Step 7: Verify Installation
 
 1. **Open your browser** and navigate to `http://localhost:8000`
-2. **You should see** the Koe landing page
+2. **You should see** the EngageMeter landing page
 3. **Click "Get Started"** to test the application
 4. **Create an account** to verify authentication works
 
@@ -177,17 +179,17 @@ bash scripts/dev.sh
 
 ### Database Configuration
 
-Koe uses SQLite by default, but you can configure other databases:
+EngageMeter uses SQLite by default, but you can configure other databases:
 
 ```bash
 # PostgreSQL
-DATABASE_URL=postgresql://user:password@localhost/koe
+DATABASE_URL=postgresql://user:password@localhost/engagemeter
 
 # MySQL
-DATABASE_URL=mysql://user:password@localhost/koe
+DATABASE_URL=mysql://user:password@localhost/engagemeter
 
 # SQLite (default)
-DATABASE_URL=sqlite:///./koe.db
+DATABASE_URL=sqlite:///./engagemeter.db
 ```
 
 ### Security Configuration
@@ -235,11 +237,13 @@ pytest -k test_scoring_logic
 ### Manual Testing
 
 1. **Authentication Flow**
+
    - Register new account
    - Login with credentials
    - Test logout functionality
 
 2. **CSV Upload**
+
    - Download sample CSV from upload page
    - Upload and verify parsing
    - Check engagement scores
@@ -270,7 +274,7 @@ uvicorn app.main:app --reload --port 8001
 
 ```bash
 # Remove existing database
-rm koe.db
+rm engagemeter.db
 
 # Reinitialize
 python3 -c "from app.db import init_db; import asyncio; asyncio.run(init_db())"
@@ -303,7 +307,7 @@ chmod 755 app/ templates/ static/
 - **Check dependencies**: Verify all packages are installed
 - **GitHub Issues**: Search existing issues or create new ones
 
-## 🔄 Updating Koe
+## 🔄 Updating EngageMeter
 
 ### Update Dependencies
 
@@ -320,7 +324,7 @@ pip install -r requirements.txt --upgrade
 
 ```bash
 # Backup current database
-cp koe.db koe.db.backup
+cp engagemeter.db engagemeter.db.backup
 
 # The application handles migrations automatically
 # But you can also run them manually if needed
@@ -331,15 +335,17 @@ cp koe.db koe.db.backup
 ### iOS/Android Testing
 
 1. **Find your local IP address**
+
    ```bash
    # On macOS/Linux
    ifconfig | grep "inet " | grep -v 127.0.0.1
-   
+
    # On Windows
    ipconfig | findstr "IPv4"
    ```
 
 2. **Run with host binding**
+
    ```bash
    uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
    ```
@@ -352,11 +358,11 @@ cp koe.db koe.db.backup
 
 After successful setup:
 
-1. **Read the [User Guide](USER_GUIDE.md)** to learn how to use Koe
+1. **Read the [User Guide](USER_GUIDE.md)** to learn how to use EngageMeter
 2. **Check the [API Reference](API_REFERENCE.md)** for developer information
 3. **Review [Deployment Guide](DEPLOYMENT.md)** for production setup
 4. **Join the community** and contribute to the project
 
 ---
 
-**🎯 Setup complete! You're ready to start analyzing your social media engagement with Koe!**
+**🎯 Setup complete! You're ready to start analyzing your social media engagement with EngageMeter!**

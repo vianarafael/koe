@@ -7,7 +7,7 @@ class Settings(BaseSettings):
     
     # Session settings
     SESSION_SECRET_KEY: str = "your-session-secret-key-here"
-    SESSION_COOKIE_NAME: str = "koe_session"
+    SESSION_COOKIE_NAME: str = "engagemeter_session"
     SESSION_COOKIE_SECURE: bool = False  # Set to True in production with HTTPS
     SESSION_COOKIE_HTTPONLY: bool = True
     SESSION_COOKIE_SAMESITE: str = "lax"

@@ -10,7 +10,7 @@ The dashboard is the central hub for users to view their engagement analytics, t
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│ Koe  [Dashboard] [Upload] [Settings] [Profile ▼] [Logout] │
+│ EngageMeter  [Dashboard] [Upload] [Settings] [Profile ▼] [Logout] │
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
 │  Welcome back, username!                                    │
@@ -217,7 +217,7 @@ The dashboard is the central hub for users to view their engagement analytics, t
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│ [☰] Koe                                                    │
+│ [☰] EngageMeter                                                    │
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
 │  Welcome back, username!                                   │

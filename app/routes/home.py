@@ -3,6 +3,7 @@ from fastapi.responses import HTMLResponse
 from app.templates import get_templates
 from app.auth import get_current_user
 from app.db import get_db, get_user_engagements, get_user_total_score, get_top_engagements, get_user_engagement_breakdown
+from app.routes.dashboard import calculate_engagement_stats
 from app.models import User
 
 router = APIRouter()
@@ -19,6 +20,7 @@ async def index(request: Request, current_user: User = Depends(get_current_user)
     total_score = 0
     top_engagements = []
     engagement_breakdown = {}
+    stats = {}
     
     if current_user:
         try:
@@ -26,12 +28,15 @@ async def index(request: Request, current_user: User = Depends(get_current_user)
             total_score = await get_user_total_score(db, current_user.id)
             top_engagements = await get_top_engagements(db, current_user.id, limit=5)
             engagement_breakdown = await get_user_engagement_breakdown(db, current_user.id)
+            # Calculate stats for the template
+            stats = calculate_engagement_stats(tweets)
         except Exception as e:
             print(f"Error fetching user data: {e}")
             tweets = []
             total_score = 0
             top_engagements = []
             engagement_breakdown = {}
+            stats = {}
     
     # Get upload success message from query params
     upload_success = request.query_params.get("upload_success") == "true"
@@ -51,7 +56,8 @@ async def index(request: Request, current_user: User = Depends(get_current_user)
         error_count=error_count,
         scoring_applied=scoring_applied,
         top_engagements=top_engagements,
-        engagement_breakdown=engagement_breakdown
+        engagement_breakdown=engagement_breakdown,
+        stats=stats
     ))
 
 @router.get("/login", response_class=HTMLResponse)

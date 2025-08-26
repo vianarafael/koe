@@ -1,4 +1,4 @@
-# 🚀 Koe - Social Media Engagement Analytics
+# 🚀 EngageMeter - Social Media Engagement Analytics
 
 > **Track, analyze, and optimize your social media engagement with intelligent scoring and insights**
 
@@ -8,9 +8,9 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.0+-blue.svg)](https://tailwindcss.com)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-## 🎯 What is Koe?
+## 🎯 What is EngageMeter?
 
-Koe is a powerful social media engagement analytics platform that helps content creators, social media managers, and brands optimize their social media strategy through intelligent engagement scoring and data-driven insights.
+EngageMeter is a powerful social media engagement analytics platform that helps content creators, social media managers, and brands optimize their social media strategy through intelligent engagement scoring and data-driven insights.
 
 ### ✨ Key Features
 
@@ -43,8 +43,8 @@ Koe is a powerful social media engagement analytics platform that helps content 
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/koe.git
-cd koe
+git clone https://github.com/yourusername/engagemeter.git
+cd engagemeter
 
 # Install dependencies
 pip install -r requirements.txt
@@ -66,7 +66,7 @@ The application will be available at `http://localhost:8000`
 ## 📚 Documentation
 
 - **[📖 Setup Guide](docs/SETUP_GUIDE.md)** - Complete installation and configuration
-- **[👥 User Guide](docs/USER_GUIDE.md)** - How to use Koe effectively
+- **[👥 User Guide](docs/USER_GUIDE.md)** - How to use EngageMeter effectively
 - **[🔌 API Reference](docs/API_REFERENCE.md)** - Complete API documentation
 - **[🚀 Deployment Guide](docs/DEPLOYMENT.md)** - Production deployment instructions
 
@@ -89,7 +89,7 @@ The application will be available at `http://localhost:8000`
 ### Project Structure
 
 ```
-koe/
+engagemeter/
 ├── app/                    # Main application code
 │   ├── models.py          # Pydantic data models
 │   ├── db.py              # Database operations
@@ -167,9 +167,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- **Issues**: [GitHub Issues](https://github.com/yourusername/koe/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/koe/discussions)
-- **Email**: support@koe-analytics.com
+- **Issues**: [GitHub Issues](https://github.com/yourusername/engagemeter/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/yourusername/engagemeter/issues)
+- **Email**: support@engagemeter-analytics.com
 
 ---
 

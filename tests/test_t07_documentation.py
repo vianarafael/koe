@@ -35,7 +35,7 @@ def test_readme_content():
     
     # Check for required sections
     required_sections = [
-        "## 🎯 What is Koe?",
+        "## 🎯 What is EngageMeter?",
         "## 🚀 Quick Start", 
         "## 📚 Documentation",
         "## 🔧 Development"

@@ -1,6 +1,6 @@
 # Email/Password Authentication Setup Guide
 
-This guide explains how to set up and use the email/password authentication system for the Koe application.
+This guide explains how to set up and use the email/password authentication system for the EngageMeter application.
 
 ## Prerequisites
 
@@ -108,7 +108,7 @@ DATABASE_URL=sqlite:///./app.db
 # Security
 SECRET_KEY=your_secret_key_here
 SESSION_SECRET_KEY=your-session-secret-key-here
-SESSION_COOKIE_NAME=koe_session
+SESSION_COOKIE_NAME=engagemeter_session
 SESSION_COOKIE_SECURE=false  # Set to true in production with HTTPS
 SESSION_COOKIE_HTTPONLY=true
 SESSION_COOKIE_SAMESITE=lax

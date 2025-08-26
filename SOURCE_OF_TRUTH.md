@@ -16,6 +16,7 @@
 - **UI mockups and design system for authentication, dashboard, and settings (T06 ✅)**
 - **Enhanced CSV parsing supporting X Analytics account overview format (Bug Fixes ✅)**
 - **Complete documentation for setup, usage, and API endpoints (T07 ✅)**
+- **App simplification and goal-setting feature removal (T12 ✅)**
 
 ## ❌ Non-Goals
 
@@ -48,6 +49,7 @@
 - **Comprehensive UI design system and mockups for professional user experience (T06 ✅)**
 - **Enhanced CSV parsing supporting X Analytics account overview and daily summary data (Bug Fixes ✅)**
 - **Comprehensive documentation covering development, user, and production needs (T07 ✅)**
+- **Simplified app architecture with goal-setting feature removed (T12 ✅)**
 
 ### 🚀 **Killer Differentiator: Active Strategy Assistant**
 
@@ -76,14 +78,12 @@
 15. **User understands cumulative scoring**: Clear explanation that total score represents ALL engagement (UI Enhancement ✅)
 16. **User sees score growth over time**: Visual indicators that score increases with new data (UI Enhancement ✅)
 
-### 🎯 **Strategy Assistant User Flows (Sprint 2)**
+### 🎯 **Simplified App User Flows (Post-T12)**
 
-17. **User sets engagement goals**: Define targets like "100 replies this month" or "500 followers in 3 months"
-18. **User is redirected to dashboard**: After goal creation, user sees immediate progress on dashboard (not confusing page states)
-19. **User tracks goal progress**: See burn-down style progress with current pace vs. needed pace on dashboard
-20. **User receives actionable insights**: Get recommendations based on actual data patterns, not assumptions
-21. **User optimizes content strategy**: Use insights to improve posting frequency, content types, and engagement
-22. **User measures growth trends**: Compare current performance to historical data and industry benchmarks
+17. **User experiences simplified app**: Clean, focused dashboard without goal-setting complexity (T12 ✅)
+18. **User focuses on core metrics**: Dashboard shows posts, replies, and engagement scores clearly (T12 ✅)
+19. **User optimizes content strategy**: Use insights to improve posting frequency, content types, and engagement
+20. **User measures growth trends**: Compare current performance to historical data and industry benchmarks
 
 ## 🏗️ Architecture
 
@@ -120,11 +120,11 @@
 - **B3**: Metric math correctness and consistency
 - **B4**: Engagement rate calculations and funnel analysis
 
-### **Epic C: Goals System Enhancement (Current T08)**
+### **Epic C: App Simplification & Core Features (T12 ✅)**
 
-- **C1**: Monetization template with dual progress bars (Impressions + Followers)
-- **C2**: Custom goal templates and free-form goal setting
-- **C3**: Goal validation coach with realistic target suggestions
+- **C1**: Goal-setting feature completely removed for app simplification
+- **C2**: Dashboard streamlined to focus on core engagement metrics
+- **C3**: App architecture simplified for better maintainability
 
 ### **Epic D: Dashboard UX Overhaul (DaisyUI + HTMX)**
 
@@ -215,15 +215,11 @@
 - `PointValueUpdate`: {'like': 'integer', 'retweet': 'integer', 'reply': 'integer', 'mention': 'integer'}
 - `StrategyImpactAnalysis`: {'current_values': 'dict', 'scoring_formula': 'string', 'example_scenarios': 'dict', 'recommendations': 'dict'}
 
-### Strategy Assistant Models (Sprint 2)
+### Simplified App Models (Post-T12)
 
-- `UserGoal`: {'id': 'string', 'user_id': 'string', 'goal_type': 'string', 'target_value': 'integer', 'start_date': 'datetime', 'end_date': 'datetime', 'current_value': 'integer', 'unit': 'string', 'is_primary': 'boolean'}
-- `GoalProgress`: {'current_value': 'integer', 'target_value': 'integer', 'progress_percentage': 'float', 'current_pace': 'float', 'needed_pace': 'float', 'on_track': 'boolean', 'days_remaining': 'integer', 'trend': 'string'}
-- `GoalTemplate`: {'id': 'string', 'name': 'string', 'description': 'string', 'category': 'string', 'primary_metric': 'string', 'secondary_metrics': 'list', 'default_targets': 'dict', 'coaching_tips': 'list'}
-- `EngagementInsight`: {'strongest_type': 'string', 'growth_opportunity': 'string', 'performance_trend': 'string', 'strategy_tip': 'string'}
-- `ContentRecommendation`: {'content_type': 'string', 'strategy': 'string', 'expected_impact': 'string', 'testing_suggestion': 'string'}
-- `GrowthAnalytics`: {'trend': 'string', 'growth_rate': 'string', 'best_day': 'date', 'consistent_days': 'integer'}
-- `ContentProductivity`: {'average_engagement': 'float', 'best_post_score': 'integer', 'best_post_date': 'datetime', 'productivity_tip': 'string', 'total_posts': 'integer'}
+- **Goal-related models removed**: All goal, progress, and template models eliminated for app simplification
+- **Core engagement models maintained**: TweetEngagement, User, and scoring models remain intact
+- **Streamlined data contracts**: Focus on essential engagement analytics without goal complexity
 
 ### API Input/Output
 
@@ -404,6 +400,7 @@
 - [x] **Dual-format CSV parsing (tweet-level and daily summaries) (Bug Fixes ✅)**
 - [x] **Improved error handling and debug logging (Bug Fixes ✅)**
 - [x] **Documentation is complete and reviewed (T07 ✅)**
+- [x] **Goal-setting feature completely removed and app simplified (T12 ✅)**
 - [ ] Deployed and accessible via public URL
 - [x] Automated tests cover key API endpoints and scoring logic (T03 ✅)
 - [x] **Dashboard functionality testing and validation (T04 ✅)**
@@ -443,6 +440,7 @@
 - ✅ **Improved error handling and debug logging (Bug Fixes ✅)**
 - ✅ **Complete documentation for setup, usage, and API endpoints (T07 ✅)**
 - ✅ **Goal setting system with template selection and coaching validation (T08 ✅)**
+- ✅ **App simplification and goal-setting feature removal (T12 ✅)**
 
 ### MVP Status
 
@@ -453,8 +451,8 @@
 
 ### Epic Transformation Status
 
-- **Current Epic**: **B** (Data Consistency & Scoring)
-- **Next Priority**: X Analytics CSV schema implementation (T09)
+- **Current Epic**: **C** (App Simplification & Core Features) - **COMPLETED ✅**
+- **Next Priority**: Dashboard daily post/reply counts (T13)
 - **Branding**: Ready for Koe → EngageMeter rename (Epic A)
 - **Architecture**: HTMX + Tailwind → DaisyUI transition planned (Epic D)
 - **Monetization**: Paywall system design complete, implementation pending (Epic G)
@@ -466,6 +464,7 @@
 
 **Key Differentiator**: Most tools show data, Koe shows how to use data to grow
 **Value Proposition**: Transform from "here's your numbers" to "here's how to hit your goals"
+**Current State**: App simplified and streamlined for core engagement analytics (T12 ✅)
 **Next Phase**: Epic Transformation - Complete rebrand to EngageMeter with monetization focus
 
 ### 🎯 **Epic Transformation Roadmap**
@@ -474,7 +473,7 @@
 
 - **A**: Koe → EngageMeter rebrand
 - **B**: X Analytics data consistency & scoring
-- **C**: Enhanced goals system
+- **C**: App simplification & core features - **COMPLETED ✅**
 
 **Phase 2 (Medium-term)**: Epics D-F
 
@@ -562,6 +561,17 @@
 - **Growth Indicators**: Clear messaging that score increases with new uploads
 - **User Education**: Automatic explanation of cumulative vs. single-post scoring
 
+### App Simplification Features (T12 ✅)
+
+- **Goal-Setting Feature Removed**: Complete elimination of goal creation, tracking, and management
+- **Dashboard Streamlined**: Removed goal display sections and goal-related variables
+- **Navigation Simplified**: Goals link removed from main navigation menu
+- **Data Models Cleaned**: Goal-related Pydantic models completely removed
+- **Database Functions Removed**: All goal-related database operations eliminated
+- **Routes Simplified**: Goals router completely removed from main app
+- **Templates Cleaned**: Goal-related UI elements removed from dashboard
+- **App Architecture Simplified**: Removed goal system complexity for better maintainability
+
 ### Documentation System Features (T07 ✅)
 
 - **Comprehensive Coverage**: Complete documentation for development, users, and production
@@ -603,10 +613,10 @@
 - **User Education**: Built-in explanations of what metrics represent
 - **Visual Hierarchy**: Professional score display with explanation boxes
 - **Growth Messaging**: Clear indication that score grows over time
-- **Goals Integration**: Goals displayed at top with progress bars and success messages
-- **Progress Tracking**: Visual progress bars with completion percentage and days remaining
-- **Goal Management**: Quick access to goals page with "Manage Goals" link
-- **Success Feedback**: Immediate confirmation when goals are created successfully
+- **Core Analytics Focus**: Dashboard displays engagement scores and top performers clearly
+- **Streamlined Interface**: Clean, focused design without goal complexity
+- **Data-Driven Insights**: Users focus on engagement patterns and optimization
+- **Simplified User Flow**: Direct path from upload to analytics insights
 
 ### Settings System Integration
 
@@ -626,35 +636,76 @@
 
 ### Technical Improvements & Bug Fixes
 
-- **JavaScript Conflict Resolution**: Eliminated `GOAL_TEMPLATES_DATA` redeclaration errors with HTMX
-- **Form Validation Fixes**: Resolved "invalid form control" errors with proper field naming
+- **App Simplification**: Eliminated goal-setting complexity for cleaner architecture
+- **Code Cleanup**: Removed unused goal-related code and dependencies
 - **HTMX Integration**: Full HTMX implementation eliminates JavaScript state management complexity
-- **User Experience Clarity**: Clear user flow from goal creation to dashboard progress tracking
+- **User Experience Clarity**: Streamlined user flow from upload to analytics insights
 - **Template Rendering**: Proper Jinja2 template structure with HTMX targeting
-- **Database Integration**: Goals displayed on dashboard with real-time progress calculation
+- **Database Integration**: Simplified database operations without goal complexity
 
-### Strategy Assistant Features (Sprint 2)
+### Core Analytics Features (Post-T12)
 
-- **Goal Setting System**: User-defined engagement targets with customizable timeframes
-- **Progress Tracking**: Burn-down style progress with current pace vs. needed pace analysis
-- **Actionable Insights**: Data-driven recommendations based on actual performance patterns
-- **Growth Analytics**: Historical comparison and trend analysis for performance optimization
-- **Content Optimization**: Pattern recognition and strategy recommendations for engagement growth
-- **Real-time Coaching**: Active guidance on how to achieve engagement goals
-- **Performance Benchmarking**: Compare current performance to historical data and trends
-- **Strategy Validation**: Test different approaches and measure their impact on engagement
+- **Engagement Analytics**: Comprehensive engagement scoring and analysis
+- **Data Visualization**: Clear display of engagement patterns and trends
+- **Performance Insights**: Top-performing content identification and ranking
+- **Strategy Optimization**: Point value configuration for engagement strategy
+- **Content Analysis**: Detailed breakdown of likes, retweets, replies, and mentions
+- **Real-time Updates**: Dynamic dashboard with immediate data refresh
+- **Performance Benchmarking**: Compare current performance to historical data
+- **Strategy Validation**: Test different point value configurations and see impact
 
-### Goal System Implementation (T08 ✅)
+### App Simplification Implementation (T12 ✅)
 
-- **Database Schema**: `user_goals` table with proper foreign key relationships
-- **Goal Templates**: Pre-configured templates with starter/intermediate/advanced options
-- **Coaching Engine**: Goal validation with supportive feedback and adjustment suggestions
-- **Navigation Integration**: Goals link in main navigation and "Set My Goal" button on dashboard
-- **Professional UI**: Step-by-step goal setting flow with template selection
-- **Progress Tracking**: Real-time progress calculation with pace analysis
-- **Dashboard Integration**: Goals displayed at top, above engagement score for clear UX narrative
-- **Full HTMX Implementation**: No JavaScript conflicts, clean form submission with `hx-target="#goals-content"`
-- **User Flow Optimization**: Goal creation → Dashboard redirect → Progress display (no confusing page states)
-- **Success Message Handling**: Dashboard shows success message and goal progress immediately after creation
-- **Progress Visualization**: Beautiful progress bars with days remaining and completion percentage
-- **Goal Management**: Quick access to goals from dashboard with "Manage Goals" link
+- **Complete Feature Removal**: Goal-setting system completely eliminated from codebase
+- **Dashboard Simplification**: Removed all goal-related UI elements and variables
+- **Navigation Cleanup**: Goals link removed from main navigation menu
+- **Data Model Cleanup**: All goal-related Pydantic models removed
+- **Database Cleanup**: Goal-related database functions and table references eliminated
+- **Route Cleanup**: Goals router completely removed from main app
+- **Template Cleanup**: Goal-related HTML sections removed from dashboard template
+- **Architecture Simplification**: App complexity reduced for better maintainability and focus
+
+## 🎯 **Current App State & Next Steps**
+
+### **App Simplification Complete (T12 ✅)**
+
+The application has been successfully simplified by removing the goal-setting feature entirely. This change:
+
+- **Eliminates Complexity**: Removes goal creation, tracking, and management overhead
+- **Focuses Core Features**: Dashboard now focuses purely on engagement analytics
+- **Improves Maintainability**: Cleaner codebase with fewer moving parts
+- **Streamlines User Experience**: Users focus on data insights rather than goal management
+
+### **What Was Removed (T12 ✅)**
+
+- ✅ Goal creation and management system
+- ✅ Goal progress tracking and visualization
+- ✅ Goal templates and coaching engine
+- ✅ Goals navigation and routing
+- ✅ Goal-related database operations
+- ✅ Goal-related Pydantic models
+- ✅ Goal-related UI components and templates
+
+### **What Remains (Core Features)**
+
+- ✅ User authentication and session management
+- ✅ CSV upload and intelligent parsing
+- ✅ Engagement scoring and calculation
+- ✅ Advanced dashboard with sorting/filtering
+- ✅ Settings management and point value configuration
+- ✅ Comprehensive documentation and testing
+
+### **Next Development Priorities**
+
+1. **T13: Dashboard Daily Post/Reply Counts** - Show daily aggregated data
+2. **T14: Premium "Best Time to Post" Feature** - Implement locked premium feature
+3. **Epic D: Dashboard UX Overhaul** - Transition to DaisyUI
+4. **Epic A: Koe → EngageMeter Rebrand** - Complete application rename
+
+### **Current Architecture Benefits**
+
+- **Simplified Codebase**: Easier to maintain and extend
+- **Focused User Experience**: Users concentrate on core analytics
+- **Reduced Complexity**: Fewer potential points of failure
+- **Better Performance**: Streamlined database queries and routing
+- **Easier Testing**: Simpler test coverage requirements

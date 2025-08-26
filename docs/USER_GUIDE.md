@@ -1,10 +1,10 @@
-# 👥 User Guide - Koe
+# 👥 User Guide - EngageMeter
 
-> **Complete guide to using Koe Social Media Analytics effectively**
+> **Complete guide to using EngageMeter Social Media Analytics effectively**
 
 ## 🎯 Getting Started
 
-Welcome to Koe! This guide will help you get the most out of your social media engagement analytics.
+Welcome to EngageMeter! This guide will help you get the most out of your social media engagement analytics.
 
 ### What You'll Learn
 
@@ -18,7 +18,7 @@ Welcome to Koe! This guide will help you get the most out of your social media e
 
 ### Creating Your Account
 
-1. **Navigate to Koe** at your local installation or deployed URL
+1. **Navigate to EngageMeter** at your local installation or deployed URL
 2. **Click "Get Started"** on the landing page
 3. **Choose "Register"** to create a new account
 4. **Fill in your details**:
@@ -44,11 +44,12 @@ Welcome to Koe! This guide will help you get the most out of your social media e
 
 ### Understanding CSV Formats
 
-Koe supports multiple CSV formats from various social media platforms:
+EngageMeter supports multiple CSV formats from various social media platforms:
 
 #### X Analytics (Twitter) Format
 
 **Tweet-Level Data** (Individual posts):
+
 ```csv
 Tweet ID,Tweet text,Posted date,Likes,Retweets,Replies,Mentions
 123456,Great content!,2024-01-15,150,25,12,3
@@ -56,6 +57,7 @@ Tweet ID,Tweet text,Posted date,Likes,Retweets,Replies,Mentions
 ```
 
 **Account Overview Data** (Daily summaries):
+
 ```csv
 Date,Impressions,Likes,Engagements,Bookmarks,Shares,New follows,Unfollows,Replies,Reposts,Profile visits
 2024-01-15,5866,9,88,5,0,0,0,5,0,35
@@ -64,7 +66,8 @@ Date,Impressions,Likes,Engagements,Bookmarks,Shares,New follows,Unfollows,Replie
 
 #### Other Platform Formats
 
-Koe automatically detects column names and maps them to the appropriate fields. Common variations include:
+EngageMeter automatically detects column names and maps them to the appropriate fields. Common variations include:
+
 - **Likes**: "Likes", "likes", "Like count", "like_count"
 - **Retweets**: "Retweets", "retweets", "Reposts", "retweet_count"
 - **Replies**: "Replies", "replies", "Reply count", "reply_count"
@@ -92,7 +95,7 @@ Koe automatically detects column names and maps them to the appropriate fields. 
 
 ### Understanding the Scoring System
 
-Koe uses a configurable point system to calculate engagement scores:
+EngageMeter uses a configurable point system to calculate engagement scores:
 
 **Formula**: `(Likes × Like Points) + (Retweets × Retweet Points) + (Replies × Reply Points) + (Mentions × Mention Points)`
 
@@ -116,18 +119,21 @@ Koe uses a configurable point system to calculate engagement scores:
 ### Scoring Strategy Examples
 
 #### **Engagement-Focused Strategy**
+
 - Likes: 1 point
 - Retweets: 3 points (encourage sharing)
 - Replies: 5 points (encourage conversation)
 - Mentions: 2 points (encourage brand mentions)
 
 #### **Reach-Focused Strategy**
+
 - Likes: 1 point
 - Retweets: 4 points (maximize reach)
 - Replies: 2 points
 - Mentions: 1 point
 
 #### **Community-Building Strategy**
+
 - Likes: 1 point
 - Retweets: 2 points
 - Replies: 6 points (encourage discussion)
@@ -149,6 +155,7 @@ The dashboard provides comprehensive insights into your social media performance
 #### **Engagement Breakdown**
 
 Visual representation of how your engagement is distributed:
+
 - **Likes**: Percentage of total engagement from likes
 - **Retweets**: Percentage from retweets
 - **Replies**: Percentage from replies
@@ -190,6 +197,7 @@ Visual representation of how your engagement is distributed:
 #### **Strategy Impact Analysis**
 
 The settings page shows:
+
 - **Current scoring formula** with actual values
 - **Example scenarios** (high/medium/low engagement)
 - **Strategy recommendations** based on your configuration
@@ -255,7 +263,8 @@ The settings page shows:
 
 ### CSV Format Detection
 
-Koe automatically:
+EngageMeter automatically:
+
 - **Detects CSV format** (tweet-level vs. account overview)
 - **Maps column names** to appropriate fields
 - **Handles data variations** from different platforms
@@ -264,6 +273,7 @@ Koe automatically:
 ### Score Recalculation
 
 When you update point values:
+
 - **All scores recalculate** automatically
 - **Historical data** maintains consistency
 - **Performance impact** is immediate
@@ -364,6 +374,6 @@ When you update point values:
 
 ---
 
-**🎯 You're now ready to master Koe and optimize your social media engagement strategy!**
+**🎯 You're now ready to master EngageMeter and optimize your social media engagement strategy!**
 
 For additional help, check the [API Reference](API_REFERENCE.md) or [Deployment Guide](DEPLOYMENT.md).

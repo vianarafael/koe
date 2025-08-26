@@ -10,7 +10,7 @@ The settings page provides users with comprehensive control over their engagemen
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│ Koe  [Dashboard] [Upload] [Settings] [Profile ▼] [Logout] │
+│ EngageMeter  [Dashboard] [Upload] [Settings] [Profile ▼] [Logout] │
 ├─────────────────────────────────────────────────────────────┘
 │                                                             │
 │  Engagement Strategy Settings                               │
@@ -291,7 +291,7 @@ The settings page provides users with comprehensive control over their engagemen
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│ [☰] Koe                                                    │
+│ [☰] EngageMeter                                                    │
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
 │  Engagement Strategy Settings                               │

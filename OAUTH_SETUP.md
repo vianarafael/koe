@@ -1,6 +1,6 @@
 # Twitter OAuth Setup Guide
 
-This guide explains how to set up Twitter OAuth 2.0 for the Koe application.
+This guide explains how to set up Twitter OAuth 2.0 for the EngageMeter application.
 
 ## Prerequisites
 

@@ -1,6 +1,6 @@
 # Build Plan
 
-Build a minimal viable product for Koe that allows users to authenticate with Twitter, fetch their recent tweets and engagement metrics, assign point values to interaction types, and view a dashboard summarizing engagement scores. Focus on fast iteration with a lean stack and simple UI. Prioritize core flows and deploy within one week.
+Build a minimal viable product for EngageMeter that allows users to authenticate with Twitter, fetch their recent tweets and engagement metrics, assign point values to interaction types, and view a dashboard summarizing engagement scores. Focus on fast iteration with a lean stack and simple UI. Prioritize core flows and deploy within one week.
 
 ## 📝 Commit Plan
 

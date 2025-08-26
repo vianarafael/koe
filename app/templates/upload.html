@@ -1,196 +1,308 @@
-{% extends "base.html" %} {% block title %}Upload CSV - Koe{% endblock %} {%
-block content %}
-<div class="max-w-4xl mx-auto">
-  <div class="bg-white shadow rounded-lg">
-    <div class="px-4 py-5 sm:p-6">
-      <h2 class="text-lg leading-6 font-medium text-gray-900 mb-4">
-        Upload X Analytics CSV
-      </h2>
+{% extends "base.html" %}
 
+{% block title %}Upload CSV - EngageMeter{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+  <!-- Page Header -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-base-content mb-2">📤 Upload X Analytics CSV</h1>
+    <p class="text-base-content/70">Upload your X Analytics CSV export to start tracking engagement metrics</p>
+  </div>
+
+  <!-- Upload Form Card -->
+  <div class="card bg-base-100 shadow-lg border border-base-300 mb-8">
+    <div class="card-body">
+      <h2 class="card-title text-2xl mb-4">Upload & Process CSV</h2>
+      
       <div class="mb-6">
-        <p class="text-sm text-gray-600">
-          Upload your X Analytics CSV export to start tracking engagement
-          metrics. The system will automatically detect column names and parse
-          your data.
+        <p class="text-base-content/70">
+          The system will automatically detect column names and parse your data. 
+          Make sure your CSV contains engagement metrics like likes, retweets, replies, and mentions.
         </p>
       </div>
 
       <!-- Upload Form -->
-      <div class="space-y-6">
-        <form
-          hx-post="/upload/csv"
-          hx-encoding="multipart/form-data"
-          hx-target="#upload-result"
-          hx-swap="innerHTML"
-          class="space-y-4"
-        >
-          <div>
-            <label
-              for="file"
-              class="block text-sm font-medium text-gray-700 mb-2"
+      <form
+        hx-post="/upload/csv"
+        hx-encoding="multipart/form-data"
+        hx-target="#upload-result"
+        hx-swap="innerHTML"
+        class="space-y-6"
+      >
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text font-medium">Select CSV File</span>
+          </label>
+          <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+            <input
+              type="file"
+              id="file"
+              name="file"
+              accept=".csv"
+              required
+              class="file-input file-input-bordered file-input-primary w-full"
+            />
+            <button
+              type="submit"
+              class="btn btn-primary btn-lg"
             >
-              Select CSV File
-            </label>
-            <div class="flex items-center space-x-4">
-              <input
-                type="file"
-                id="file"
-                name="file"
-                accept=".csv"
-                required
-                class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-              />
-              <button
-                type="submit"
-                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
-              >
-                <svg
-                  class="w-4 h-4 mr-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                  />
-                </svg>
-                Upload & Process
-              </button>
-            </div>
-            <p class="mt-1 text-xs text-gray-500">
-              Only CSV files are supported. Maximum file size: 10MB
-            </p>
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+              </svg>
+              Upload & Process
+            </button>
           </div>
-        </form>
-
-        <!-- Upload Result -->
-        <div id="upload-result"></div>
-
-        <!-- Sample CSV Download -->
-        <div class="border-t border-gray-200 pt-6">
-          <h3 class="text-sm font-medium text-gray-900 mb-3">
-            Need a sample CSV?
-          </h3>
-          <p class="text-sm text-gray-600 mb-4">
-            Download a sample CSV file to see the expected format and column
-            names.
-          </p>
-          <a
-            href="/upload/sample"
-            class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
-            <svg
-              class="w-4 h-4 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-              />
-            </svg>
-            Download Sample CSV
-          </a>
+          <label class="label">
+            <span class="label-text-alt text-base-content/60">Only CSV files are supported. Maximum file size: 10MB</span>
+          </label>
         </div>
+      </form>
 
-        <!-- CSV Format Guide -->
-        <div class="border-t border-gray-200 pt-6">
-          <h3 class="text-sm font-medium text-gray-900 mb-3">
-            CSV Format Requirements
-          </h3>
-          <div class="bg-gray-50 rounded-md p-4">
-            <div class="text-sm text-gray-700 space-y-2">
-              <p><strong>Required columns:</strong></p>
-              <ul class="list-disc list-inside ml-4 space-y-1">
-                <li>
-                  <code>Tweet ID</code> - Unique identifier for each tweet
-                </li>
-                <li><code>Likes</code> - Number of likes received</li>
-                <li><code>Retweets</code> - Number of retweets received</li>
-                <li><code>Replies</code> - Number of replies received</li>
-              </ul>
+      <!-- Upload Result -->
+      <div id="upload-result"></div>
+    </div>
+  </div>
 
-              <p class="mt-3"><strong>Optional columns:</strong></p>
-              <ul class="list-disc list-inside ml-4 space-y-1">
-                <li><code>Tweet text</code> - The actual tweet content</li>
-                <li><code>Posted date</code> - When the tweet was posted</li>
-                <li><code>Mentions</code> - Number of mentions received</li>
-              </ul>
+  <!-- Uploaded Files List -->
+  {% if csv_uploads %}
+  <div class="card bg-base-100 shadow-lg border border-base-300 mb-8">
+    <div class="card-body">
+      <h3 class="card-title text-xl mb-4">📁 Your Uploaded Files</h3>
+      <div class="overflow-x-auto">
+        <table class="table table-zebra w-full">
+          <thead>
+            <tr>
+              <th>Filename</th>
+              <th>Uploaded</th>
+              <th>Size</th>
+              <th>Records</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for upload in csv_uploads %}
+            <tr>
+              <td class="font-mono text-sm">{{ upload.filename }}</td>
+              <td>{{ upload.uploaded_at.strftime('%Y-%m-%d %H:%M') }}</td>
+              <td>{{ (upload.file_size / 1024) | round(1) }} KB</td>
+              <td>{{ upload.records_stored }}/{{ upload.records_processed }}</td>
+              <td>
+                {% if upload.parse_errors %}
+                  <span class="badge badge-warning">Warnings</span>
+                {% else %}
+                  <span class="badge badge-success">Success</span>
+                {% endif %}
+              </td>
+              <td>
+                <a href="/upload/download/{{ upload.id }}" class="btn btn-sm btn-outline">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  Download
+                </a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  {% endif %}
 
-              <p class="mt-3"><strong>Supported date formats:</strong></p>
-              <ul class="list-disc list-inside ml-4 space-y-1">
-                <li><code>2024-01-15 14:30:00</code></li>
-                <li><code>2024-01-15</code></li>
-                <li><code>01/15/2024</code></li>
-                <li><code>15/01/2024</code></li>
-              </ul>
+  <!-- Sample CSV Download Card -->
+  <div class="card bg-base-100 shadow-lg border border-base-300 mb-8">
+    <div class="card-body">
+      <h3 class="card-title text-xl mb-4">📋 Need a Sample CSV?</h3>
+      <p class="text-base-content/70 mb-6">
+        Download a sample CSV file to see the expected format and column names. 
+        This will help you understand how to structure your data for optimal processing.
+      </p>
+      <a
+        href="/upload/sample"
+        class="btn btn-outline btn-primary"
+      >
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+        Download Sample CSV
+      </a>
+    </div>
+  </div>
+
+  <!-- CSV Format Guide Card -->
+  <div class="card bg-base-100 shadow-lg border border-base-300 mb-8">
+    <div class="card-body">
+      <h3 class="card-title text-xl mb-4">📖 CSV Format Guide</h3>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="space-y-4">
+          <div class="card bg-primary/5 border border-primary/20">
+            <div class="card-body p-4">
+              <h4 class="font-semibold text-primary">Required Columns</h4>
+              <div class="space-y-2 text-sm text-base-content/70">
+                <div class="flex items-center gap-2">
+                  <span class="badge badge-primary badge-sm">Required</span>
+                  <span>tweet_id - Unique identifier for each tweet</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="badge badge-primary badge-sm">Required</span>
+                  <span>tweet_text - The content of your tweet</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="badge badge-primary badge-sm">Required</span>
+                  <span>posted_date - When the tweet was published</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card bg-secondary/5 border border-secondary/20">
+            <div class="card-body p-4">
+              <h4 class="font-semibold text-secondary">Engagement Columns</h4>
+              <div class="space-y-2 text-sm text-base-content/70">
+                <div class="flex items-center gap-2">
+                  <span class="badge badge-secondary badge-sm">Optional</span>
+                  <span>like_count - Number of likes received</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="badge badge-secondary badge-sm">Optional</span>
+                  <span>retweet_count - Number of retweets</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="badge badge-secondary badge-sm">Optional</span>
+                  <span>reply_count - Number of replies</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="badge badge-secondary badge-sm">Optional</span>
+                  <span>mention_count - Number of mentions</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-
-        <!-- How to Export from X Analytics -->
-        <div class="border-t border-gray-200 pt-6">
-          <h3 class="text-sm font-medium text-gray-900 mb-3">
-            How to Export from X Analytics
-          </h3>
-          <div class="bg-blue-50 rounded-md p-4">
-            <div class="text-sm text-blue-700 space-y-2">
-              <ol class="list-decimal list-inside ml-4 space-y-1">
-                <li>
-                  Go to
-                  <a
-                    href="https://analytics.twitter.com"
-                    target="_blank"
-                    class="underline hover:text-blue-800"
-                    >X Analytics</a
-                  >
-                </li>
-                <li>Navigate to "Tweets" section</li>
-                <li>Select the date range you want to analyze</li>
-                <li>Click "Export" and select "CSV" format</li>
-                <li>Download the file and upload it here</li>
-              </ol>
+        
+        <div class="space-y-4">
+          <div class="card bg-accent/5 border border-accent/20">
+            <div class="card-body p-4">
+              <h4 class="font-semibold text-accent">File Requirements</h4>
+              <div class="space-y-2 text-sm text-base-content/70">
+                <div class="flex items-center gap-2">
+                  <span class="badge badge-accent badge-sm">Format</span>
+                  <span>CSV (Comma Separated Values)</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="badge badge-accent badge-sm">Encoding</span>
+                  <span>UTF-8 recommended</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="badge badge-accent badge-sm">Size</span>
+                  <span>Maximum 10MB</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="badge badge-accent badge-sm">Headers</span>
+                  <span>First row should contain column names</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card bg-info/5 border border-info/20">
+            <div class="card-body p-4">
+              <h4 class="font-semibold text-info">Processing Tips</h4>
+              <div class="space-y-2 text-sm text-base-content/70">
+                <div class="flex items-start gap-2">
+                  <span class="badge badge-info badge-sm">Tip</span>
+                  <span>Ensure dates are in YYYY-MM-DD format</span>
+                </div>
+                <div class="flex items-start gap-2">
+                  <span class="badge badge-info badge-sm">Tip</span>
+                  <span>Remove any special characters from column names</span>
+                </div>
+                <div class="flex items-start gap-2">
+                  <span class="badge badge-info badge-sm">Tip</span>
+                  <span>Use consistent number formatting for engagement counts</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- What Happens Next Card -->
+  <div class="card bg-base-100 shadow-lg border border-base-300">
+    <div class="card-body">
+      <h3 class="card-title text-xl mb-4">🚀 What Happens Next?</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="text-center">
+          <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="text-2xl">1️⃣</span>
+          </div>
+          <h4 class="font-semibold text-base-content mb-2">Upload & Parse</h4>
+          <p class="text-sm text-base-content/70">Your CSV is uploaded and automatically parsed for engagement data</p>
+        </div>
+        
+        <div class="text-center">
+          <div class="w-16 h-16 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="text-2xl">2️⃣</span>
+          </div>
+          <h4 class="font-semibold text-base-content mb-2">Calculate Scores</h4>
+          <p class="text-sm text-base-content/70">Engagement scores are calculated using your custom point values</p>
+        </div>
+        
+        <div class="text-center">
+          <div class="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="text-2xl">3️⃣</span>
+          </div>
+          <h4 class="font-semibold text-base-content mb-2">View Analytics</h4>
+          <p class="text-sm text-base-content/70">Access your data on the dashboard with filters and insights</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<script>
-  // HTMX event handlers
-  document.addEventListener("htmx:beforeRequest", function (evt) {
-    const submitButton = evt.target.querySelector('button[type="submit"]');
-    if (submitButton) {
-      submitButton.disabled = true;
-      submitButton.innerHTML = `
-      <svg class="w-4 h-4 mr-2 animate-spin" fill="none" viewBox="0 0 24 24">
-        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-      </svg>
-      Processing...
-    `;
-    }
-  });
+<!-- Upload Result Template -->
+<template id="upload-result-template">
+  <div class="alert alert-info">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+    </svg>
+    <div>
+      <h3 class="font-bold">Processing...</h3>
+      <div class="text-sm">Please wait while we process your CSV file.</div>
+    </div>
+  </div>
+</template>
 
-  document.addEventListener("htmx:afterRequest", function (evt) {
-    const submitButton = evt.target.querySelector('button[type="submit"]');
-    if (submitButton) {
-      submitButton.disabled = false;
-      submitButton.innerHTML = `
-      <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-      </svg>
-      Upload & Process
+<script>
+// HTMX event handlers for better UX
+document.addEventListener('htmx:beforeRequest', function(evt) {
+  if (evt.target.closest('form')) {
+    const resultDiv = document.getElementById('upload-result');
+    const template = document.getElementById('upload-result-template');
+    resultDiv.innerHTML = template.innerHTML;
+  }
+});
+
+document.addEventListener('htmx:afterRequest', function(evt) {
+  if (evt.detail.xhr.status !== 200) {
+    const resultDiv = document.getElementById('upload-result');
+    resultDiv.innerHTML = `
+      <div class="alert alert-error">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+        </svg>
+        <div>
+          <h3 class="font-bold">Upload Failed</h3>
+          <div class="text-sm">There was an error processing your file. Please try again.</div>
+        </div>
+      </div>
     `;
-    }
-  });
+  }
+});
 </script>
 {% endblock %}

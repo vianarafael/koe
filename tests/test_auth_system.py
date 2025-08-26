@@ -102,7 +102,7 @@ async def test_user_registration_success(test_db, sample_user_data):
         
         # Should set session cookie
         cookies = response.cookies
-        assert "koe_session" in cookies
+        assert "engagemeter_session" in cookies
 
 @pytest.mark.asyncio
 async def test_user_registration_email_exists(test_db, sample_user_data):
@@ -160,7 +160,7 @@ async def test_user_login_success(test_db, sample_user):
         
         # Should set session cookie
         cookies = response.cookies
-        assert "koe_session" in cookies
+        assert "engagemeter_session" in cookies
 
 @pytest.mark.asyncio
 async def test_user_login_invalid_email(test_db):
@@ -229,7 +229,7 @@ async def test_profile_endpoint_authenticated(test_db, sample_user):
          patch('app.auth.get_user_by_id', return_value=sample_user):
         
         # Set session cookie
-        client.cookies.set("koe_session", session_id)
+        client.cookies.set("engagemeter_session", session_id)
         
         response = client.get("/auth/profile")
         
@@ -258,7 +258,7 @@ async def test_dashboard_authenticated(test_db, sample_user):
          patch('app.auth.get_user_by_id', return_value=sample_user):
         
         # Set session cookie
-        client.cookies.set("koe_session", session_id)
+        client.cookies.set("engagemeter_session", session_id)
         
         response = client.get("/")
         

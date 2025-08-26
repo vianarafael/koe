@@ -4,13 +4,13 @@
 
 ```csv
 project_number,project_name,ticket_id,ticket_description,estimate_points,actual_points,estimate_time,actual_time,velocity_notes
-1,Koe,T01,Implement simple email/password authentication system,5,5,4h,0.5h,Excellent velocity! Completed in 30 minutes vs 4 hour estimate. 10 points/hour.
-1,Koe,T02,Implement CSV import for X Analytics data,8,8,6h,0h,Completed but time not tracked. Assuming similar velocity pattern.
-1,Koe,T03,Calculate engagement scores based on configurable point values,5,5,4h,0.17h,Outstanding velocity! Completed in 10 minutes vs 4 hour estimate. 29.4 points/hour.
-1,Koe,T04,Build dashboard UI to display tweets sorted by engagement score,8,8,6h,0.33h,Outstanding velocity! Completed in 20 minutes vs 6 hour estimate. 24.2 points/hour.
-1,Koe,T05,Implement user settings to update point values,5,5,4h,0.37h,Excellent velocity! Completed in 22 minutes vs 4 hour estimate. 13.5 points/hour.
-1,Koe,T06,[HUMAN] Design simple UI mockups for authentication, dashboard, and settings,3,3,2h,1h,Good velocity! Completed in 1 hour vs 2 hour estimate. 3 points/hour.
-1,Koe,T07,[HUMAN] Write documentation for setup, usage, and API endpoints,3,3,2h,0.25h,Excellent velocity! Completed in 15 minutes vs 2 hour estimate. 12 points/hour.
+1,EngageMeter,T01,Implement simple email/password authentication system,5,5,4h,0.5h,Excellent velocity! Completed in 30 minutes vs 4 hour estimate. 10 points/hour.
+1,EngageMeter,T02,Implement CSV import for X Analytics data,8,8,6h,0h,Completed but time not tracked. Assuming similar velocity pattern.
+1,EngageMeter,T03,Calculate engagement scores based on configurable point values,5,5,4h,0.17h,Outstanding velocity! Completed in 10 minutes vs 4 hour estimate. 29.4 points/hour.
+1,EngageMeter,T04,Build dashboard UI to display tweets sorted by engagement score,8,8,6h,0.33h,Outstanding velocity! Completed in 20 minutes vs 6 hour estimate. 24.2 points/hour.
+1,EngageMeter,T05,Implement user settings to update point values,5,5,4h,0.37h,Excellent velocity! Completed in 22 minutes vs 4 hour estimate. 13.5 points/hour.
+1,EngageMeter,T06,[HUMAN] Design simple UI mockups for authentication, dashboard, and settings,3,3,2h,1h,Good velocity! Completed in 1 hour vs 2 hour estimate. 3 points/hour.
+1,EngageMeter,T07,[HUMAN] Write documentation for setup, usage, and API endpoints,3,3,2h,0.25h,Excellent velocity! Completed in 15 minutes vs 2 hour estimate. 12 points/hour.
 ```
 
 ## Quick Reference

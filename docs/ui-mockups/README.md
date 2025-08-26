@@ -2,7 +2,7 @@
 
 ## 🎨 Overview
 
-This directory contains comprehensive UI mockups and design specifications for the Koe Engagement Tracker application. These mockups serve as the blueprint for frontend implementation and ensure consistency across all user interfaces.
+This directory contains comprehensive UI mockups and design specifications for the EngageMeter Engagement Tracker application. These mockups serve as the blueprint for frontend implementation and ensure consistency across all user interfaces.
 
 ## 📱 Design System
 

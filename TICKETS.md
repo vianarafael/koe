@@ -1,6 +1,6 @@
 # Development Tickets
 
-**Total Points:** 71 (MVP: 31 + Sprint 2: 26 + Epic Transformation: 14)
+**Total Points:** 92 (MVP: 34 + Sprint 2: 26 + Epic Transformation: 14 + Epic K: 18)
 
 **Note:** This represents the transformation from Koe (passive dashboard) to EngageMeter (active strategy assistant with monetization focus).
 
@@ -9,7 +9,7 @@
 ### **EPIC A: Global Rename & Branding**
 
 - **A1**: Codebase rename & branding (Koe → EngageMeter)
-- **A2**: URL & meta updates
+- **A2**: URL & meta updates - Minimalistic SaaS branding with DaisyUI styling
 
 ### **EPIC B: Data Consistency & Scoring**
 
@@ -26,7 +26,7 @@
 
 ### **EPIC D: Dashboard UX (DaisyUI + HTMX)**
 
-- **D1**: Layout structure (Navbar + Sidebar + Content)
+- **D1**: Layout structure (Navbar + Sidebar + Content) - Modern DaisyUI components, clean Marc Lou-inspired design
 - **D2**: Empty states & value clarity
 - **D3**: Tooltips & help text
 
@@ -90,7 +90,7 @@ Create backend FastAPI endpoints and HTML templates with HTMX for user registrat
 
 **Points:** 8 | **Owner:** LLM
 
-Implement backend logic to parse X Analytics CSV files that users download from Twitter/X, extract engagement counts (likes, retweets, replies, mentions), and store data in SQLite with timestamp. Inputs: uploaded CSV file; Outputs: stored TweetEngagement records. (acceptance_check: CSV files are parsed correctly and engagement data is stored in database.)
+Implement backend logic to parse X Analytics CSV files that users download from Twitter/X, extract engagement counts (likes, retweets, replies, mentions), store data in SQLite with timestamp, AND persist original CSV files in database for data recovery. Inputs: uploaded CSV file; Outputs: stored TweetEngagement records + original CSV backup. (acceptance_check: CSV files are parsed correctly, engagement data is stored in database, AND original CSV files are preserved for backup/recovery.)
 
 **Files to touch:**
 
@@ -98,6 +98,7 @@ Implement backend logic to parse X Analytics CSV files that users download from 
 - `app/models.py`
 - `app/db.py`
 - `app/templates/upload.html`
+- `app/routes/upload.py` (add CSV persistence)
 
 **Tests to run:**
 
@@ -106,6 +107,28 @@ Implement backend logic to parse X Analytics CSV files that users download from 
 **Dependencies:**
 
 - T01
+
+---
+
+### T02.5: Implement CSV file persistence in database
+
+**Points:** 3 | **Owner:** LLM
+
+Add CSV file storage capability to preserve original uploaded files in database for data recovery and re-processing. Store CSV content as BLOB/TEXT, link to user uploads, and provide download capability. Inputs: uploaded CSV file content; Outputs: stored CSV file in database with metadata. (acceptance_check: Original CSV files can be retrieved from database and downloaded by users.)
+
+**Files to touch:**
+
+- `app/models.py` (add CSVUpload model)
+- `app/db.py` (add CSV storage operations)
+- `app/routes/upload.py` (add CSV download endpoint)
+
+**Tests to run:**
+
+- `pytest -k test_csv_persistence`
+
+**Dependencies:**
+
+- T02
 
 ---
 
@@ -349,3 +372,119 @@ Create content optimization engine that identifies what drives engagement and re
 **Focus:** Transform Koe from passive data viewer to active growth coach
 **Key Outcome:** Users get actionable insights and track progress toward engagement goals
 **Strategic Value:** Differentiate from competitors by providing strategy, not just data
+
+---
+
+## 🎯 **EPIC K: App Simplification & Premium Features**
+
+**Focus:** Streamline the app to core functionality and introduce premium features for monetization
+
+### T12: Remove goal-setting feature and simplify dashboard
+
+**Points:** 4 | **Owner:** LLM
+
+Remove the goal-setting system and clean up unnecessary elements from the dashboard to focus on core engagement analytics. Simplify the UI by removing goal progress bars, goal management sections, and related navigation elements. Inputs: current dashboard with goals; Outputs: clean, simplified dashboard focused only on engagement data. (acceptance_check: Dashboard shows only essential engagement metrics without goal-related clutter.)
+
+**Files to touch:**
+
+- `app/routes/goals.py` (remove entire file)
+- `app/templates/goals.html` (remove entire file)
+- `app/templates/dashboard.html` (remove goal progress sections)
+- `app/templates/base.html` (remove goals navigation)
+- `app/main.py` (remove goals router)
+- `app/models.py` (remove goal-related models)
+- `app/db.py` (remove goal-related database operations)
+
+**Tests to run:**
+
+- `pytest -k test_dashboard_simplified`
+
+**Dependencies:**
+
+- T01-T11 (previous features complete)
+
+**Acceptance Criteria:**
+
+- [ ] Goals route completely removed
+- [ ] Dashboard shows only engagement data
+- [ ] Navigation cleaned up
+- [ ] No goal-related UI elements remain
+
+---
+
+### T13: Update dashboard to show daily post and reply counts
+
+**Points:** 6 | **Owner:** LLM
+
+Modify the dashboard to display daily aggregated data showing the number of posts and replies made each day based on uploaded CSV data. Create a clean, simple view that focuses on posting frequency and engagement patterns over time. Inputs: CSV engagement data with timestamps; Outputs: daily summary showing posts per day and replies per day. (acceptance_check: Dashboard displays clear daily counts of posts and replies in an easy-to-read format.)
+
+**Files to touch:**
+
+- `app/routes/dashboard.py` (add daily aggregation logic)
+- `app/templates/dashboard.html` (update to show daily counts)
+- `app/db.py` (add daily aggregation queries)
+- `app/models.py` (add daily summary models if needed)
+
+**Tests to run:**
+
+- `pytest -k test_daily_aggregation`
+
+**Dependencies:**
+
+- T12
+
+**Acceptance Criteria:**
+
+- [ ] Dashboard shows posts per day
+- [ ] Dashboard shows replies per day
+- [ ] Data is aggregated by date
+- [ ] Clean, simple visualization
+
+---
+
+### T14: Implement premium "best time to post" feature
+
+**Points:** 8 | **Owner:** LLM
+
+Create a premium feature that analyzes uploaded CSV data to calculate and display the best time of day to post for maximum engagement. Show this as a locked feature with upgrade prompts for free users. Implement time-based analysis of engagement patterns and present recommendations visually. Inputs: engagement data with timestamps; Outputs: best posting time recommendations with upgrade prompts for free users. (acceptance_check: Free users see locked premium feature, premium users get actionable time-based posting recommendations.)
+
+**Files to touch:**
+
+- `app/models.py` (add user subscription model)
+- `app/routes/dashboard.py` (add premium feature logic)
+- `app/templates/dashboard.html` (add premium feature UI)
+- `app/premium.py` (new premium features module)
+- `app/templates/partials/premium_upgrade.html` (upgrade prompt component)
+
+**Tests to run:**
+
+- `pytest -k test_premium_features`
+
+**Dependencies:**
+
+- T13
+
+**Acceptance Criteria:**
+
+- [ ] Best time to post analysis implemented
+- [ ] Free users see locked feature with upgrade prompt
+- [ ] Premium users see actionable recommendations
+- [ ] Time analysis based on actual engagement data
+- [ ] Clear upgrade path for free users
+
+**Premium Feature Details:**
+
+- Analyze engagement patterns by hour of day
+- Identify peak engagement windows
+- Provide specific time recommendations
+- Show engagement heatmap by time
+- Include upgrade prompts and pricing
+
+---
+
+## 📊 **EPIC K Summary**
+
+**Total Points:** 18
+**Focus:** Simplify app to core features and introduce premium monetization
+**Key Outcome:** Clean, focused dashboard with clear upgrade path
+**Strategic Value:** Streamlined user experience with premium revenue potential

@@ -3,7 +3,7 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from typing import Optional
 from app.auth import get_current_user
 from app.models import User, CSVUploadResponse
-from app.db import get_db, store_multiple_engagements, get_user_by_id
+from app.db import get_db, store_multiple_engagements, get_user_by_id, store_csv_upload, get_csv_upload, get_user_csv_uploads
 from app.csv_parser import csv_parser
 from app.scoring import process_csv_engagements_with_scoring
 from app.templates import get_templates
@@ -39,6 +39,10 @@ async def upload_csv(
         raise HTTPException(status_code=400, detail="Only CSV files are allowed")
     
     try:
+        # Read file content for storage
+        file_content = await file.read()
+        file_size = len(file_content)
+        
         # Parse CSV file
         engagements, parse_errors = await csv_parser.parse_csv_file(file, current_user.id)
         
@@ -56,6 +60,20 @@ async def upload_csv(
             user.point_values, 
             db
         )
+        
+        # Store original CSV file in database
+        from app.models import CSVUpload
+        csv_upload = CSVUpload(
+            user_id=current_user.id,
+            filename=file.filename,
+            content=file_content,
+            file_size=file_size,
+            records_processed=len(engagements),
+            records_stored=stored_count,
+            parse_errors=[f"Row {error.row}: {error.error}" for error in parse_errors]
+        )
+        
+        await store_csv_upload(db, csv_upload)
         
         # Prepare response
         response = CSVUploadResponse(
@@ -99,3 +117,48 @@ async def download_sample_csv(request: Request, current_user: User = Depends(get
         media_type="text/csv",
         headers={"Content-Disposition": "attachment; filename=sample_engagement_data.csv"}
     )
+
+@router.get("/download/{upload_id}")
+async def download_csv(
+    upload_id: str,
+    current_user: User = Depends(get_current_user),
+    db=Depends(get_db)
+):
+    """Download a previously uploaded CSV file"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    # Get CSV upload from database
+    csv_upload = await get_csv_upload(db, upload_id, current_user.id)
+    if not csv_upload:
+        raise HTTPException(status_code=404, detail="CSV file not found")
+    
+    # Return CSV file for download
+    return Response(
+        content=csv_upload.content,
+        media_type=csv_upload.content_type,
+        headers={
+            "Content-Disposition": f"attachment; filename={csv_upload.filename}",
+            "Content-Length": str(csv_upload.file_size)
+        }
+    )
+
+@router.get("/list")
+async def list_csv_uploads(
+    request: Request,
+    current_user: User = Depends(get_current_user),
+    db=Depends(get_db)
+):
+    """List user's CSV uploads"""
+    if not current_user:
+        return RedirectResponse(url="/auth/login", status_code=302)
+    
+    # Get user's CSV uploads
+    csv_uploads = await get_user_csv_uploads(db, current_user.id)
+    
+    template = templates.get_template("upload.html")
+    return HTMLResponse(template.render(
+        request=request, 
+        current_user=current_user,
+        csv_uploads=csv_uploads
+    ))

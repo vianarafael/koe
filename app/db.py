@@ -3,7 +3,7 @@ import uuid
 from datetime import datetime, timedelta
 from typing import List, Optional
 from app.settings import settings
-from app.models import User, UserCreate, UserResponse, TweetEngagement, UserGoal
+from app.models import User, UserCreate, UserResponse, TweetEngagement, CSVUpload
 
 async def get_db():
     db = await aiosqlite.connect(settings.DATABASE_URL.replace('sqlite:///', ''))
@@ -45,8 +45,23 @@ async def init_db():
             )
         ''')
         
-        # Initialize goals table
-        await init_goals_table(db)
+        await db.execute('''
+            CREATE TABLE IF NOT EXISTS csv_uploads (
+                id TEXT PRIMARY KEY,
+                user_id TEXT NOT NULL,
+                filename TEXT NOT NULL,
+                content BLOB NOT NULL,
+                content_type TEXT NOT NULL DEFAULT 'text/csv',
+                file_size INTEGER NOT NULL,
+                uploaded_at TEXT NOT NULL,
+                records_processed INTEGER NOT NULL DEFAULT 0,
+                records_stored INTEGER NOT NULL DEFAULT 0,
+                parse_errors TEXT,
+                FOREIGN KEY (user_id) REFERENCES users(id)
+            )
+        ''')
+        
+
         
         await db.commit()
 
@@ -165,6 +180,67 @@ async def store_multiple_engagements(db: aiosqlite.Connection, engagements: List
         if await store_tweet_engagement(db, engagement):
             stored_count += 1
     return stored_count
+
+async def store_csv_upload(db: aiosqlite.Connection, csv_upload) -> str:
+    """Store CSV file in database"""
+    csv_upload.id = str(uuid.uuid4())
+    
+    await db.execute('''
+        INSERT INTO csv_uploads (id, user_id, filename, content, content_type, file_size, uploaded_at, records_processed, records_stored, parse_errors)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ''', (
+        csv_upload.id, csv_upload.user_id, csv_upload.filename, csv_upload.content,
+        csv_upload.content_type, csv_upload.file_size, csv_upload.uploaded_at.isoformat(),
+        csv_upload.records_processed, csv_upload.records_stored, str(csv_upload.parse_errors)
+    ))
+    await db.commit()
+    return csv_upload.id
+
+async def get_csv_upload(db: aiosqlite.Connection, upload_id: str, user_id: str):
+    """Get CSV upload by ID for a specific user"""
+    async with db.execute('''
+        SELECT * FROM csv_uploads WHERE id = ? AND user_id = ?
+    ''', (upload_id, user_id)) as cursor:
+        row = await cursor.fetchone()
+        if row:
+            from app.models import CSVUpload
+            return CSVUpload(
+                id=row['id'],
+                user_id=row['user_id'],
+                filename=row['filename'],
+                content=row['content'],
+                content_type=row['content_type'],
+                file_size=row['file_size'],
+                uploaded_at=datetime.fromisoformat(row['uploaded_at']),
+                records_processed=row['records_processed'],
+                records_stored=row['records_stored'],
+                parse_errors=eval(row['parse_errors']) if row['parse_errors'] else []
+            )
+        return None
+
+async def get_user_csv_uploads(db: aiosqlite.Connection, user_id: str, limit: int = 50) -> List[CSVUpload]:
+    """Get list of CSV uploads for a user"""
+    from app.models import CSVUpload
+    uploads = []
+    
+    async with db.execute('''
+        SELECT * FROM csv_uploads WHERE user_id = ? ORDER BY uploaded_at DESC LIMIT ?
+    ''', (user_id, limit)) as cursor:
+        async for row in cursor:
+            uploads.append(CSVUpload(
+                id=row['id'],
+                user_id=row['user_id'],
+                filename=row['filename'],
+                content=row['content'],
+                content_type=row['content_type'],
+                file_size=row['file_size'],
+                uploaded_at=datetime.fromisoformat(row['uploaded_at']),
+                records_processed=row['records_processed'],
+                records_stored=row['records_stored'],
+                parse_errors=eval(row['parse_errors']) if row['parse_errors'] else []
+            ))
+    
+    return uploads
 
 async def get_user_engagements(db: aiosqlite.Connection, user_id: str, limit: int = 100) -> List[TweetEngagement]:
     """Get engagement records for a specific user"""
@@ -297,94 +373,12 @@ async def get_user_engagement_breakdown(db: aiosqlite.Connection, user_id: str) 
             'mentions': row['total_mentions']
         }
 
-# Goal System Database Operations (Sprint 2)
-async def init_goals_table(db: aiosqlite.Connection):
-    """Initialize goals table"""
-    await db.execute('''
-        CREATE TABLE IF NOT EXISTS user_goals (
-            id TEXT PRIMARY KEY,
-            user_id TEXT NOT NULL,
-            goal_type TEXT NOT NULL,
-            target_value INTEGER NOT NULL,
-            start_date TEXT NOT NULL,
-            end_date TEXT NOT NULL,
-            current_value INTEGER NOT NULL DEFAULT 0,
-            unit TEXT NOT NULL,
-            is_primary BOOLEAN NOT NULL DEFAULT 1,
-            created_at TEXT NOT NULL,
-            FOREIGN KEY (user_id) REFERENCES users (id)
-        )
-    ''')
-    await db.commit()
 
-async def create_user_goal(db: aiosqlite.Connection, goal: UserGoal) -> UserGoal:
-    """Create a new user goal"""
-    goal.id = str(uuid.uuid4())
-    await db.execute('''
-        INSERT INTO user_goals (id, user_id, goal_type, target_value, start_date, end_date, 
-                               current_value, unit, is_primary, created_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    ''', (
-        goal.id, goal.user_id, goal.goal_type, goal.target_value,
-        goal.start_date.isoformat(), goal.end_date.isoformat(),
-        goal.current_value, goal.unit, goal.is_primary, goal.created_at.isoformat()
-    ))
-    await db.commit()
-    return goal
 
-async def get_user_goals(db: aiosqlite.Connection, user_id: str) -> List[UserGoal]:
-    """Get all goals for a user"""
-    async with db.execute('''
-        SELECT * FROM user_goals WHERE user_id = ? ORDER BY is_primary DESC, created_at DESC
-    ''', (user_id,)) as cursor:
-        rows = await cursor.fetchall()
-        goals = []
-        for row in rows:
-            goals.append(UserGoal(
-                id=row['id'],
-                user_id=row['user_id'],
-                goal_type=row['goal_type'],
-                target_value=row['target_value'],
-                start_date=datetime.fromisoformat(row['start_date']),
-                end_date=datetime.fromisoformat(row['end_date']),
-                current_value=row['current_value'],
-                unit=row['unit'],
-                is_primary=bool(row['is_primary']),
-                created_at=datetime.fromisoformat(row['created_at'])
-            ))
-        return goals
 
-async def get_user_goal(db: aiosqlite.Connection, goal_id: str) -> UserGoal | None:
-    """Get a specific goal by ID"""
-    async with db.execute('''
-        SELECT * FROM user_goals WHERE id = ?
-    ''', (goal_id,)) as cursor:
-        row = await cursor.fetchone()
-        if row:
-            return UserGoal(
-                id=row['id'],
-                user_id=row['user_id'],
-                goal_type=row['goal_type'],
-                target_value=row['target_value'],
-                start_date=datetime.fromisoformat(row['start_date']),
-                end_date=datetime.fromisoformat(row['end_date']),
-                current_value=row['current_value'],
-                unit=row['unit'],
-                is_primary=bool(row['is_primary']),
-                created_at=datetime.fromisoformat(row['created_at'])
-            )
-        return None
 
-async def update_goal_progress(db: aiosqlite.Connection, goal_id: str, current_value: int) -> bool:
-    """Update the current progress of a goal"""
-    await db.execute('''
-        UPDATE user_goals SET current_value = ? WHERE id = ?
-    ''', (current_value, goal_id))
-    await db.commit()
-    return True
 
-async def delete_user_goal(db: aiosqlite.Connection, goal_id: str) -> bool:
-    """Delete a user goal"""
-    await db.execute('DELETE FROM user_goals WHERE id = ?', (goal_id,))
-    await db.commit()
-    return True
+
+
+
+

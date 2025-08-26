@@ -1,10 +1,10 @@
-# 🚀 Deployment Guide - Koe
+# 🚀 Deployment Guide - EngageMeter
 
-> **Complete production deployment guide for Koe Social Media Analytics**
+> **Complete production deployment guide for EngageMeter Social Media Analytics**
 
 ## 🎯 Overview
 
-This guide covers deploying Koe to production environments, including server setup, security configuration, performance optimization, and ongoing maintenance.
+This guide covers deploying EngageMeter to production environments, including server setup, security configuration, performance optimization, and ongoing maintenance.
 
 ## 🏗️ Deployment Options
 
@@ -77,14 +77,14 @@ sudo apt install -y postgresql postgresql-contrib
 
 ```bash
 # Create application user
-sudo adduser koe
-sudo usermod -aG sudo koe
+sudo adduser engagemeter
+sudo usermod -aG sudo engagemeter
 
-# Switch to koe user
-su - koe
+# Switch to engagemeter user
+su - engagemeter
 
 # Generate SSH key for secure access
-ssh-keygen -t ed25519 -C "koe-deployment"
+ssh-keygen -t ed25519 -C "engagemeter-deployment"
 
 # Add SSH key to authorized_keys
 cat ~/.ssh/id_ed25519.pub >> ~/.ssh/authorized_keys
@@ -110,8 +110,8 @@ sudo ufw status
 
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/koe.git
-cd koe
+git clone https://github.com/yourusername/engagemeter.git
+cd engagemeter
 
 # Create virtual environment
 python3 -m venv .venv
@@ -138,14 +138,14 @@ nano .env.production
 
 ```bash
 # Application Settings
-APP_NAME=Koe Analytics
+APP_NAME=EngageMeter Analytics
 DEBUG=False
 HOST=127.0.0.1
 PORT=8000
 
 # Database Configuration
-DATABASE_URL=sqlite:///./koe.db
-# For PostgreSQL: DATABASE_URL=postgresql://koe:password@localhost/koe
+DATABASE_URL=sqlite:///./engagemeter.db
+# For PostgreSQL: DATABASE_URL=postgresql://engagemeter:password@localhost/engagemeter
 
 # Security
 SECRET_KEY=your-super-secure-production-secret-key
@@ -169,10 +169,10 @@ BIND=127.0.0.1:8000
 # Database will be created automatically
 
 # For PostgreSQL
-sudo -u postgres createuser koe
-sudo -u postgres createdb koe
-sudo -u postgres psql -c "ALTER USER koe PASSWORD 'your-secure-password';"
-sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE koe TO koe;"
+sudo -u postgres createuser engagemeter
+sudo -u postgres createdb engagemeter
+sudo -u postgres psql -c "ALTER USER engagemeter PASSWORD 'your-secure-password';"
+sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE engagemeter TO engagemeter;"
 ```
 
 ### Step 3: Process Management
@@ -181,23 +181,23 @@ sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE koe TO koe;"
 
 ```bash
 # Create systemd service file
-sudo nano /etc/systemd/system/koe.service
+sudo nano /etc/systemd/system/engagemeter.service
 ```
 
 **Service Configuration:**
 
 ```ini
 [Unit]
-Description=Koe Social Media Analytics
+Description=EngageMeter Social Media Analytics
 After=network.target
 
 [Service]
 Type=exec
-User=koe
-Group=koe
-WorkingDirectory=/home/koe/koe
-Environment=PATH=/home/koe/koe/.venv/bin
-ExecStart=/home/koe/koe/.venv/bin/gunicorn app.main:app -w 4 -k uvicorn.workers.UvicornWorker --bind 127.0.0.1:8000
+User=engagemeter
+Group=engagemeter
+WorkingDirectory=/home/engagemeter/engagemeter
+Environment=PATH=/home/engagemeter/engagemeter/.venv/bin
+ExecStart=/home/engagemeter/engagemeter/.venv/bin/gunicorn app.main:app -w 4 -k uvicorn.workers.UvicornWorker --bind 127.0.0.1:8000
 ExecReload=/bin/kill -s HUP $MAINPID
 Restart=always
 RestartSec=3
@@ -213,16 +213,16 @@ WantedBy=multi-user.target
 sudo systemctl daemon-reload
 
 # Enable service
-sudo systemctl enable koe
+sudo systemctl enable engagemeter
 
 # Start service
-sudo systemctl start koe
+sudo systemctl start engagemeter
 
 # Check status
-sudo systemctl status koe
+sudo systemctl status engagemeter
 
 # View logs
-sudo journalctl -u koe -f
+sudo journalctl -u engagemeter -f
 ```
 
 ### Step 4: Nginx Configuration
@@ -231,7 +231,7 @@ sudo journalctl -u koe -f
 
 ```bash
 # Create Nginx configuration
-sudo nano /etc/nginx/sites-available/koe
+sudo nano /etc/nginx/sites-available/engagemeter
 ```
 
 **Nginx Configuration:**
@@ -273,7 +273,7 @@ server {
 
     # Static Files (if any)
     location /static/ {
-        alias /home/koe/koe/static/;
+        alias /home/engagemeter/engagemeter/static/;
         expires 1y;
         add_header Cache-Control "public, immutable";
     }
@@ -304,7 +304,7 @@ server {
 
 ```bash
 # Enable site
-sudo ln -s /etc/nginx/sites-available/koe /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/engagemeter /etc/nginx/sites-enabled/
 
 # Remove default site
 sudo rm /etc/nginx/sites-enabled/default
@@ -348,7 +348,7 @@ sudo certbot renew --dry-run
 heroku login
 
 # Create Heroku app
-heroku create your-koe-app
+heroku create your-engagemeter-app
 
 # Set environment variables
 heroku config:set DEBUG=False
@@ -368,11 +368,13 @@ heroku open
 #### Heroku Configuration Files
 
 **Procfile:**
+
 ```
 web: gunicorn app.main:app -w 4 -k uvicorn.workers.UvicornWorker
 ```
 
 **runtime.txt:**
+
 ```
 python-3.11.0
 ```
@@ -414,8 +416,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Create non-root user
-RUN useradd -m -u 1000 koe && chown -R koe:koe /app
-USER koe
+RUN useradd -m -u 1000 engagemeter && chown -R engagemeter:engagemeter /app
+USER engagemeter
 
 # Expose port
 EXPOSE 8000
@@ -431,17 +433,17 @@ CMD ["gunicorn", "app.main:app", "-w", "4", "-k", "uvicorn.workers.UvicornWorker
 ### Docker Compose
 
 ```yaml
-version: '3.8'
+version: "3.8"
 
 services:
-  koe:
+  engagemeter:
     build: .
     ports:
       - "8000:8000"
     environment:
       - DEBUG=False
       - SECRET_KEY=your-secret-key
-      - DATABASE_URL=sqlite:///./koe.db
+      - DATABASE_URL=sqlite:///./engagemeter.db
     volumes:
       - ./data:/app/data
     restart: unless-stopped
@@ -455,7 +457,7 @@ services:
       - ./nginx.conf:/etc/nginx/nginx.conf
       - ./ssl:/etc/nginx/ssl
     depends_on:
-      - koe
+      - engagemeter
     restart: unless-stopped
 ```
 
@@ -577,7 +579,7 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     handlers=[
-        logging.FileHandler("koe.log"),
+        logging.FileHandler("engagemeter.log"),
         logging.StreamHandler()
     ]
 )
@@ -601,7 +603,7 @@ nethogs
 
 ```bash
 # Monitor application logs
-sudo journalctl -u koe -f
+sudo journalctl -u engagemeter -f
 
 # Monitor Nginx logs
 sudo tail -f /var/log/nginx/access.log
@@ -617,27 +619,27 @@ sudo tail -f /var/log/syslog
 
 ```bash
 # SQLite backup
-cp /home/koe/koe/koe.db /home/koe/koe/koe.db.backup.$(date +%Y%m%d_%H%M%S)
+cp /home/engagemeter/engagemeter/engagemeter.db /home/engagemeter/engagemeter/engagemeter.db.backup.$(date +%Y%m%d_%H%M%S)
 
 # PostgreSQL backup
-pg_dump koe > koe_backup_$(date +%Y%m%d_%H%M%S).sql
+pg_dump engagemeter > engagemeter_backup_$(date +%Y%m%d_%H%M%S).sql
 
 # Automated backup script
 #!/bin/bash
-BACKUP_DIR="/home/koe/backups"
+BACKUP_DIR="/home/engagemeter/backups"
 DATE=$(date +%Y%m%d_%H%M%S)
-cp /home/koe/koe/koe.db "$BACKUP_DIR/koe_$DATE.db"
-find "$BACKUP_DIR" -name "koe_*.db" -mtime +7 -delete
+cp /home/engagemeter/engagemeter/engagemeter.db "$BACKUP_DIR/engagemeter_$DATE.db"
+find "$BACKUP_DIR" -name "engagemeter_*.db" -mtime +7 -delete
 ```
 
 ### Application Backup
 
 ```bash
 # Backup application code
-tar -czf koe_app_$(date +%Y%m%d_%H%M%S).tar.gz /home/koe/koe/
+tar -czf engagemeter_app_$(date +%Y%m%d_%H%M%S).tar.gz /home/engagemeter/engagemeter/
 
 # Backup configuration files
-sudo tar -czf koe_config_$(date +%Y%m%d_%H%M%S).tar.gz /etc/nginx/sites-available/koe /etc/systemd/system/koe.service
+sudo tar -czf engagemeter_config_$(date +%Y%m%d_%H%M%S).tar.gz /etc/nginx/sites-available/engagemeter /etc/systemd/system/engagemeter.service
 ```
 
 ## 🚨 Troubleshooting
@@ -648,16 +650,16 @@ sudo tar -czf koe_config_$(date +%Y%m%d_%H%M%S).tar.gz /etc/nginx/sites-availabl
 
 ```bash
 # Check service status
-sudo systemctl status koe
+sudo systemctl status engagemeter
 
 # Check logs
-sudo journalctl -u koe -f
+sudo journalctl -u engagemeter -f
 
 # Check port availability
 sudo netstat -tlnp | grep :8000
 
 # Check file permissions
-ls -la /home/koe/koe/
+ls -la /home/engagemeter/engagemeter/
 ```
 
 #### Nginx Issues
@@ -677,13 +679,13 @@ sudo systemctl status nginx
 
 ```bash
 # Check database file
-ls -la /home/koe/koe/koe.db
+ls -la /home/engagemeter/engagemeter/engagemeter.db
 
 # Test database connection
 python3 -c "from app.db import get_db; print('Database OK')"
 
 # Check database permissions
-sudo chown koe:koe /home/koe/koe/koe.db
+sudo chown engagemeter:engagemeter /home/engagemeter/engagemeter/engagemeter.db
 ```
 
 ## 🔄 Maintenance
@@ -717,13 +719,13 @@ sudo chown koe:koe /home/koe/koe/koe.db
 
 ```bash
 # Stop service
-sudo systemctl stop koe
+sudo systemctl stop engagemeter
 
 # Backup current version
-cp -r /home/koe/koe /home/koe/koe.backup.$(date +%Y%m%d)
+cp -r /home/engagemeter/engagemeter /home/engagemeter/engagemeter.backup.$(date +%Y%m%d)
 
 # Pull latest changes
-cd /home/koe/koe
+cd /home/engagemeter/engagemeter
 git pull origin main
 
 # Update dependencies
@@ -731,10 +733,10 @@ source .venv/bin/activate
 pip install -r requirements.txt
 
 # Restart service
-sudo systemctl start koe
+sudo systemctl start engagemeter
 
 # Check status
-sudo systemctl status koe
+sudo systemctl status engagemeter
 ```
 
 #### System Updates
@@ -745,7 +747,7 @@ sudo apt update && sudo apt upgrade -y
 
 # Restart services if needed
 sudo systemctl restart nginx
-sudo systemctl restart koe
+sudo systemctl restart engagemeter
 ```
 
 ## 📚 Additional Resources
@@ -753,8 +755,8 @@ sudo systemctl restart koe
 - **[Setup Guide](SETUP_GUIDE.md)**: Local development setup
 - **[User Guide](USER_GUIDE.md)**: End-user documentation
 - **[API Reference](API_REFERENCE.md)**: API documentation
-- **[GitHub Repository](https://github.com/yourusername/koe)**: Source code
+- **[GitHub Repository](https://github.com/yourusername/engagemeter)**: Source code
 
 ---
 
-**🚀 Your Koe application is now ready for production! Monitor, maintain, and scale as needed.**
+**🚀 Your EngageMeter application is now ready for production! Monitor, maintain, and scale as needed.**

@@ -6,6 +6,9 @@
     <title>
       {% block title %}EngageMeter - Engagement Analytics{% endblock %}
     </title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg" />
+    <link rel="shortcut icon" href="/static/favicon.svg" />
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
@@ -35,8 +38,8 @@
     <!-- Top Navigation Bar -->
     <div class="navbar bg-base-100 shadow-lg border-b border-base-300">
       <div class="navbar-start">
-        <div class="dropdown">
-          <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
+        <div class="dropdown lg:hidden">
+          <div tabindex="0" role="button" class="btn btn-ghost">
             <svg
               class="w-5 h-5"
               fill="none"
@@ -61,11 +64,7 @@
                 >📊 Dashboard</a
               >
             </li>
-            <li>
-              <a href="/goals" class="text-primary hover:text-primary-focus"
-                >🎯 Goals</a
-              >
-            </li>
+
             <li>
               <a href="/upload" class="text-primary hover:text-primary-focus"
                 >📤 Upload</a
@@ -108,10 +107,10 @@
         </div>
         <a href="/" class="btn btn-ghost text-xl">
           <div
-            class="w-10 rounded-full bg-primary text-primary-content flex items-center justify-center"
+            class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-primary text-primary-content flex items-center justify-center"
           >
             <svg
-              class="w-6 h-6"
+              class="w-4 h-4 md:w-6 md:h-6"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -124,7 +123,10 @@
               ></path>
             </svg>
           </div>
-          <span class="text-primary font-bold ml-2">EngageMeter</span>
+          <span class="text-primary font-bold ml-2 hidden sm:inline"
+            >EngageMeter</span
+          >
+          <span class="text-primary font-bold ml-2 sm:hidden">EM</span>
         </a>
       </div>
 
@@ -137,16 +139,16 @@
           >
             {% if request.cookies.get('engagemeter_session') %}
             <div
-              class="w-10 rounded-full bg-primary text-primary-content flex items-center justify-center"
+              class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-primary text-primary-content flex items-center justify-center"
             >
-              <span class="text-lg font-semibold">U</span>
+              <span class="text-sm md:text-lg font-semibold">U</span>
             </div>
             {% else %}
             <div
-              class="w-10 rounded-full bg-base-300 text-base-content flex items-center justify-center"
+              class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-base-300 text-base-content flex items-center justify-center"
             >
               <svg
-                class="w-6 h-6"
+                class="w-4 h-4 md:w-6 md:h-6"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -200,13 +202,65 @@
     </div>
 
     <!-- Main Layout Container -->
-    {% if request.cookies.get('engagemeter_session') %}
-    <!-- Sidebar layout for authenticated users -->
-    <div class="flex min-h-screen bg-base-200">
-      <!-- Sidebar - Fixed width -->
-      <aside class="w-64 bg-base-100 border-r border-base-300 min-h-screen">
-        <!-- Sidebar Header -->
-        <div class="p-4 border-b border-base-300">
+    <div
+      class="{% if request.cookies.get('engagemeter_session') %}flex{% endif %} min-h-screen bg-base-200"
+    >
+      {% if request.cookies.get('engagemeter_session') %}
+      <!-- Mobile Sidebar Toggle Button -->
+      <div class="lg:hidden fixed top-20 left-4 z-50">
+        <button
+          onclick="toggleSidebar()"
+          class="btn btn-primary btn-circle shadow-lg"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            ></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Sidebar - Fixed width on desktop, overlay on mobile -->
+      <aside
+        id="sidebar"
+        class="fixed lg:relative inset-0 z-40 transform lg:transform-none transition-transform duration-300 ease-in-out lg:translate-x-0 bg-base-100 border-r border-base-300 min-h-screen w-64 lg:block"
+        style="transform: translateX(-100%)"
+      >
+        <!-- Mobile Sidebar Header with Close Button -->
+        <div
+          class="lg:hidden flex items-center justify-between p-4 border-b border-base-300"
+        >
+          <h2 class="text-lg font-semibold text-primary">Navigation</h2>
+          <button
+            onclick="toggleSidebar()"
+            class="btn btn-ghost btn-sm btn-circle"
+          >
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Desktop Sidebar Header -->
+        <div class="hidden lg:block p-4 border-b border-base-300">
           <h2 class="text-lg font-semibold text-primary">Navigation</h2>
           <p class="text-sm text-base-content/70">
             Manage your engagement analytics
@@ -243,27 +297,7 @@
                 Dashboard
               </a>
             </li>
-            <li>
-              <a
-                href="/goals"
-                class="{% if request.url.path == '/goals' %}active bg-primary text-primary-content{% endif %} hover:bg-primary hover:text-primary-content"
-              >
-                <svg
-                  class="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                  ></path>
-                </svg>
-                Goals
-              </a>
-            </li>
+
             <li>
               <a
                 href="/upload"
@@ -315,9 +349,9 @@
           </ul>
         </nav>
 
-        <!-- Sidebar Footer -->
+        <!-- Sidebar Footer - Hidden on mobile -->
         <div
-          class="absolute bottom-0 left-0 right-0 p-4 border-t border-base-300"
+          class="hidden lg:block absolute bottom-0 left-0 right-0 p-4 border-t border-base-300"
         >
           <div class="flex items-center space-x-3">
             <div class="avatar placeholder">
@@ -348,30 +382,77 @@
         </div>
       </aside>
 
-      <!-- Main content area - Flexible width -->
-      <main class="flex-1 p-8">
-        <!-- Content will be rendered here -->
-      </main>
-    </div>
-    {% else %}
-    <!-- Full-width layout for non-authenticated users -->
-    <div class="min-h-screen bg-base-200">
-      <main class="p-8">
-        <!-- Content will be rendered here -->
-      </main>
-    </div>
-    {% endif %}
+      <!-- Mobile Sidebar Overlay -->
+      <div
+        id="sidebar-overlay"
+        onclick="toggleSidebar()"
+        class="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
+        style="display: none"
+      ></div>
+      {% endif %}
 
-    <!-- Single content block for all users -->
-    <main class="p-8">{% block content %}{% endblock %}</main>
+      <!-- Main content area - Single content block for all users -->
+      <main
+        class="{% if request.cookies.get('engagemeter_session') %}flex-1{% endif %} p-4 md:p-6 lg:p-8 w-full"
+      >
+        {% block content %}{% endblock %}
+      </main>
+    </div>
 
     <!-- Footer -->
-    <footer class="bg-base-100 border-t border-base-300 mt-12">
+    <footer class="bg-base-100 border-t border-base-300 mt-8 lg:mt-12">
       <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
         <p class="text-center text-sm text-base-content/70">
           EngageMeter - Engagement Analytics Platform
         </p>
       </div>
     </footer>
+
+    <!-- Mobile Sidebar JavaScript -->
+    <script>
+      function toggleSidebar() {
+        const sidebar = document.getElementById("sidebar");
+        const overlay = document.getElementById("sidebar-overlay");
+
+        if (
+          sidebar.style.transform === "translateX(0px)" ||
+          sidebar.style.transform === ""
+        ) {
+          // Close sidebar
+          sidebar.style.transform = "translateX(-100%)";
+          overlay.style.display = "none";
+        } else {
+          // Open sidebar
+          sidebar.style.transform = "translateX(0px)";
+          overlay.style.display = "block";
+        }
+      }
+
+      // Close sidebar when clicking on a link (mobile)
+      document.addEventListener("DOMContentLoaded", function () {
+        const sidebarLinks = document.querySelectorAll("#sidebar a");
+        sidebarLinks.forEach((link) => {
+          link.addEventListener("click", function () {
+            if (window.innerWidth < 1024) {
+              // lg breakpoint
+              toggleSidebar();
+            }
+          });
+        });
+      });
+
+      // Close sidebar on window resize if switching to desktop
+      window.addEventListener("resize", function () {
+        if (window.innerWidth >= 1024) {
+          // lg breakpoint
+          const sidebar = document.getElementById("sidebar");
+          const overlay = document.getElementById("sidebar-overlay");
+          if (sidebar) {
+            sidebar.style.transform = "translateX(0px)";
+            if (overlay) overlay.style.display = "none";
+          }
+        }
+      });
+    </script>
   </body>
 </html>
