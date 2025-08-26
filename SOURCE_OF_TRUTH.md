@@ -1,103 +1,86 @@
-# Source of Truth - Koe → EngageMeter
+# Source of Truth - EngageMeter.co
 
 ## 🎯 Project Scope
 
-- Track user engagement metrics (likes, retweets, replies, mentions) from uploaded CSV data
-- Assign configurable point values to each interaction type
-- Provide a simple dashboard summarizing engagement scores over time
-- Allow users to view top-performing tweets by engagement score
-- Support local user authentication with email/password
-- Basic user onboarding and settings for point values
-- CSV file upload and parsing for engagement data ingestion
-- Intelligent CSV parsing with automatic column detection
-- Automatic engagement score calculation using user-defined point values
-- Advanced dashboard UI with real-time sorting, filtering, and analytics
-- **User settings management for optimizing engagement strategy (T05 ✅)**
-- **UI mockups and design system for authentication, dashboard, and settings (T06 ✅)**
-- **Enhanced CSV parsing supporting X Analytics account overview format (Bug Fixes ✅)**
-- **Complete documentation for setup, usage, and API endpoints (T07 ✅)**
-- **App simplification and goal-setting feature removal (T12 ✅)**
+**PIVOT: From Social Media Analytics to Simple Funnel Tracking**
+
+- **NEW**: Track website traffic from social media sources (X, Reddit, LinkedIn, Other)
+- **NEW**: Generate short/minified URLs with UTM parameters for tracking
+- **NEW**: Provide 24h dashboard showing traffic by source
+- **NEW**: Simple JS snippet for website integration
+- **KEEP**: Local user authentication with email/password
+- **KEEP**: Basic user onboarding and dashboard structure
+- **REMOVE**: CSV upload and social media analytics
+- **REMOVE**: Engagement scoring and complex metrics
+- **REMOVE**: Goal setting and progress tracking
 
 ## ❌ Non-Goals
 
-- Advanced analytics beyond engagement scoring (e.g., sentiment analysis)
-- Scheduling or posting tweets
-- Multi-account management
-- Monetization features in MVP
-- Mobile app (web only)
-- Twitter API integration (using CSV uploads instead)
+- **Complex analytics** (keep it simple - just traffic counts)
+- **Social media posting** (focus on tracking, not creating)
+- **Multi-account management** (single user focus for MVP)
+- **Monetization features** (free tier for MVP)
+- **Mobile app** (web only)
+- **API integrations** (manual link creation only)
+- **CSV imports** (not needed for funnel tracking)
+- **Engagement scoring** (not relevant to traffic tracking)
 
 ## 👥 Target Users
 
-- Individual social media users seeking to optimize engagement
-- Social media managers for small brands or personal brands
-- Content creators wanting quick feedback on post performance
-- Users who export engagement data from various platforms
-- **Users wanting to optimize their engagement strategy through point value configuration**
+- **Indie hackers** who want to know which social posts drive traffic
+- **Content creators** seeking to optimize their X → website funnel
+- **Small businesses** tracking social media ROI
+- **Solo entrepreneurs** who ship fast and need simple analytics
+- **Users who want** simple setup without complex configuration
 
 ## 💎 Value Propositions
 
-- Quantify social media engagement with a simple point system
-- Help users identify which content types generate the most engagement
-- Enable data-driven content strategy optimization
-- Lightweight, fast setup with minimal configuration
-- No API dependencies or rate limits
-- Intelligent CSV parsing that adapts to various export formats
-- Automatic score calculation that adapts to user preferences
-- **Advanced dashboard with real-time sorting, filtering, and analytics (T04 ✅)**
-- **Professional settings interface for engagement strategy optimization (T05 ✅)**
-- **Comprehensive UI design system and mockups for professional user experience (T06 ✅)**
-- **Enhanced CSV parsing supporting X Analytics account overview and daily summary data (Bug Fixes ✅)**
-- **Comprehensive documentation covering development, user, and production needs (T07 ✅)**
-- **Simplified app architecture with goal-setting feature removed (T12 ✅)**
+- **Super simple setup** - one JS snippet, no complex configuration
+- **Immediate results** - see traffic from social posts in real-time
+- **Focused analytics** - just what matters: which posts drive traffic
+- **Lightweight** - no heavy tracking scripts or complex dashboards
+- **No API dependencies** - manual link creation, simple tracking
+- **Fast insights** - know which social posts convert to website visits
+- **Indie hacker focused** - built for people who ship fast
 
-### 🚀 **Killer Differentiator: Active Strategy Assistant**
+### 🚀 **Killer Differentiator: Simple Funnel Tracking**
 
-- **Most Tools = Passive Reporting**: Just show numbers, leave users to figure out what to do
-- **Koe = Active Strategy Assistant**: Analyze data, identify patterns, recommend actions, track progress toward goals
-- **Growth Coach**: Not just "here's your data" but "here's how to grow your engagement"
-- **Actionable Insights**: Every metric comes with "so what?" and "what next?" guidance
-- **Goal-Driven Growth**: Users set targets, Koe tracks progress and recommends actions to hit them
+- **Most Tools = Complex**: Google Analytics, Mixpanel, etc. are overwhelming
+- **EngageMeter = Simple**: One snippet, one dashboard, clear insights
+- **Funnel Focus**: Not just "here's your traffic" but "here's which social posts drive it"
+- **Actionable Data**: Know exactly which X posts to double down on
+- **Ship Fast**: No complex setup, immediate tracking, instant insights
 
 ## 🔄 Key User Flows
 
-1. User creates account with email and password
-2. User signs in to access the dashboard
-3. User uploads CSV files with engagement data (T02 ✅)
-4. System automatically detects CSV column structure and parses data (T02 ✅)
-5. User sets or accepts default point values for likes, retweets, replies, mentions (T03 ✅)
-6. System parses CSV data and stores engagement metrics (T02 ✅)
-7. System automatically calculates engagement scores per post using point values (T03 ✅)
-8. User views dashboard with engagement scores and top posts (T03 ✅)
-9. **User accesses advanced dashboard with sorting, filtering, and analytics (T04 ✅)**
-10. **User updates point values and sees updated scores immediately (T05 ✅)**
-11. **User optimizes engagement strategy based on real-time score impact (T05 ✅)**
-12. **User benefits from professional UI design system and comprehensive mockups (T06 ✅)**
-13. **System intelligently handles both tweet-level and account overview CSV formats (Bug Fixes ✅)**
-14. **Users access comprehensive documentation for setup, usage, and deployment (T07 ✅)**
-15. **User understands cumulative scoring**: Clear explanation that total score represents ALL engagement (UI Enhancement ✅)
-16. **User sees score growth over time**: Visual indicators that score increases with new data (UI Enhancement ✅)
+### 🎯 **New MVP User Flows (Funnel Tracking)**
 
-### 🎯 **Simplified App User Flows (Post-T12)**
+1. **User creates account** with email and password
+2. **User signs in** to access the dashboard
+3. **User adds website URLs** to track (e.g., pricing page, blog post)
+4. **System generates short URLs** with UTM parameters for each source
+5. **User shares short URLs** on social media (X, Reddit, LinkedIn)
+6. **System tracks clicks** when visitors use the short URLs
+7. **User views 24h dashboard** showing traffic by source
+8. **User optimizes strategy** based on which posts drive traffic
 
-17. **User experiences simplified app**: Clean, focused dashboard without goal-setting complexity (T12 ✅)
-18. **User focuses on core metrics**: Dashboard shows posts, replies, and engagement scores clearly (T12 ✅)
-19. **User optimizes content strategy**: Use insights to improve posting frequency, content types, and engagement
-20. **User measures growth trends**: Compare current performance to historical data and industry benchmarks
+### 🚀 **Simple Setup Flow**
+
+9. **User drops JS snippet** into website (one line copy-paste)
+10. **User creates tracked links** for important pages
+11. **User gets immediate tracking** without complex configuration
+12. **User sees real-time results** in simple dashboard
 
 ## 🏗️ Architecture
 
-- Backend: FastAPI for API endpoints and authentication
-- Frontend: HTMX with Tailwind CSS for dynamic interactions (transitioning to DaisyUI)
-- Database: SQLite for user accounts and engagement data
-- Authentication: Local email/password with session management
-- File Processing: CSV parsing for engagement data ingestion (T02 ✅)
-- Scoring Engine: Automatic engagement score calculation (T03 ✅)
-- **Dashboard System: Advanced UI with sorting, filtering, and real-time updates (T04 ✅)**
-- **Settings Management: Point value configuration and strategy optimization (T05 ✅)**
-- **UI Design System: Comprehensive mockups and design specifications (T06 ✅)**
-- **Enhanced CSV Parser: Intelligent format detection and dual-mode parsing (Bug Fixes ✅)**
-- **Documentation System: Complete guides for development, users, and production (T07 ✅)**
+- **Backend**: FastAPI for API endpoints and authentication
+- **Frontend**: HTMX with DaisyUI for dynamic interactions
+- **Database**: SQLite for user accounts and link tracking data
+- **Authentication**: Local email/password with session management
+- **Link Generation**: Short URL creation with UTM parameter tracking
+- **Click Tracking**: Simple visitor data ingestion and aggregation
+- **Dashboard System**: Simple UI showing traffic by source and time
+- **JS Snippet**: Lightweight tracking script for website integration
 - Deployment: Linode server with direct deployment
 
 ## 🚀 **Epic Transformation: Koe → EngageMeter**
@@ -709,3 +692,52 @@ The application has been successfully simplified by removing the goal-setting fe
 - **Reduced Complexity**: Fewer potential points of failure
 - **Better Performance**: Streamlined database queries and routing
 - **Easier Testing**: Simpler test coverage requirements
+
+## 🚀 **PRODUCT PIVOT: EngageMeter.co MVP**
+
+### **Strategic Direction Change**
+
+**Previous Focus**: Social media engagement analytics with CSV imports
+**New Focus**: Simple funnel tracking from social media to website
+
+### **Why This Pivot?**
+
+1. **Market Opportunity**: Gap between complex analytics (GA, Mixpanel) and simple tracking
+2. **Indie Hacker Focus**: Built for people who ship fast and need simple insights
+3. **Competitive Advantage**: Cheaper than Vercel Analytics, faster than Umami setup
+4. **Clear Value**: Know which social posts drive traffic to your site
+
+### **New MVP Features**
+
+- **JS Tracking Snippet**: One-line website integration
+- **Short URL Generation**: Auto-create minified links with UTMs
+- **24h Dashboard**: Traffic visualization by source (X, Reddit, LinkedIn)
+- **Link Management**: Add, edit, delete tracked URLs
+- **Simple Analytics**: Focus on traffic volume, not complex metrics
+
+### **What We're Building**
+
+- **Not**: Social media engagement scoring
+- **Not**: CSV import and parsing
+- **Not**: Complex analytics and goal setting
+- **Yes**: Simple traffic tracking from social to website
+- **Yes**: One JS snippet, immediate results
+- **Yes**: Clear funnel view: X → website → monetization
+
+### **Technical Requirements**
+
+- **Keep**: FastAPI, HTMX, DaisyUI, SQLite, authentication
+- **Add**: Link tracking models, short URL generation, click ingestion
+- **Remove**: CSV parsing, engagement scoring, goal management
+- **New**: JS snippet serving, UTM parameter handling, traffic aggregation
+
+### **Success Metrics**
+
+- **User can drop JS snippet** and start tracking immediately
+- **User can create tracked links** and see short URLs generated
+- **User can view 24h traffic** by social media source
+- **User can optimize strategy** based on which posts drive traffic
+
+---
+
+**Status**: Product pivot defined, scope updated, ready for MVP development

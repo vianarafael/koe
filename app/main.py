@@ -6,9 +6,8 @@ from fastapi.responses import HTMLResponse
 from datetime import datetime
 import uvicorn
 
-from app.routes import home, upload, dashboard, settings
+from app.routes import home, dashboard
 from app import auth
-from app.scoring import scoring_engine
 
 app = FastAPI(
     title="EngageMeter - Social Media Engagement Analytics",
@@ -31,9 +30,7 @@ app.mount("/static", StaticFiles(directory="app/static"), name="static")
 # Include routers
 app.include_router(home.router)
 app.include_router(auth.router)
-app.include_router(upload.router)
 app.include_router(dashboard.router)
-app.include_router(settings.router)
 
 
 # Health check endpoint for production monitoring
@@ -43,8 +40,8 @@ async def health_check():
 
 @app.on_event("startup")
 async def startup_event():
-    # Ensure scoring engine is initialized
-    assert scoring_engine is not None
+    # Initialize database and ensure app is ready
+    pass
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

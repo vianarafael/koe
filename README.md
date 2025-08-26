@@ -1,6 +1,8 @@
-# 🚀 EngageMeter - Social Media Engagement Analytics
+# 🚀 EngageMeter.co - Premium Funnel Tracker
 
-> **Track, analyze, and optimize your social media engagement with intelligent scoring and insights**
+> **Cheaper, faster, simpler than setting up Umami per project or paying Vercel Analytics**
+
+Built for ship-fast indie hackers who want a funnel view from X → website → monetization.
 
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com)
@@ -10,26 +12,24 @@
 
 ## 🎯 What is EngageMeter?
 
-EngageMeter is a powerful social media engagement analytics platform that helps content creators, social media managers, and brands optimize their social media strategy through intelligent engagement scoring and data-driven insights.
+EngageMeter is a **super-simple analytics platform** that tracks your social media traffic to website conversions. Drop a tiny JS snippet, share our minified links, and see exactly which X posts drive traffic to your site.
 
-### ✨ Key Features
+**No more guessing** - know which social posts convert to website visits.
 
-- **🔐 Secure Authentication**: Email/password authentication with session management
-- **📊 CSV Data Import**: Intelligent parsing of X Analytics and other platform exports
-- **🎯 Engagement Scoring**: Configurable point values for likes, retweets, replies, and mentions
-- **📈 Advanced Dashboard**: Real-time sorting, filtering, and analytics visualization
-- **⚙️ Smart Settings**: Dynamic point value configuration with strategy optimization
-- **📱 Responsive Design**: Mobile-first interface with HTMX-powered interactions
-- **🔍 X Analytics Support**: Native support for X Analytics account overview and tweet-level data
+### ✨ MVP Features
 
-### 🏗️ Architecture
+- **🔧 One-Line Setup**: Tiny JS snippet to drop into your site
+- **🔗 Tracked Links**: Auto-generate short/minified URLs with UTMs
+- **📊 24h Dashboard**: Bar graph of visits by source (X, Reddit, LinkedIn, Other)
+- **🚀 Simple Management**: Add, delete, regenerate tracking links at will
+
+## 🏗️ Architecture
 
 - **Backend**: FastAPI with async/await support
-- **Frontend**: HTMX + Tailwind CSS for dynamic interactions
-- **Database**: SQLite with SQLAlchemy ORM
+- **Frontend**: HTMX + DaisyUI (Tailwind CSS) for dynamic interactions
+- **Database**: SQLite with aiosqlite
 - **Authentication**: Local session-based auth with bcrypt hashing
-- **File Processing**: Intelligent CSV parsing with format detection
-- **Scoring Engine**: Configurable engagement scoring algorithm
+- **Link Generation**: Short URL creation with UTM parameter tracking
 
 ## 🚀 Quick Start
 
@@ -58,31 +58,79 @@ The application will be available at `http://localhost:8000`
 ### Quick Demo
 
 1. **Register** a new account
-2. **Upload** your X Analytics CSV export
-3. **Configure** engagement point values
-4. **View** your engagement analytics dashboard
-5. **Optimize** your strategy based on insights
+2. **Drop the JS snippet** into your website
+3. **Create tracked links** for your URLs
+4. **Share on social media** using the generated short URLs
+5. **Monitor traffic** in your 24h dashboard
 
-## 📚 Documentation
+## 📊 How It Works
 
-- **[📖 Setup Guide](docs/SETUP_GUIDE.md)** - Complete installation and configuration
-- **[👥 User Guide](docs/USER_GUIDE.md)** - How to use EngageMeter effectively
-- **[🔌 API Reference](docs/API_REFERENCE.md)** - Complete API documentation
-- **[🚀 Deployment Guide](docs/DEPLOYMENT.md)** - Production deployment instructions
+### 1. Drop the Snippet
 
-## 🎨 Screenshots
+```html
+<script src="https://engagemeter.co/track.js"></script>
+```
 
-### Dashboard
+### 2. Create Tracked Links
 
-![Dashboard](docs/screenshots/dashboard.png)
+- **Original**: `https://yoursite.com/pricing`
+- **Generated**: `engmtr.co/abc123` (with UTM parameters)
+- **Source**: X (Twitter)
+- **Result**: Tracked click in your dashboard
 
-### Settings
+### 3. Monitor Traffic
 
-![Settings](docs/screenshots/settings.png)
+See exactly which social posts drive traffic:
+- **X posts**: 45 visits in last 24h
+- **Reddit comments**: 12 visits in last 24h
+- **LinkedIn posts**: 8 visits in last 24h
 
-### Upload
+## 🔧 Setup
 
-![Upload](docs/screenshots/upload.png)
+### JS Tracking Snippet
+
+Add this single line to your website's `<head>` section:
+
+```html
+<script src="https://engagemeter.co/track.js"></script>
+```
+
+### Tracked Link Management
+
+1. **Add URL**: Enter your website page URL
+2. **Pick Source**: X, Reddit, LinkedIn, or Other
+3. **Get Short Link**: Auto-generated with tracking parameters
+4. **Share**: Use the short link in your social posts
+
+## 📈 Dashboard Features
+
+- **Link Management**: Add, edit, delete tracking URLs
+- **Source Breakdown**: X, Reddit, LinkedIn, Other
+- **24h Traffic**: Bar graph of visits in last 24 hours
+- **Simple Analytics**: Focus on what matters - traffic from social
+
+## 🚀 Deployment
+
+### Local Development
+
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Run with auto-reload
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+### Production
+
+```bash
+# Set environment variables
+export DATABASE_URL="sqlite:///./engagemeter.db"
+export SECRET_KEY="your-secret-key-here"
+
+# Run with production server
+gunicorn app.main:app -w 4 -k uvicorn.workers.UvicornWorker
+```
 
 ## 🔧 Development
 
@@ -94,11 +142,8 @@ engagemeter/
 │   ├── models.py          # Pydantic data models
 │   ├── db.py              # Database operations
 │   ├── auth.py            # Authentication logic
-│   ├── scoring.py         # Engagement scoring engine
-│   ├── csv_parser.py      # CSV parsing and validation
 │   ├── routes/            # API route handlers
 │   └── templates/         # HTML templates
-├── docs/                  # Documentation
 ├── tests/                 # Test suite
 ├── requirements.txt       # Python dependencies
 └── README.md             # This file
@@ -112,39 +157,23 @@ pytest
 
 # Run specific test categories
 pytest -k test_auth_system
-pytest -k test_csv_parsing
-pytest -k test_scoring_logic
+pytest -k test_link_tracking
 pytest -k test_dashboard_core
-```
-
-### Development Server
-
-```bash
-# Start with auto-reload
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-
-# Start with specific settings
-uvicorn app.main:app --reload --env-file .env
 ```
 
 ## 📊 Project Status
 
-- **MVP Completion**: 91.9% (34/37 points)
-- **Current Sprint**: Final documentation and deployment
-- **Next Milestone**: Production deployment
+- **MVP Status**: In Development
+- **Current Focus**: Core tracking functionality
+- **Next Milestone**: JS snippet and link generation
 
-### Completed Features ✅
+### Planned Features 🎯
 
-- [x] **T01**: User authentication system
-- [x] **T02**: CSV import and parsing
-- [x] **T03**: Engagement scoring engine
-- [x] **T04**: Advanced dashboard UI
-- [x] **T05**: User settings management
-- [x] **T06**: UI design system and mockups
-
-### In Progress 🔄
-
-- [ ] **T07**: Documentation and deployment guide
+- [ ] **JS Tracking Snippet**: One-line website integration
+- [ ] **Link Management**: Create, edit, delete tracked URLs
+- [ ] **Short URL Generation**: Auto-create minified links with UTMs
+- [ ] **24h Dashboard**: Traffic visualization by source
+- [ ] **Click Tracking**: Ingest pipeline for visitor data
 
 ## 🤝 Contributing
 
@@ -162,15 +191,15 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - **FastAPI** for the excellent web framework
 - **HTMX** for seamless dynamic interactions
-- **Tailwind CSS** for beautiful, responsive design
-- **SQLAlchemy** for robust database operations
+- **DaisyUI** for beautiful, responsive design
+- **SQLite** for simple, reliable data storage
 
 ## 📞 Support
 
 - **Issues**: [GitHub Issues](https://github.com/yourusername/engagemeter/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/yourusername/engagemeter/issues)
-- **Email**: support@engagemeter-analytics.com
+- **Email**: support@engagemeter.co
 
 ---
 
-**Made with ❤️ for social media creators everywhere**
+**EngageMeter.co** - Simple analytics for indie hackers who ship fast.
